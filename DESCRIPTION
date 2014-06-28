@@ -1,8 +1,10 @@
 Package: checkmate
 Type: Package
-Title: checkmate
-Description: Fast and versatile argument checks
-Version: 1.0
+Title: Fast and versatile argument checks
+Description: Tests and assertions to perform frequent argument checks. A
+    substantial part of the package was written in C to minimize any worries
+    about execution time overhead.
+Version: 1.1
 Author: Michel Lang <michellang@gmail.com>,
     Bernd Bischl <bernd_bischl@gmx.net>
 Maintainer: Michel Lang <michellang@gmail.com>
@@ -14,6 +16,6 @@ Encoding: UTF-8
 Depends: R (>= 2.15.0)
 Suggests: testthat
 License: BSD_3_clause + file LICENSE
-Packaged: 2014-06-17 10:55:20 UTC; lang
+Packaged: 2014-06-28 12:22:35 UTC; michel
 Repository: CRAN
-Date/Publication: 2014-06-17 21:47:50
+Date/Publication: 2014-06-28 18:36:02

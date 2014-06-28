@@ -48,7 +48,6 @@ static inline Rboolean is_vector(SEXP x) {
 
 static Rboolean check_strict_names(SEXP x) {
     const R_len_t nx = length(x);
-
     const char *str;
     for (R_len_t i = 0; i < nx; i++) {
         str = CHAR(STRING_ELT(x, i));
@@ -77,7 +76,7 @@ static inline Rboolean all_finite_double(SEXP x) {
 /*********************************************************************************************************************/
 /* Shared check functions returning an intermediate msg_t                                                            */
 /*********************************************************************************************************************/
-static msg_t check_names(SEXP nn, SEXP type) {
+static msg_t check_named(SEXP nn, SEXP type) {
     if (!isNull(type)) {
         assertString(type, "type");
         const char * const ctype = CHAR(STRING_ELT(type, 0));
@@ -100,7 +99,13 @@ static msg_t check_names(SEXP nn, SEXP type) {
             error("Unknown naming definition '%s'", ctype);
         }
     }
+    return MSGT;
+}
 
+static msg_t check_names(SEXP x, SEXP type) {
+    if (length(x) > 0) {
+        return check_named(getAttrib(x, R_NamesSymbol), type);
+    }
     return MSGT;
 }
 
@@ -136,9 +141,9 @@ static msg_t check_vector_props(SEXP x, SEXP any_missing, SEXP all_missing, SEXP
 
     assertFlag(unique, "unique");
     if (isTRUE(unique) && any_duplicated(x, FALSE) > 0)
-        return Msg("Contains only missing values");
+        return Msg("Contains duplicated values");
 
-    return check_names(getAttrib(x, R_NamesSymbol), names);
+    return check_names(x, names);
 }
 
 static msg_t check_matrix_props(SEXP x, SEXP any_missing, SEXP min_rows, SEXP min_cols, SEXP rows, SEXP cols, SEXP row_names, SEXP col_names) {
@@ -177,10 +182,10 @@ static msg_t check_matrix_props(SEXP x, SEXP any_missing, SEXP min_rows, SEXP mi
         msg_t msg;
         SEXP dn = getAttrib(x, R_DimNamesSymbol);
 
-        msg = check_names(isNull(dn) ? R_NilValue : VECTOR_ELT(dn, 1), row_names);
+        msg = check_named(isNull(dn) ? R_NilValue : VECTOR_ELT(dn, 0), row_names);
         if (!msg.ok)
             return msg;
-        msg = check_names(isNull(dn) ? R_NilValue : VECTOR_ELT(dn, 1), col_names);
+        msg = check_named(isNull(dn) ? R_NilValue : VECTOR_ELT(dn, 1), col_names);
         if (!msg.ok)
             return msg;
     }
@@ -322,7 +327,7 @@ SEXP c_check_names(SEXP nn, SEXP type) {
 SEXP c_check_named(SEXP x, SEXP type) {
     if (length(x) == 0)
         return mwrap(MSGT);
-    return mwrap(check_names(getAttrib(x, R_NamesSymbol), type));
+    return mwrap(check_names(x, type));
 }
 
 SEXP c_check_numeric(SEXP x, SEXP lower, SEXP upper, SEXP finite, SEXP any_missing, SEXP all_missing, SEXP len, SEXP min_len, SEXP max_len, SEXP unique, SEXP names) {
@@ -368,7 +373,6 @@ SEXP c_check_flag(SEXP x, SEXP na_ok) {
     Rboolean is_na = is_scalar_na(x);
     if (length(x) != 1 || (!is_na && !isLogical(x)))
         return CRes("Must be a logical flag");
-
     assertFlag(na_ok, "na.ok");
     if (is_na && !isTRUE(na_ok))
         return CRes("May not be NA");
@@ -385,8 +389,8 @@ SEXP c_check_count(SEXP x, SEXP na_ok, SEXP positive, SEXP tol) {
             return CRes("May not be NA");
     } else  {
         assertFlag(positive, "positive");
-        const int xi = asInteger(x), pos = LOGICAL(positive)[0];
-        if (xi < pos)
+        const int pos = LOGICAL(positive)[0];
+        if (asInteger(x) < pos)
             return CResf("Must be >= %i", pos);
     }
     return ScalarLogical(TRUE);
@@ -408,7 +412,6 @@ SEXP c_check_number(SEXP x, SEXP na_ok, SEXP lower, SEXP upper, SEXP finite) {
     Rboolean is_na = is_scalar_na(x);
     if (length(x) != 1 || (!is_na && !isNumeric(x)))
         return CRes("Must be a number");
-
     assertFlag(na_ok, "na.ok");
     if (is_na) {
         if (!isTRUE(na_ok))
@@ -425,7 +428,6 @@ SEXP c_check_string(SEXP x, SEXP na_ok) {
     Rboolean is_na = is_scalar_na(x);
     if (length(x) != 1 || (!is_na && !isString(x)))
         return CRes("Must be a string");
-
     assertFlag(na_ok, "na.ok");
     if (is_na && !isTRUE(na_ok))
         return CRes("May not be NA");
@@ -436,7 +438,6 @@ SEXP c_check_scalar(SEXP x, SEXP na_ok) {
     Rboolean is_na = is_scalar_na(x);
     if (length(x) != 1 || (!is_na && !isVectorAtomic(x)))
         return CRes("Must be an atomic scalar");
-
     assertFlag(na_ok, "na.ok");
     if (is_na && !isTRUE(na_ok))
         return CRes("May not be NA");

@@ -1,4 +1,4 @@
-#' Combine multiple checks to an assertion
+#' Combine multiple checks into one assertion
 #'
 #' @param ... [ANY]\cr
 #'  List of calls to check functions.
@@ -18,7 +18,7 @@ assert = function(..., .var.name) {
   for (i in seq_along(dots)) {
     val = eval(dots[[i]], envir = env)
     if (isTRUE(val))
-      return(TRUE)
+      return(invisible(TRUE))
     msgs[i] = as.character(val)
   }
   if (missing(.var.name))
