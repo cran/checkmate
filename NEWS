@@ -1,3 +1,9 @@
+Version 1.2 (2014-07-21)
+-------------------------------------------------------------------------------
+* Fixed bug in checkList
+* Fixed dimnames check on empty matrices and data frames
+* Added *SetEqual functions
+
 Version 1.1 (2014-06-28)
 -------------------------------------------------------------------------------
 * Improved error messages in assert* functions
