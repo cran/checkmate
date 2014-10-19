@@ -1,10 +1,11 @@
 #include "checks.h"
 #include <ctype.h>
 #include <string.h>
-#include "assertions.h"
+#include "as_type.h"
 #include "cmessages.h"
 #include "is_integerish.h"
 #include "any_missing.h"
+#include "any_infinite.h"
 #include "all_missing.h"
 #include "all_nchar.h"
 #include "bounds.h"
@@ -14,17 +15,10 @@
 /*********************************************************************************************************************/
 /* Some helpers                                                                                                      */
 /*********************************************************************************************************************/
-static inline Rboolean isTRUE(SEXP x) {
-    return (LOGICAL(x)[0] == TRUE);
-}
-
-static inline Rboolean isFALSE(SEXP x) {
-    return (LOGICAL(x)[0] == FALSE);
-}
+typedef enum { T_UNDEF, T_UNNAMED, T_NAMED, T_UNIQUE, T_STRICT } name_t;
 
 static inline double asTol(SEXP tol) {
-    assertNumber(tol, "tol");
-    return REAL(tol)[0];
+    return asNumber(tol, "tol");
 }
 
 static inline Rboolean is_scalar_na(SEXP x) {
@@ -46,16 +40,6 @@ static inline Rboolean is_vector(SEXP x) {
     return TRUE;
 }
 
-static inline Rboolean all_finite_double(SEXP x) {
-    const double * xp = REAL(x);
-    const double * const xe = xp + length(x);
-    for (; xp != xe; xp++) {
-        if (*xp == R_PosInf || *xp == R_NegInf)
-            return FALSE;
-    }
-    return TRUE;
-}
-
 /*********************************************************************************************************************/
 /* Shared check functions returning an intermediate msg_t                                                            */
 /*********************************************************************************************************************/
@@ -64,12 +48,10 @@ static Rboolean check_valid_names(SEXP x) {
 }
 
 static Rboolean check_unique_names(SEXP x) {
-    return check_valid_names(x) && any_duplicated(x, FALSE) == 0;
+    return any_duplicated(x, FALSE) == 0;
 }
 
 static Rboolean check_strict_names(SEXP x) {
-    if (!check_unique_names(x))
-        return FALSE;
     const R_len_t nx = length(x);
     const char *str;
     for (R_len_t i = 0; i < nx; i++) {
@@ -86,60 +68,78 @@ static Rboolean check_strict_names(SEXP x) {
     return TRUE;
 }
 
-static msg_t check_names(SEXP x, SEXP nn, SEXP type, const char * what) {
-    assertString(type, "type");
-    const char * const ctype = CHAR(STRING_ELT(type, 0));
+static name_t get_name_type(SEXP type) {
+    const char * const ctype = asString(type, "type");
+    if (strcmp(ctype, "unnamed") == 0)
+        return T_UNNAMED;
+    if (strcmp(ctype, "named") == 0)
+        return T_NAMED;
+    if (strcmp(ctype, "unique") == 0)
+        return T_UNIQUE;
+    if (strcmp(ctype, "strict") == 0)
+        return T_STRICT;
+    error("Unknown type definition '%s'", ctype);
+}
 
-    if (strcmp(ctype, "unnamed") == 0) {
-        if (length(x) > 0 && !isNull(nn))
-            return Msgf("%s must be unnamed", what);
-    } else if (strcmp(ctype, "named") == 0) {
-        if (length(x) > 0 && !check_valid_names(nn))
-            return Msgf("%s must be named", what);
-    } else if (strcmp(ctype, "unique") == 0) {
-        if (length(x) > 0 && !check_unique_names(nn))
-            return Msgf("%s must be uniquely named", what);
-    } else if (strcmp(ctype, "strict") == 0) {
-        if (length(x) > 0 && !check_strict_names(nn))
-            return Msgf("%s must be uniquely named according to R's variable naming rules", what);
+static name_t check_type(SEXP nn, name_t type) {
+    if (type == T_UNNAMED) {
+        if (!isNull(nn))
+            return T_UNNAMED;
     } else {
-        error("Unknown naming definition '%s'", ctype);
+        if (!check_valid_names(nn))
+            return T_NAMED;
+
+        if (type >= T_UNIQUE) {
+            if (!check_unique_names(nn))
+                return T_UNIQUE;
+
+            if (type >= T_STRICT && !check_strict_names(nn))
+                return T_STRICT;
+        }
+    }
+    return T_UNDEF;
+}
+
+static msg_t check_names(SEXP x, SEXP nn, SEXP type, const char * what) {
+    name_t ntype = get_name_type(type);
+    if (length(x) > 0) {
+        switch(check_type(nn, ntype)) {
+            case T_UNDEF: break;
+            case T_UNNAMED: return Msgf("%s must be unnamed", what);
+            case T_NAMED: return Msgf("%s must be named", what);
+            case T_UNIQUE: return Msgf("%s must be uniquely named", what);
+            case T_STRICT: return Msgf("%s must be named according to R's variable naming rules", what);
+        }
     }
     return MSGT;
 }
 
 static msg_t check_vector_props(SEXP x, SEXP any_missing, SEXP all_missing, SEXP len, SEXP min_len, SEXP max_len, SEXP unique, SEXP names) {
     if (!isNull(len)) {
-        assertCount(len, "len");
-        R_len_t n = asInteger(len);
+        R_len_t n = asCount(len, "len");
         if (length(x) != n)
             return Msgf("Must have length %i", n);
     }
 
     if (!isNull(min_len)) {
-        assertCount(min_len, "min.len");
-        R_len_t n = asInteger(min_len);
+        R_len_t n = asCount(min_len, "min.len");
         if (length(x) < n)
             return Msgf("Must have length >= %i", n);
     }
 
     if (!isNull(max_len)) {
-        assertCount(max_len, "max.len");
-        R_len_t n = asInteger(max_len);
+        R_len_t n = asCount(max_len, "max.len");
         if (length(x) > n)
             return Msgf("Must have length <= %i", n);
     }
 
-    assertFlag(any_missing, "any.missing");
-    if (isFALSE(any_missing) && any_missing_atomic(x))
+    if (!asFlag(any_missing, "any.missing") && any_missing_atomic(x))
         return Msg("Contains missing values");
 
-    assertFlag(all_missing, "all.missing");
-    if (isFALSE(all_missing) && all_missing_atomic(x))
+    if (!asFlag(all_missing, "all.missing") && all_missing_atomic(x))
         return Msg("Contains only missing values");
 
-    assertFlag(unique, "unique");
-    if (isTRUE(unique) && any_duplicated(x, FALSE) > 0)
+    if (asFlag(unique, "unique") && any_duplicated(x, FALSE) > 0)
         return Msg("Contains duplicated values");
 
     if (!isNull(names))
@@ -151,32 +151,31 @@ static msg_t check_matrix_props(SEXP x, SEXP any_missing, SEXP min_rows, SEXP mi
     if (!isNull(min_rows) || !isNull(rows)) {
         R_len_t xrows = nrows(x);
         if (!isNull(min_rows)) {
-            assertCount(min_rows, "min.rows");
-            if (xrows < asInteger(min_rows))
-                return Msgf("Must have at least %i rows", min_rows);
+            R_len_t cmp = asCount(min_rows, "min.rows");
+            if (xrows < cmp)
+                return Msgf("Must have at least %i rows", cmp);
         }
         if (!isNull(rows)) {
-            assertCount(rows, "rows");
-            if (xrows != asInteger(rows))
-                return Msgf("Must have at exactly %i rows", rows);
+            R_len_t cmp = asCount(rows, "rows");
+            if (xrows != cmp)
+                return Msgf("Must have at exactly %i rows", cmp);
         }
     }
     if (!isNull(min_cols) || !isNull(cols)) {
         R_len_t xcols = ncols(x);
         if (!isNull(min_cols)) {
-            assertCount(min_cols, "min.cols");
-            if (xcols < asInteger(min_cols))
-                return Msgf("Must have at least %i cols", min_cols);
+            R_len_t cmp = asCount(min_cols, "min.cols");
+            if (xcols < cmp)
+                return Msgf("Must have at least %i cols", cmp);
         }
         if (!isNull(cols)) {
-            assertCount(cols, "cols");
-            if (xcols != asInteger(cols))
-                return Msgf("Must have at exactly %i cols", cols);
+            R_len_t cmp = asCount(cols, "cols");
+            if (xcols != cmp)
+                return Msgf("Must have at exactly %i cols", cmp);
         }
     }
 
-    assertFlag(any_missing, "any.missing");
-    if (isFALSE(any_missing) && any_missing_atomic(x))
+    if (!asFlag(any_missing, "any.missing") && any_missing_atomic(x))
         return Msg("Contains missing values");
 
     return MSGT;
@@ -184,8 +183,7 @@ static msg_t check_matrix_props(SEXP x, SEXP any_missing, SEXP min_rows, SEXP mi
 
 static msg_t check_storage(SEXP x, SEXP mode) {
     if (!isNull(mode)) {
-        assertString(mode, "mode");
-        const char * const storage = CHAR(STRING_ELT(mode, 0));
+        const char * const storage = asString(mode, "mode");
         if (strcmp(storage, "logical") == 0) {
             if (!isLogical(x))
                 return Msg("Must contain logicals");
@@ -213,13 +211,11 @@ static msg_t check_storage(SEXP x, SEXP mode) {
 
 static msg_t check_array_props(SEXP x, SEXP any_missing, SEXP d) {
     if (!isNull(d)) {
-        assertCount(d, "d");
-        int di = asInteger(d);
+        int di = asCount(d, "d");
         if (LENGTH(getAttrib(x, R_DimSymbol)) != di)
             return Msgf("Must be %i-d array", di);
     }
-    assertFlag(any_missing, "any.missing");
-    if (isFALSE(any_missing) && any_missing_atomic(x))
+    if (!asFlag(any_missing, "any.missing") && any_missing_atomic(x))
         return Msg("Contains missing values");
 
     return MSGT;
@@ -233,8 +229,7 @@ SEXP c_check_character(SEXP x, SEXP min_chars, SEXP any_missing, SEXP all_missin
     if (!isString(x) && !all_missing_atomic(x))
         return CheckResult("Must be a character");
     if (!isNull(min_chars)) {
-        assertCount(min_chars, "min.chars");
-        R_len_t n = asInteger(min_chars);
+        R_len_t n = asCount(min_chars, "min.chars");
         if (n > 0 && !all_nchar(x, n))
             return CheckResultf("All elements must have at least %i characters", n);
     }
@@ -363,11 +358,24 @@ SEXP c_check_named(SEXP x, SEXP type) {
     return ScalarLogical(TRUE);
 }
 
+SEXP c_check_names(SEXP x, SEXP type) {
+    if (!isString(x))
+        return CheckResult("Must be a character vector of names");
+    name_t res = check_type(x, get_name_type(type));
+    switch(res) {
+        case T_UNDEF: break;
+        case T_UNNAMED: return CheckResult("Names must be missing (NULL)");
+        case T_NAMED: return CheckResult("Valid names required");
+        case T_UNIQUE: return CheckResult("All names must be unique");
+        case T_STRICT: return CheckResult("All names must comply to R's variable naming rules");
+    }
+    return ScalarLogical(TRUE);
+}
+
 SEXP c_check_numeric(SEXP x, SEXP lower, SEXP upper, SEXP finite, SEXP any_missing, SEXP all_missing, SEXP len, SEXP min_len, SEXP max_len, SEXP unique, SEXP names) {
     if (!isNumeric(x) && !all_missing_atomic(x))
         return CheckResult("Must be numeric");
-    assertFlag(finite, "finite");
-    if (isTRUE(finite) && !all_finite_double(x))
+    if (asFlag(finite, "finite") && any_infinite(x))
         return CheckResult("Must be finite");
     msg_t msg = check_bounds(x, lower, upper);
     if (!msg.ok)
@@ -376,8 +384,7 @@ SEXP c_check_numeric(SEXP x, SEXP lower, SEXP upper, SEXP finite, SEXP any_missi
 }
 
 SEXP c_check_vector(SEXP x, SEXP strict, SEXP any_missing, SEXP all_missing, SEXP len, SEXP min_len, SEXP max_len, SEXP unique, SEXP names) {
-    assertFlag(strict, "strict");
-    if (!isVector(x) || (isTRUE(strict) && !is_vector(x)))
+    if (!isVector(x) || ((asFlag(strict, "strict") && !is_vector(x))))
         return CheckResult("Must be a vector");
     return mwrap(check_vector_props(x, any_missing, all_missing, len, min_len, max_len, unique, names));
 }
@@ -401,8 +408,7 @@ SEXP c_check_flag(SEXP x, SEXP na_ok) {
     Rboolean is_na = is_scalar_na(x);
     if (length(x) != 1 || (!is_na && !isLogical(x)))
         return CheckResult("Must be a logical flag");
-    assertFlag(na_ok, "na.ok");
-    if (is_na && !isTRUE(na_ok))
+    if (is_na && !asFlag(na_ok, "na.ok"))
         return CheckResult("May not be NA");
     return ScalarLogical(TRUE);
 }
@@ -412,12 +418,10 @@ SEXP c_check_count(SEXP x, SEXP na_ok, SEXP positive, SEXP tol) {
     if (length(x) != 1 || (!is_na && !isIntegerish(x, asTol(tol))))
         return CheckResult("Must be a count");
     if (is_na) {
-        assertFlag(na_ok, "na.ok");
-        if (!isTRUE(na_ok))
+        if (!asFlag(na_ok, "na.ok"))
             return CheckResult("May not be NA");
     } else  {
-        assertFlag(positive, "positive");
-        const int pos = LOGICAL(positive)[0];
+        const int pos = (int) asFlag(positive, "positive");
         if (asInteger(x) < pos)
             return CheckResultf("Must be >= %i", pos);
     }
@@ -429,8 +433,7 @@ SEXP c_check_int(SEXP x, SEXP na_ok, SEXP lower, SEXP upper, SEXP tol) {
     if (length(x) != 1 || (!is_na && !isIntegerish(x, asTol(tol))))
         return CheckResult("Must be a single integerish value");
     if (is_na) {
-        assertFlag(na_ok, "na.ok");
-        if (!isTRUE(na_ok))
+        if (!asFlag(na_ok, "na.ok"))
             return CheckResult("May not be NA");
     }
     return mwrap(check_bounds(x, lower, upper));
@@ -440,14 +443,12 @@ SEXP c_check_number(SEXP x, SEXP na_ok, SEXP lower, SEXP upper, SEXP finite) {
     Rboolean is_na = is_scalar_na(x);
     if (length(x) != 1 || (!is_na && !isStrictlyNumeric(x)))
         return CheckResult("Must be a number");
-    assertFlag(na_ok, "na.ok");
     if (is_na) {
-        if (!isTRUE(na_ok))
+        if (!asFlag(na_ok, "na.ok"))
             return CheckResult("May not be NA");
         return ScalarLogical(TRUE);
     }
-    assertFlag(finite, "finite");
-    if (isTRUE(finite) && !all_finite_double(x))
+    if (asFlag(finite, "finite") && any_infinite(x))
         return CheckResult("Must be finite");
     return mwrap(check_bounds(x, lower, upper));
 }
@@ -456,8 +457,7 @@ SEXP c_check_string(SEXP x, SEXP na_ok) {
     Rboolean is_na = is_scalar_na(x);
     if (length(x) != 1 || (!is_na && !isString(x)))
         return CheckResult("Must be a string");
-    assertFlag(na_ok, "na.ok");
-    if (is_na && !isTRUE(na_ok))
+    if (is_na && !asFlag(na_ok, "na.ok"))
         return CheckResult("May not be NA");
     return ScalarLogical(TRUE);
 }
@@ -466,8 +466,7 @@ SEXP c_check_scalar(SEXP x, SEXP na_ok) {
     Rboolean is_na = is_scalar_na(x);
     if (length(x) != 1 || (!is_na && !isVectorAtomic(x)))
         return CheckResult("Must be an atomic scalar");
-    assertFlag(na_ok, "na.ok");
-    if (is_na && !isTRUE(na_ok))
+    if (is_na && !asFlag(na_ok, "na.ok"))
         return CheckResult("May not be NA");
     return ScalarLogical(TRUE);
 }
