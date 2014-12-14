@@ -12,7 +12,7 @@ assertPathForOutput(x, overwrite = FALSE, .var.name)
 testPathForOutput(x, overwrite = FALSE)
 }
 \arguments{
-\item{x}{[ANY]\cr
+\item{x}{[any]\cr
 Object to check.}
 
 \item{overwrite}{[\code{logical(1)}]\cr
@@ -37,7 +37,7 @@ Check whether a file path can later be safely used to create a file and write to
 This is checked:
 \itemize{
  \item{Does \code{dirname(x)} exist?}
- \item{Does no file under path \code{x)} exist?}
+ \item{Does no file under path \code{x} exist?}
  \item{Is \code{dirname(x)} writeable?}
 }
 
