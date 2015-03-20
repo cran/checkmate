@@ -1,4 +1,12 @@
-Version 1.5.1 (20xx-xx-xx)
+Version 1.5.2 (2015-03-19)
+-------------------------------------------------------------------------------
+* Fixed: (assert|check|test)Character(NA_character_, min.chars = 1) does not
+  eval to TRUE anymore.
+* New arguments for *Factor functions: (n|min|max).levels.
+* Improved error messages for type and length checks
+* Improved error messages for missing arguments
+
+Version 1.5.1 (2014-12-13)
 -------------------------------------------------------------------------------
 * Included a workaround for R's nrow and ncol to properly worh with data frames
 * Fixed a bug handling complex number in checks for integerish values
