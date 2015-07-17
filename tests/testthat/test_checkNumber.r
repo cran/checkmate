@@ -2,9 +2,9 @@ context("checkNumber")
 
 test_that("checkNumber", {
   myobj = 1
-  expect_succ(Number, myobj)
+  expect_succ_all(Number, myobj)
   myobj = "a"
-  expect_fail(Number, myobj)
+  expect_fail_all(Number, myobj)
 
   expect_false(testNumber(integer(0)))
   expect_false(testNumber(NULL))
@@ -26,4 +26,11 @@ test_that("checkNumber", {
   expect_false(testNumber(TRUE))
 
   expect_error(assertNumber(2+3i), "number")
+})
+
+test_that("bounds of vectors with only missings are not checked", {
+  expect_true(checkNumber(NA, na.ok = TRUE, lower = 1))
+  expect_true(checkNumber(NA_character_, na.ok = TRUE, upper = 10))
+  expect_fail_all(Number, 0, lower = 1)
+  expect_fail_all(Number, 100, upper = 10)
 })

@@ -1,3 +1,6 @@
+## ----include=FALSE-------------------------------------------------------
+library(checkmate)
+
 ## ------------------------------------------------------------------------
 fact <- function(n, method = "stirling") {
   if (length(n) != 1)
@@ -30,7 +33,6 @@ fact <- function(n, method = "stirling") {
 
 ## ------------------------------------------------------------------------
 fact <- function(n, method = "stirling") {
-  library(checkmate)
   assertCount(n)
   assertChoice(method, c("stirling", "factorial"))
 
@@ -39,4 +41,26 @@ fact <- function(n, method = "stirling") {
   else
     sqrt(2 * pi * n) * (n / exp(1))^n
 }
+
+## ----eval=FALSE----------------------------------------------------------
+#  library(testthat)
+#  library(checkmate) # for testthat extensions
+#  test_check("checkmate")
+
+## ----eval=FALSE----------------------------------------------------------
+#  test_that("checkmate is a sweet extension for testthat", {
+#      x = runif(100)
+#      expect_numeric(x, len = 100, any.missing = FALSE, lower = 0, upper = 1)
+#  })
+
+## ----dev="svg",fig.width=6,fig.height=4----------------------------------
+library(ggplot2)
+library(microbenchmark)
+
+x = runif(1000)
+r = function(x) stopifnot(is.numeric(x) && length(x) == 1000 && all(!is.na(x) & x >= 0 & x <= 1))
+cm = function(x) assertNumeric(x, len = 1000, any.missing = FALSE, lower = 0, upper = 1)
+mb = microbenchmark(r(x), cm(x))
+print(mb)
+autoplot(mb)
 

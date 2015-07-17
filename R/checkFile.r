@@ -36,5 +36,14 @@ assertFile = function(x, access = "", .var.name) {
 #' @rdname checkFile
 #' @export
 testFile = function(x, access = "") {
-  isTRUE(checkFile(x, access))
+  res = checkFile(x, access)
+  isTRUE(res)
+}
+
+#' @rdname checkFile
+#' @template expect
+#' @export
+expect_file = function(x, access = "", info = NULL, label = NULL) {
+  res = checkFile(x, access)
+  makeExpectation(res, info = info, label = vname(x, label))
 }

@@ -34,3 +34,12 @@ testFlag = function(x, na.ok = FALSE) {
   res = .Call("c_check_flag", x, na.ok, PACKAGE = "checkmate")
   isTRUE(res)
 }
+
+#' @rdname checkFlag
+#' @template expect
+#' @useDynLib checkmate c_check_flag
+#' @export
+expect_flag = function(x, na.ok = FALSE, info = NULL, label = NULL) {
+  res = .Call("c_check_flag", x, na.ok, PACKAGE = "checkmate")
+  makeExpectation(res, info = info, label = vname(x, label))
+}

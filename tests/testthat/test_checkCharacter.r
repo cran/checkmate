@@ -2,9 +2,9 @@ context("checkCharacter")
 
 test_that("checkCharacter", {
   myobj = c("a", "b")
-  expect_succ(Character, myobj)
+  expect_succ_all(Character, myobj)
   myobj = 0
-  expect_fail(Character, myobj)
+  expect_fail_all(Character, myobj)
 
   expect_true(testCharacter(character(0)))
   expect_false(testCharacter(NULL))
@@ -18,6 +18,7 @@ test_that("checkCharacter", {
   # treat NA_character_ as zero-length string
   expect_true(testCharacter(NA_character_, min.chars = 0))
   expect_false(testCharacter(NA_character_, min.chars = 1))
+  expect_false(testCharacter(NA, min.chars = 1))
 
   x = c("abba", "baab")
   expect_true(testCharacter(x, pattern="a"))

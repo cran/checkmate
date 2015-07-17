@@ -2,9 +2,9 @@ context("checkIntegerish")
 
 test_that("checkIntegerish", {
   myobj = 1
-  expect_succ(Integerish, myobj)
+  expect_succ_all(Integerish, myobj)
   myobj = 3.3
-  expect_fail(Integerish, myobj)
+  expect_fail_all(Integerish, myobj)
 
   x = 1 - 0.9 -.1
 
@@ -45,4 +45,11 @@ test_that("checkIntegerish", {
   expect_false(testIntegerish(NA, any.missing = FALSE))
   expect_false(testIntegerish(NA, all.missing = FALSE))
   expect_error(assertIntegerish(x, tol=0), "integerish")
+})
+
+test_that("bounds of vectors with only missings are not checked", {
+  expect_true(checkInteger(NA, lower = 1))
+  expect_true(checkInteger(NA_character_, upper = 10))
+  expect_fail_all(Integerish, 0, lower = 1L)
+  expect_fail_all(Integerish, 100, upper = 10L)
 })

@@ -68,12 +68,12 @@ Rboolean any_missing_string(SEXP x) {
 
 Rboolean any_missing_atomic(SEXP x) {
     switch(TYPEOF(x)) {
-        case LGLSXP: return any_missing_logical(x);
-        case INTSXP: return any_missing_integer(x);
+        case LGLSXP:  return any_missing_logical(x);
+        case INTSXP:  return any_missing_integer(x);
         case REALSXP: return any_missing_double(x);
         case CPLXSXP: return any_missing_complex(x);
-        case STRSXP: return any_missing_string(x);
-        default: return(FALSE);
+        case STRSXP:  return any_missing_string(x);
+        default:      return FALSE;
     }
 }
 

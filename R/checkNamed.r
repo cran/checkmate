@@ -37,3 +37,12 @@ testNamed = function(x, type = "named") {
   res = .Call("c_check_named", x, type, PACKAGE = "checkmate")
   isTRUE(res)
 }
+
+# #' @rdname checkNamed
+# #' @useDynLib checkmate c_check_named
+# #' @template expect
+# #' @export
+# expect_named = function(x, type = "named", info = NULL, label = NULL) {
+#   res = .Call("c_check_named", x, type, PACKAGE = "checkmate")
+#   makeExpectation(res, info = info, label = vname(x, label))
+# }
