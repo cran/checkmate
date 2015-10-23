@@ -4,9 +4,13 @@ vname = function(x, var.name) {
   collapse(deparse(substitute(x, parent.frame(1L)), width.cutoff = 500), "\n")
 }
 
-makeAssertion = function(msg, var.name) {
-  if (!isTRUE(msg))
-    mstop("Assertion on '%s' failed: %s", var.name, msg)
+makeAssertion = function(msg, var.name, collection) {
+  if (!isTRUE(msg)) {
+    if (is.null(collection))
+      mstop("Assertion on '%s' failed: %s", var.name, msg)
+    collection$push(sprintf("Variable '%s': %s", var.name, msg))
+    return(invisible(FALSE))
+  }
   invisible(TRUE)
 }
 
@@ -37,7 +41,6 @@ qamsg = function(x, msg, vname, recursive=FALSE) {
   sprintf("Assertion on '%s'%s failed. %s", vname, item, msg)
 }
 
-# Don't use this with assert*. Will fk up the error messages
 "%and%" = function(lhs, rhs) {
   if (isTRUE(lhs)) rhs else lhs
 }
@@ -48,6 +51,11 @@ collapse = function(x, sep = ",") {
 
 "%nin%" = function(x, y) {
   !match(x, y, nomatch = 0L)
+}
+
+setClasses = function(x, cl) {
+  class(x) = cl
+  x
 }
 
 killCamel = function(x) {
