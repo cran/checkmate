@@ -20,30 +20,30 @@
 #' testCount(1)
 #' testCount(-1)
 checkCount = function(x, na.ok = FALSE, positive = FALSE, tol = sqrt(.Machine$double.eps)) {
-  .Call("c_check_count", x, na.ok, positive, tol, PACKAGE = "checkmate")
+  .Call(c_check_count, x, na.ok, positive, tol)
 }
 
-#' @rdname checkCount
-#' @useDynLib checkmate c_check_count
 #' @export
-assertCount = function(x, na.ok = FALSE, positive = FALSE, tol = sqrt(.Machine$double.eps), add = NULL, .var.name) {
-  res = .Call("c_check_count", x, na.ok, positive, tol, PACKAGE = "checkmate")
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkCount
-#' @useDynLib checkmate c_check_count
+assertCount = makeAssertionFunction(checkCount)
+
 #' @export
-testCount = function(x, na.ok = FALSE, positive = FALSE, tol = sqrt(.Machine$double.eps)) {
-  res = .Call("c_check_count", x, na.ok, positive, tol, PACKAGE = "checkmate")
-  isTRUE(res)
-}
-
 #' @rdname checkCount
+assert_count = assertCount
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkCount
+testCount = makeTestFunction(checkCount)
+
+#' @export
+#' @rdname checkCount
+test_count = testCount
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @useDynLib checkmate c_check_count
-#' @export
-expect_count = function(x, na.ok = FALSE, positive = FALSE, tol = sqrt(.Machine$double.eps), info = NULL, label = NULL) {
-  res = .Call("c_check_count", x, na.ok, positive, tol, PACKAGE = "checkmate")
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkCount
+expect_count = makeExpectationFunction(checkCount)

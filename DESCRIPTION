@@ -4,7 +4,7 @@ Title: Fast and Versatile Argument Checks
 Description: Tests and assertions to perform frequent argument checks. A
     substantial part of the package was written in C to minimize any worries
     about execution time overhead.
-Version: 1.6.3
+Version: 1.7.0
 Author: Michel Lang <michellang@gmail.com>,
     Bernd Bischl <bernd_bischl@gmx.net>
 Maintainer: Michel Lang <michellang@gmail.com>
@@ -15,9 +15,26 @@ ByteCompile: yes
 Encoding: UTF-8
 Depends: R (>= 3.0.0)
 Imports: utils
-Suggests: data.table, dplyr, ggplot2, knitr, microbenchmark, testthat
+Suggests: data.table, devtools, dplyr, ggplot2, knitr, rmarkdown,
+        magrittr, microbenchmark, testthat
 License: BSD_3_clause + file LICENSE
 VignetteBuilder: knitr
-Packaged: 2015-10-23 11:08:45 UTC; lang
+RoxygenNote: 5.0.1
+Collate: 'AssertCollection.r' 'allMissing.r' 'anyInfinite.r'
+        'anyMissing.r' 'anyNaN.r' 'asInteger.r' 'assert.r'
+        'backports.r' 'helper.r' 'makeExpectation.r' 'makeTest.r'
+        'makeAssertion.r' 'checkAccess.r' 'checkArray.r'
+        'checkAtomic.r' 'checkAtomicVector.r' 'checkCharacter.r'
+        'checkChoice.r' 'checkClass.r' 'checkComplex.r' 'checkCount.r'
+        'checkDataFrame.r' 'checkDataTable.r' 'checkDirectory.r'
+        'checkEnvironment.r' 'checkFactor.r' 'checkFile.r'
+        'checkFlag.r' 'checkFunction.r' 'checkInt.r' 'checkInteger.r'
+        'checkIntegerish.r' 'checkList.r' 'checkLogical.r'
+        'checkMatrix.r' 'checkNamed.r' 'checkNames.r' 'checkNull.r'
+        'checkNumber.r' 'checkNumeric.r' 'checkPathForOutput.r'
+        'checkScalar.r' 'checkScalarNA.r' 'checkSetEqual.r'
+        'checkString.r' 'checkSubset.r' 'checkVector.r' 'coalesce.r'
+        'isIntegerish.r' 'qassert.r' 'qassertr.r' 'wfwl.r' 'zzz.r'
+Packaged: 2016-01-23 22:01:28 UTC; michel
 Repository: CRAN
-Date/Publication: 2015-10-23 16:23:03
+Date/Publication: 2016-01-23 23:26:20

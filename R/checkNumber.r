@@ -16,27 +16,30 @@
 #' testNumber(1)
 #' testNumber(1:2)
 checkNumber = function(x, na.ok = FALSE, lower = -Inf, upper = Inf, finite = FALSE) {
-  .Call("c_check_number", x, na.ok, lower, upper, finite, PACKAGE = "checkmate")
+  .Call(c_check_number, x, na.ok, lower, upper, finite)
 }
 
-#' @rdname checkNumber
 #' @export
-assertNumber = function(x, na.ok = FALSE, lower = -Inf, upper = Inf, finite = FALSE, add = NULL, .var.name) {
-  res = .Call("c_check_number", x, na.ok, lower, upper, finite, PACKAGE = "checkmate")
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkNumber
+assertNumber = makeAssertionFunction(checkNumber)
+
 #' @export
-testNumber = function(x, na.ok = FALSE, lower = -Inf, upper = Inf, finite = FALSE) {
-  res = .Call("c_check_number", x, na.ok, lower, upper, finite, PACKAGE = "checkmate")
-  isTRUE(res)
-}
-
 #' @rdname checkNumber
+assert_number = assertNumber
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkNumber
+testNumber = makeTestFunction(checkNumber)
+
+#' @export
+#' @rdname checkNumber
+test_number = testNumber
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @export
-expect_number = function(x, na.ok = FALSE, lower = -Inf, upper = Inf, finite = FALSE, info = NULL, label = NULL) {
-  res = .Call("c_check_number", x, na.ok, lower, upper, finite, PACKAGE = "checkmate")
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkNumber
+expect_number = makeExpectationFunction(checkNumber)

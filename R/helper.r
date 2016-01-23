@@ -1,24 +1,7 @@
 vname = function(x, var.name) {
   if (!missing(var.name) && !is.null(var.name))
     return(var.name)
-  collapse(deparse(substitute(x, parent.frame(1L)), width.cutoff = 500), "\n")
-}
-
-makeAssertion = function(msg, var.name, collection) {
-  if (!isTRUE(msg)) {
-    if (is.null(collection))
-      mstop("Assertion on '%s' failed: %s", var.name, msg)
-    collection$push(sprintf("Variable '%s': %s", var.name, msg))
-    return(invisible(FALSE))
-  }
-  invisible(TRUE)
-}
-
-makeExpectation = function(res, info, label) {
-  if (!requireNamespace("testthat", quietly = TRUE))
-    stop("Package 'testthat' is required for 'expect_*' extensions")
-  cond = function(tmp) testthat::expectation(isTRUE(res), failure_msg = res, success_msg = "all good")
-  testthat::expect_that(TRUE, cond, info = info, label = label)
+  collapse(deparse(substitute(x, parent.frame(2L)), width.cutoff = 500), "\n")
 }
 
 mstop = function(msg, ...) {
@@ -38,6 +21,9 @@ qamsg = function(x, msg, vname, recursive=FALSE) {
   } else {
     item = ""
   }
+
+  if (missing(vname))
+    vname = collapse(deparse(substitute(x, parent.frame(1L)), width.cutoff = 500), "\n")
   sprintf("Assertion on '%s'%s failed. %s", vname, item, msg)
 }
 
@@ -58,6 +44,6 @@ setClasses = function(x, cl) {
   x
 }
 
-killCamel = function(x) {
-  gsub("([A-Z])", "_\\L\\1", x, perl = TRUE)
+convertCamelCase = function(x) {
+  tolower(gsub("((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))", "_\\1", x, perl = TRUE))
 }

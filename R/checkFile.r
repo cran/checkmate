@@ -28,23 +28,26 @@ checkFile = function(x, access = "") {
 }
 
 #' @export
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkFile
-assertFile = function(x, access = "", add = NULL, .var.name) {
-  res = checkFile(x, access)
-  makeAssertion(res, vname(x, .var.name), add)
-}
+assertFile = makeAssertionFunction(checkFile)
 
-#' @rdname checkFile
 #' @export
-testFile = function(x, access = "") {
-  res = checkFile(x, access)
-  isTRUE(res)
-}
-
 #' @rdname checkFile
+assert_file = assertFile
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkFile
+testFile = makeTestFunction(checkFile)
+
+#' @export
+#' @rdname checkFile
+test_file = testFile
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @export
-expect_file = function(x, access = "", info = NULL, label = NULL) {
-  res = checkFile(x, access)
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkFile
+expect_file = makeExpectationFunction(checkFile)

@@ -15,30 +15,30 @@
 #' testInt(1)
 #' testInt(-1, lower = 0)
 checkInt = function(x, na.ok = FALSE, lower = -Inf, upper = Inf, tol = sqrt(.Machine$double.eps)) {
-  .Call("c_check_int", x, na.ok, lower, upper, tol, PACKAGE = "checkmate")
+  .Call(c_check_int, x, na.ok, lower, upper, tol)
 }
 
-#' @rdname checkInt
-#' @useDynLib checkmate c_check_int
 #' @export
-assertInt = function(x, na.ok = FALSE, lower = -Inf, upper = Inf, tol = sqrt(.Machine$double.eps), add = NULL, .var.name) {
-  res = .Call("c_check_int", x, na.ok, lower, upper, tol, PACKAGE = "checkmate")
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkInt
-#' @useDynLib checkmate c_check_int
+assertInt = makeAssertionFunction(checkInt)
+
 #' @export
-testInt = function(x, na.ok = FALSE, lower = -Inf, upper = Inf, tol = sqrt(.Machine$double.eps)) {
-  res = .Call("c_check_int", x, na.ok, lower, upper, tol, PACKAGE = "checkmate")
-  isTRUE(res)
-}
-
 #' @rdname checkInt
+assert_int = assertInt
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkInt
+testInt = makeTestFunction(checkInt)
+
+#' @export
+#' @rdname checkInt
+test_int = testInt
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @useDynLib checkmate c_check_int
-#' @export
-expect_int = function(x, na.ok = FALSE, lower = -Inf, upper = Inf, tol = sqrt(.Machine$double.eps), info = NULL, label = NULL) {
-  res = .Call("c_check_int", x, na.ok, lower, upper, tol, PACKAGE = "checkmate")
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkInt
+expect_int = makeExpectationFunction(checkInt)

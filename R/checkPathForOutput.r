@@ -14,7 +14,7 @@
 #' @templateVar fn PathForOutput
 #' @template x
 #' @param overwrite [\code{logical(1)}]\cr
-#'  If \code{TRUE}, an exising file in place is allowed if it
+#'  If \code{TRUE}, an existing file in place is allowed if it
 #'  it is both readable and writeable.
 #'  Default is \code{FALSE}.
 #' @template checker
@@ -43,24 +43,27 @@ checkPathForOutput = function(x, overwrite = FALSE) {
   return(checkAccess(dn, "w"))
 }
 
-#' @rdname checkPathForOutput
 #' @export
-assertPathForOutput = function(x, overwrite = FALSE, add = NULL, .var.name) {
-  res = checkPathForOutput(x, overwrite)
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkPathForOutput
+assertPathForOutput = makeAssertionFunction(checkPathForOutput)
+
 #' @export
-testPathForOutput = function(x, overwrite = FALSE) {
-  res = checkPathForOutput(x, overwrite)
-  isTRUE(res)
-}
-
 #' @rdname checkPathForOutput
+assert_path_for_output = assertPathForOutput
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkPathForOutput
+testPathForOutput = makeTestFunction(checkPathForOutput)
+
+#' @export
+#' @rdname checkPathForOutput
+test_path_for_output = testPathForOutput
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @export
-expect_path_for_output = function(x, overwrite = FALSE, info = NULL, label = NULL) {
-  res = checkPathForOutput(x, overwrite)
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkPathForOutput
+expect_path_for_output = makeExpectationFunction(checkPathForOutput)

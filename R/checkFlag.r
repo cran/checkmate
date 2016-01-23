@@ -16,30 +16,30 @@
 #' testFlag(TRUE)
 #' testFlag(1)
 checkFlag = function(x, na.ok = FALSE) {
-  .Call("c_check_flag", x, na.ok, PACKAGE = "checkmate")
+  .Call(c_check_flag, x, na.ok)
 }
 
-#' @rdname checkFlag
-#' @useDynLib checkmate c_check_flag
 #' @export
-assertFlag = function(x, na.ok = FALSE, add = NULL, .var.name) {
-  res = .Call("c_check_flag", x, na.ok, PACKAGE = "checkmate")
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkFlag
-#' @useDynLib checkmate c_check_flag
+assertFlag = makeAssertionFunction(checkFlag)
+
 #' @export
-testFlag = function(x, na.ok = FALSE) {
-  res = .Call("c_check_flag", x, na.ok, PACKAGE = "checkmate")
-  isTRUE(res)
-}
-
 #' @rdname checkFlag
+assert_flag = assertFlag
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkFlag
+testFlag = makeTestFunction(checkFlag)
+
+#' @export
+#' @rdname checkFlag
+test_flag = testFlag
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @useDynLib checkmate c_check_flag
-#' @export
-expect_flag = function(x, na.ok = FALSE, info = NULL, label = NULL) {
-  res = .Call("c_check_flag", x, na.ok, PACKAGE = "checkmate")
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkFlag
+expect_flag = makeExpectationFunction(checkFlag)

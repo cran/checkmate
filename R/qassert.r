@@ -1,4 +1,4 @@
-#' Quick argument checks on (builtin) R types
+#' @title Quick argument checks on (builtin) R types
 #'
 #' @description
 #' The provided functions parse rules which allow to express some of the most
@@ -11,17 +11,16 @@
 #' @param .var.name [\code{logical(1)}]\cr
 #'  Argument name to print in error message. If missing,
 #'  the name of \code{x} will be retrieved via \code{\link[base]{substitute}}.
-#' @return [logical(1)]: \code{TRUE} on success, \code{FALSE} (or a thrown exception) otherwise.
+#' @return
+#'  \code{qassert} throws an \code{R} exception if object \code{x} does
+#'  not comply to at least one of the \code{rules} and returns the tested object invisibly
+#'  otherwise.
+#'  \code{qtest} behaves the same way but returns \code{FALSE} if none of the
+#'  \code{rules} comply.
+#'  \code{qexpect} is intended to be inside the unit test framework \code{\link[testthat]{testthat}} and
+#'  returns an \code{\link[testthat]{expectation}}.
 #'
 #' @details
-#' \code{qassert} throws an \code{R} exception if object \code{x} does
-#' not comply to at least one of the \code{rules} and returns \code{TRUE}
-#' otherwise.
-#' \code{qtest} behaves the same way but returns \code{FALSE} if none of the
-#' \code{rules} comply.
-#' \code{qexpect} is intended to be inside the unit test framework \code{\link[testthat]{testthat}} and
-#' returns an \code{\link[testthat]{expectation}}.
-#'
 #' The rule is specified in up to three parts.
 #' \enumerate{
 #'  \item{
@@ -49,7 +48,7 @@
 #'    }
 #'    Note that the check for missingness does not distinguish between
 #'    \code{NaN} and \code{NA}. Infinite values are not treated as missing, but
-#'    can be catched using boundary checks (part 3).
+#'    can be caught using boundary checks (part 3).
 #'    }
 #'  \item{
 #'    Length definition. This can be one of
@@ -103,24 +102,25 @@
 #' # data frame with at least one column and no missing value in any column
 #' qtest(iris, "D+")
 qassert = function(x, rules, .var.name) {
-  res = .Call("c_qassert", x, rules, FALSE, PACKAGE = "checkmate")
+  res = .Call(c_qassert, x, rules, FALSE)
   if (!isTRUE(res))
-    mstop(qamsg(x, res, vname(x, .var.name)))
-  invisible(TRUE)
+    mstop(qamsg(x, res, .var.name))
+  invisible(x)
 }
 
 #' @useDynLib checkmate c_qtest
 #' @rdname qassert
 #' @export
 qtest = function(x, rules) {
-  .Call("c_qtest", x, rules, FALSE, PACKAGE = "checkmate")
+  .Call(c_qtest, x, rules, FALSE)
 }
 
 #' @useDynLib checkmate c_qassert
 #' @template expect
 #' @rdname qassert
+#' @include makeExpectation.r
 #' @export
 qexpect = function(x, rules, info = NULL, label = NULL) {
-  res = .Call("c_qassert", x, rules, FALSE, PACKAGE = "checkmate")
-  makeExpectation(res, info = info, label = vname(x, label))
+  res = .Call(c_qassert, x, rules, FALSE)
+  makeExpectation(x, res, info = info, label = label)
 }

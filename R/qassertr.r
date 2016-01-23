@@ -1,4 +1,4 @@
-#' Quick recursive arguments checks on lists and data frames
+#' @title Quick recursive arguments checks on lists and data frames
 #'
 #' @description
 #' These functions are the tuned counterparts of \code{\link{qtest}},
@@ -13,7 +13,7 @@
 #' @param .var.name [\code{logical(1)}]\cr
 #'  Argument name to print in error message. If missing,
 #'  the name of \code{x} will be retrieved via \code{\link[base]{substitute}}.
-#' @return [logical(1)]: \code{TRUE} on success, \code{FALSE} (or a thrown exception) otherwise.
+#' @return See \code{\link{qassert}}.
 #' @seealso \code{\link{qtest}}, \code{\link{qassert}}
 #' @useDynLib checkmate c_qassert
 #' @export
@@ -21,10 +21,10 @@
 #' qtestr(as.list(1:10), "i+")
 #' qtestr(iris, "n")
 qassertr = function(x, rules, .var.name) {
-  res = .Call("c_qassert", x, rules, TRUE, PACKAGE = "checkmate")
+  res = .Call(c_qassert, x, rules, TRUE)
   if (!isTRUE(res))
-    mstop(qamsg(x, res, vname(x, .var.name), recursive = TRUE))
-  invisible(TRUE)
+    mstop(qamsg(x, res, .var.name, recursive = TRUE))
+  invisible(x)
 }
 
 
@@ -32,14 +32,15 @@ qassertr = function(x, rules, .var.name) {
 #' @useDynLib checkmate c_qtest
 #' @export
 qtestr = function(x, rules) {
-  .Call("c_qtest", x, rules, TRUE, PACKAGE = "checkmate")
+  .Call(c_qtest, x, rules, TRUE)
 }
 
 #' @useDynLib checkmate c_qassert
 #' @template expect
 #' @rdname qassertr
+#' @include makeExpectation.r
 #' @export
 qexpectr = function(x, rules, info = NULL, label = NULL) {
-  res = .Call("c_qassert", x, rules, TRUE, PACKAGE = "checkmate")
-  makeExpectation(res, info = info, label = vname(x, label))
+  res = .Call(c_qassert, x, rules, TRUE)
+  makeExpectation(x, res, info = info, label = label)
 }

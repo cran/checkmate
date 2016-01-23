@@ -16,30 +16,30 @@
 #' testString("a")
 #' testString(letters)
 checkString = function(x, na.ok = FALSE) {
-  .Call("c_check_string", x, na.ok, PACKAGE = "checkmate")
+  .Call(c_check_string, x, na.ok)
 }
 
-#' @rdname checkString
-#' @useDynLib checkmate c_check_string
 #' @export
-assertString = function(x, na.ok = FALSE, add = NULL, .var.name) {
-  res = checkString(x, na.ok)
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkString
-#' @useDynLib checkmate c_check_string
+assertString = makeAssertionFunction(checkString)
+
 #' @export
-testString = function(x, na.ok = FALSE) {
-  res = checkString(x, na.ok)
-  isTRUE(res)
-}
-
 #' @rdname checkString
+assert_string = assertString
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkString
+testString = makeTestFunction(checkString)
+
+#' @export
+#' @rdname checkString
+test_string = testString
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @useDynLib checkmate c_check_string
-#' @export
-expect_string = function(x, na.ok = FALSE, info = NULL, label = NULL) {
-  res = checkString(x, na.ok)
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkString
+expect_string = makeExpectationFunction(checkString)

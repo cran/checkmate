@@ -12,30 +12,30 @@
 #' testComplex(1)
 #' testComplex(1+1i)
 checkComplex = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  .Call("c_check_complex", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
+  .Call(c_check_complex, x, any.missing, all.missing, len, min.len, max.len, unique, names)
 }
 
-#' @rdname checkComplex
-#' @useDynLib checkmate c_check_complex
 #' @export
-assertComplex = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, add = NULL, .var.name) {
-  res = .Call("c_check_complex", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkComplex
-#' @useDynLib checkmate c_check_complex
+assertComplex = makeAssertionFunction(checkComplex)
+
 #' @export
-testComplex = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  res = .Call("c_check_complex", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  isTRUE(res)
-}
-
 #' @rdname checkComplex
+assert_complex = assertComplex
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkComplex
+testComplex = makeTestFunction(checkComplex)
+
+#' @export
+#' @rdname checkComplex
+test_complex = testComplex
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @useDynLib checkmate c_check_complex
-#' @export
-expect_complex = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, info = NULL, label = NULL) {
-  res = .Call("c_check_complex", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkComplex
+expect_complex = makeExpectationFunction(checkComplex)

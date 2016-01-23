@@ -34,26 +34,26 @@ test_that("checkDataFrame", {
 test_that("checkDataFrame name checking works", {
   df = data.frame(x = 1:2, y = 1:2)
   names(df) = c("x", "x")
-  expect_true(assertDataFrame(df))
+  expect_identical(assertDataFrame(df), df)
   expect_error(assertDataFrame(df, col.names = "unnamed"), "unnamed")
 
   names(df) = c("x", "")
   expect_error(assertDataFrame(df, col.names = "named"), "named")
 
   names(df) = c("x", "x")
-  expect_true(assertDataFrame(df, col.names = "named"))
+  expect_identical(assertDataFrame(df, col.names = "named"), df)
   expect_error(assertDataFrame(df, col.names = "unique"), "uniquely")
   expect_error(assertDataFrame(df, col.names = "strict"), "uniquely")
   expect_error(assertDataFrame(df, col.names = "foo"), "unnamed")
 
   names(df) = c("x", "1")
-  expect_true(assertDataFrame(df, col.names = "named"))
-  expect_true(assertDataFrame(df, col.names = "unique"))
+  expect_identical(assertDataFrame(df, col.names = "named"), df)
+  expect_identical(assertDataFrame(df, col.names = "unique"), df)
   expect_error(assertDataFrame(df, col.names = "strict"), "naming rules")
 
   rownames(df) = NULL
   expect_error(assertDataFrame(df, row.names = "unnamed"), "unnamed")
-  expect_true(assertDataFrame(df, row.names = "named"))
+  expect_identical(assertDataFrame(df, row.names = "named"), df)
   expect_error(assertDataFrame(df, row.names = "strict"), "naming rules")
 })
 
@@ -81,22 +81,4 @@ test_that("missing values are detected", {
   x$b[2] = NA
   expect_false(testDataFrame(x, any.missing = FALSE))
   expect_false(testDataFrame(x, all.missing = FALSE))
-})
-
-test_that("data.table is supported", {
-  skip_if_not_installed("data.table")
-  library(data.table)
-  myobj = as.data.table(iris)
-  expect_succ_all(DataFrame, myobj)
-  expect_true(testDataFrame(myobj, nrow = 150, min.cols = 2, any.missing = FALSE, col.names = "strict"))
-  expect_true(testDataFrame(data.table()))
-})
-
-test_that("dplyr::data_frame is supported", {
-  skip_if_not_installed("dplyr")
-  library(dplyr)
-  myobj = as_data_frame(iris)
-  expect_succ_all(DataFrame, myobj)
-  expect_true(testDataFrame(myobj, nrow = 150, min.cols = 2, any.missing = FALSE, col.names = "strict"))
-  expect_true(testDataFrame(data_frame()))
 })

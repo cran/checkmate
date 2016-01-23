@@ -15,24 +15,27 @@ checkScalarNA = function(x) {
   return(TRUE)
 }
 
-#' @rdname checkScalarNA
 #' @export
-assertScalarNA = function(x, add = NULL, .var.name) {
-  res = checkScalarNA(x)
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkScalarNA
+assertScalarNA = makeAssertionFunction(checkScalarNA)
+
 #' @export
-testScalarNA = function(x) {
-  res = checkScalarNA(x)
-  isTRUE(res)
-}
-
 #' @rdname checkScalarNA
+assert_scalar_na = assertScalarNA
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkScalarNA
+testScalarNA = makeTestFunction(checkScalarNA)
+
+#' @export
+#' @rdname checkScalarNA
+test_scalar_na = testScalarNA
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @export
-expect_scalar_na = function(x, info = NULL, label = NULL) {
-  res = checkScalarNA(x)
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkScalarNA
+expect_scalar_na = makeExpectationFunction(checkScalarNA)

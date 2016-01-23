@@ -15,30 +15,30 @@
 #' testNumeric(1)
 #' testNumeric(1, min.len = 1, lower = 0)
 checkNumeric = function(x, lower = -Inf, upper = Inf, finite = FALSE, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  .Call("c_check_numeric", x, lower, upper, finite, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
+  .Call(c_check_numeric, x, lower, upper, finite, any.missing, all.missing, len, min.len, max.len, unique, names)
 }
 
-#' @rdname checkNumeric
-#' @useDynLib checkmate c_check_numeric
 #' @export
-assertNumeric = function(x, lower = -Inf, upper = Inf, finite = FALSE, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, add = NULL, .var.name) {
-  res = .Call("c_check_numeric", x, lower, upper, finite, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkNumeric
-#' @useDynLib checkmate c_check_numeric
+assertNumeric = makeAssertionFunction(checkNumeric)
+
 #' @export
-testNumeric = function(x, lower = -Inf, upper = Inf, finite = FALSE, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  res = .Call("c_check_numeric", x, lower, upper, finite, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  isTRUE(res)
-}
-
 #' @rdname checkNumeric
+assert_numeric = assertNumeric
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkNumeric
+testNumeric = makeTestFunction(checkNumeric)
+
+#' @export
+#' @rdname checkNumeric
+test_numeric = testNumeric
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @useDynLib checkmate c_check_numeric
-#' @export
-expect_numeric = function(x, lower = -Inf, upper = Inf, finite = FALSE, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, info = NULL, label = NULL) {
-  res = .Call("c_check_numeric", x, lower, upper, finite, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkNumeric
+expect_numeric = makeExpectationFunction(checkNumeric)

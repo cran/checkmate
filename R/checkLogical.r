@@ -12,30 +12,30 @@
 #' testLogical(TRUE)
 #' testLogical(TRUE, min.len = 1)
 checkLogical = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  .Call("c_check_logical", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
+  .Call(c_check_logical, x, any.missing, all.missing, len, min.len, max.len, unique, names)
 }
 
-#' @rdname checkLogical
-#' @useDynLib checkmate c_check_logical
 #' @export
-assertLogical = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, add = NULL, .var.name) {
-  res = .Call("c_check_logical", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkLogical
-#' @useDynLib checkmate c_check_logical
+assertLogical = makeAssertionFunction(checkLogical)
+
 #' @export
-testLogical = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  res = .Call("c_check_logical", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  isTRUE(res)
-}
-
 #' @rdname checkLogical
+assert_logical = assertLogical
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkLogical
+testLogical = makeTestFunction(checkLogical)
+
+#' @export
+#' @rdname checkLogical
+test_logical = testLogical
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @useDynLib checkmate c_check_logical
-#' @export
-expect_logical = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, info = NULL, label = NULL) {
-  res = .Call("c_check_logical", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkLogical
+expect_logical = makeExpectationFunction(checkLogical)

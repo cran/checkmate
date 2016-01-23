@@ -27,24 +27,27 @@ checkDirectory = function(x, access = "") {
   return(checkAccess(x, access))
 }
 
-#' @rdname checkDirectory
 #' @export
-assertDirectory = function(x, access = "", add = NULL, .var.name) {
-  res = checkDirectory(x, access)
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkDirectory
+assertDirectory = makeAssertionFunction(checkDirectory)
+
 #' @export
-testDirectory = function(x, access = "", .var.name) {
-  res = checkDirectory(x, access)
-  isTRUE(res)
-}
-
 #' @rdname checkDirectory
+assert_directory = assertDirectory
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkDirectory
+testDirectory = makeTestFunction(checkDirectory)
+
+#' @export
+#' @rdname checkDirectory
+test_directory = testDirectory
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @export
-expect_directory = function(x, access = "", info = NULL, label = NULL) {
-  res = checkDirectory(x, access)
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkDirectory
+expect_directory = makeExpectationFunction(checkDirectory)

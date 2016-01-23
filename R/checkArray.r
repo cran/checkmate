@@ -6,13 +6,13 @@
 #' @param any.missing [\code{logical(1)}]\cr
 #'  Are missing values allowed? Default is \code{TRUE}.
 #' @param d [\code{integer(1)}]\cr
-#'  Exact dimensionality of array \code{x}.
+#'  Exact number of dimensions of array \code{x}.
 #'  Default is \code{NULL} (no check).
 #' @param min.d [\code{integer(1)}]\cr
-#'  Minimum dimensionality of array \code{x}.
+#'  Minimum number of dimensions of array \code{x}.
 #'  Default is \code{NULL} (no check).
 #' @param max.d [\code{integer(1)}]\cr
-#'  Maximum dimensionality of array \code{x}.
+#'  Maximum number of dimensions of array \code{x}.
 #'  Default is \code{NULL} (no check).
 #' @template checker
 #' @family basetypes
@@ -21,30 +21,30 @@
 #' @examples
 #' checkArray(array(1:27, dim = c(3, 3, 3)), d = 3)
 checkArray = function(x, mode = NULL, any.missing = TRUE, d = NULL, min.d = NULL, max.d = NULL) {
-  .Call("c_check_array", x, mode, any.missing, d, min.d, max.d, PACKAGE = "checkmate")
+  .Call(c_check_array, x, mode, any.missing, d, min.d, max.d)
 }
 
-#' @rdname checkArray
-#' @useDynLib checkmate c_check_array
 #' @export
-assertArray = function(x, mode = NULL, any.missing = TRUE, d = NULL, min.d = NULL, max.d = NULL, add = NULL, .var.name) {
-  res = .Call("c_check_array", x, mode, any.missing, d, min.d, max.d, PACKAGE = "checkmate")
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkArray
-#' @useDynLib checkmate c_check_array
+assertArray = makeAssertionFunction(checkArray)
+
 #' @export
-testArray = function(x, mode = NULL, any.missing = TRUE, d = NULL, min.d = NULL, max.d = NULL) {
-  res = .Call("c_check_array", x, mode, any.missing, d, min.d, max.d, PACKAGE = "checkmate")
-  isTRUE(res)
-}
-
 #' @rdname checkArray
+assert_array = assertArray
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkArray
+testArray = makeTestFunction(checkArray)
+
+#' @export
+#' @rdname checkArray
+test_array = testArray
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @useDynLib checkmate c_check_array
-#' @export
-expect_array = function(x, mode = NULL, any.missing = TRUE, d = NULL, min.d = NULL, max.d = NULL, info = NULL, label = NULL) {
-  res = .Call("c_check_array", x, mode, any.missing, d, min.d, max.d, PACKAGE = "checkmate")
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkArray
+expect_array = makeExpectationFunction(checkArray)

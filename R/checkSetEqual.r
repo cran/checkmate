@@ -28,24 +28,27 @@ checkSetEqual = function(x, y, ordered = FALSE) {
   return(TRUE)
 }
 
-#' @rdname checkSetEqual
 #' @export
-assertSetEqual = function(x, y, ordered = FALSE, add = NULL, .var.name) {
-  res = checkSetEqual(x, y, ordered = ordered)
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkSetEqual
+assertSetEqual = makeAssertionFunction(checkSetEqual)
+
 #' @export
-testSetEqual = function(x, y, ordered = FALSE) {
-  res = checkSetEqual(x, y, ordered = ordered)
-  isTRUE(res)
-}
-
 #' @rdname checkSetEqual
+assert_set_equal = assertSetEqual
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkSetEqual
+testSetEqual = makeTestFunction(checkSetEqual)
+
+#' @export
+#' @rdname checkSetEqual
+test_set_equal = testSetEqual
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @export
-expect_set_equal = function(x, y, ordered = FALSE, info = NULL, label = NULL) {
-  res = checkSetEqual(x, y, ordered = ordered)
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkSetEqual
+expect_set_equal = makeExpectationFunction(checkSetEqual)

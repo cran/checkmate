@@ -31,30 +31,30 @@
 #' @examples
 #' testVector(letters, min.len = 1L, any.missing = FALSE)
 checkVector = function(x, strict = FALSE, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  .Call("c_check_vector", x, strict, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
+  .Call(c_check_vector, x, strict, any.missing, all.missing, len, min.len, max.len, unique, names)
 }
 
-#' @rdname checkVector
-#' @useDynLib checkmate c_check_vector
 #' @export
-assertVector = function(x, strict = FALSE, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, add = NULL, .var.name) {
-  res = .Call("c_check_vector", x, strict, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkVector
-#' @useDynLib checkmate c_check_vector
+assertVector = makeAssertionFunction(checkVector)
+
 #' @export
-testVector = function(x, strict = FALSE, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  res = .Call("c_check_vector", x, strict, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  isTRUE(res)
-}
-
 #' @rdname checkVector
+assert_vector = assertVector
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkVector
+testVector = makeTestFunction(checkVector)
+
+#' @export
+#' @rdname checkVector
+test_vector = testVector
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @useDynLib checkmate c_check_vector
-#' @export
-expect_vector = function(x, strict = FALSE, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, info = NULL, label = NULL) {
-  res = .Call("c_check_vector", x, strict, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkVector
+expect_vector = makeExpectationFunction(checkVector)

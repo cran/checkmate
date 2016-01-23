@@ -13,15 +13,28 @@ checkNull = function(x) {
   return(TRUE)
 }
 
-#' @rdname checkNull
 #' @export
-assertNull = function(x, add = NULL, .var.name) {
-  res = checkNull(x)
-  makeAssertion(res, vname(x, .var.name), add)
-}
+#' @include makeAssertion.r
+#' @template assert
+#' @rdname checkNull
+assertNull = makeAssertionFunction(checkNull)
 
-#' @rdname checkNull
 #' @export
-testNull = function(x) {
-  is.null(x)
-}
+#' @rdname checkNull
+assert_null = assertNull
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkNull
+testNull = makeTestFunction(checkNull)
+
+#' @export
+#' @rdname checkNull
+test_null = testNull
+
+# This function is already provided by testthat
+# #' @export
+# #' @include makeExpectation.r
+# #' @template expect
+# #' @rdname checkNull
+expect_null = makeExpectationFunction(checkNull)

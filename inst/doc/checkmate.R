@@ -1,3 +1,6 @@
+## ----include=FALSE-------------------------------------------------------
+library(checkmate)
+
 ## ------------------------------------------------------------------------
 fact <- function(n, method = "stirling") {
   if (length(n) != 1)
@@ -30,7 +33,6 @@ fact <- function(n, method = "stirling") {
 
 ## ------------------------------------------------------------------------
 fact <- function(n, method = "stirling") {
-  library(checkmate)
   assertCount(n)
   assertChoice(method, c("stirling", "factorial"))
 
@@ -39,4 +41,67 @@ fact <- function(n, method = "stirling") {
   else
     sqrt(2 * pi * n) * (n / exp(1))^n
 }
+
+## ----eval=FALSE----------------------------------------------------------
+#  # file: tests/test-all.R
+#  library(testthat)
+#  library(checkmate) # for testthat extensions
+#  test_check("mypkg")
+
+## ----eval=FALSE----------------------------------------------------------
+#  test_that("checkmate is a sweet extension for testthat", {
+#    x = runif(100)
+#    expect_numeric(x, len = 100, any.missing = FALSE, lower = 0, upper = 1)
+#    # or, equivalent, using the lazy style:
+#    qexpect(x, "N100[0,1]")
+#  })
+
+## ----dev="svg",fig.width=6,fig.height=4----------------------------------
+library(ggplot2)
+library(microbenchmark)
+
+x = TRUE
+r = function(x, na.ok = FALSE) { stopifnot(is.logical(x), length(x) == 1, na.ok || !is.na(x)) }
+cm = function(x) assertFlag(x)
+cmq = function(x) qassert(x, "B1")
+mb = microbenchmark(r(x), cm(x), cmq(x))
+print(mb)
+autoplot(mb)
+
+## ----dev="svg",fig.width=6,fig.height=4----------------------------------
+x = runif(1000)
+r = function(x) stopifnot(is.numeric(x) && length(x) == 1000 && all(!is.na(x) & x >= 0 & x <= 1))
+cm = function(x) assertNumeric(x, len = 1000, any.missing = FALSE, lower = 0, upper = 1)
+cmq = function(x) qassert(x, "N1000[0,1]")
+mb = microbenchmark(r(x), cm(x), cmq(x))
+print(mb)
+autoplot(mb)
+
+## ----dev="svg",fig.width=6,fig.height=4----------------------------------
+x = sample(letters, 10000, replace = TRUE)
+r = function(x) stopifnot(is.character(x) && !any(is.na(x)) && all(nzchar(x)))
+cm = function(x) assertCharacter(x, any.missing = FALSE, min.chars = 1)
+cmq = function(x) qassert(x, "S+[1,]")
+mb = microbenchmark(r(x), cm(x), cmq(x))
+print(mb)
+autoplot(mb)
+
+## ----dev="svg",fig.width=6,fig.height=4----------------------------------
+N = 10000
+x = data.frame(a = runif(N), b = sample(letters[1:5], N, replace = TRUE), c = sample(c(FALSE, TRUE), N, replace = TRUE))
+r = function(x) is.data.frame(x) && !any(sapply(x, function(x) any(is.na(x))))
+cm = function(x) testDataFrame(x, any.missing = FALSE)
+cmq = function(x) qtest(x, "D")
+mb = microbenchmark(r(x), cm(x), cmq(x))
+print(mb)
+autoplot(mb)
+
+# checkmate tries to stop as early as possible
+x$a[1] = NA
+mb = microbenchmark(r(x), cm(x), cmq(x))
+print(mb)
+autoplot(mb)
+
+## ------------------------------------------------------------------------
+sessionInfo()
 

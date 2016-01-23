@@ -33,30 +33,30 @@
 #' @examples
 #' testAtomicVector(letters, min.len = 1L, any.missing = FALSE)
 checkAtomicVector = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  .Call("c_check_atomic_vector", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
+  .Call(c_check_atomic_vector, x, any.missing, all.missing, len, min.len, max.len, unique, names)
 }
 
-#' @rdname checkAtomicVector
-#' @useDynLib checkmate c_check_atomic_vector
 #' @export
-assertAtomicVector = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, add = NULL, .var.name) {
-  res = .Call("c_check_atomic_vector", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkAtomicVector
-#' @useDynLib checkmate c_check_atomic_vector
+assertAtomicVector = makeAssertionFunction(checkAtomicVector)
+
 #' @export
-testAtomicVector = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  res = .Call("c_check_atomic_vector", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  isTRUE(res)
-}
-
 #' @rdname checkAtomicVector
+assert_atomic_vector = assertAtomicVector
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkAtomicVector
+testAtomicVector = makeTestFunction(checkAtomicVector)
+
+#' @export
+#' @rdname checkAtomicVector
+test_atomic_vector = testAtomicVector
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @useDynLib checkmate c_check_atomic_vector
-#' @export
-expect_atomic_vector = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, info = NULL, label = NULL) {
-  res = .Call("c_check_atomic_vector", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkAtomicVector
+expect_atomic_vector = makeExpectationFunction(checkAtomicVector)

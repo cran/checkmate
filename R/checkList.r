@@ -3,7 +3,7 @@
 #' @templateVar fn List
 #' @template x
 #' @inheritParams checkVector
-#' @param ... [ANY]\cr
+#' @param ... [any]\cr
 #'  Additional parameters used in a call of \code{\link{checkVector}}.
 #' @param types [\code{character}]\cr
 #'  Character vector of class names. Each list element must inherit
@@ -22,33 +22,8 @@
 #' testList(list())
 #' testList(as.list(iris), types = c("numeric", "factor"))
 checkList = function(x, types = character(0L), any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  .Call("c_check_list", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate") %and%
+  .Call(c_check_list, x, any.missing, all.missing, len, min.len, max.len, unique, names) %and%
   checkListProps(x, types)
-}
-
-#' @rdname checkList
-#' @useDynLib checkmate c_check_list
-#' @export
-assertList = function(x, types = character(0L), any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, add = NULL, .var.name) {
-  res = .Call("c_check_list", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate") %and% checkListProps(x, types)
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
-#' @rdname checkList
-#' @useDynLib checkmate c_check_list
-#' @export
-testList = function(x, types = character(0L), any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  res = .Call("c_check_list", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  isTRUE(res) && isTRUE(checkListProps(x, types))
-}
-
-#' @rdname checkList
-#' @template expect
-#' @useDynLib checkmate c_check_list
-#' @export
-expect_list = function(x, types = character(0L), any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, info = NULL, label = NULL) {
-  res = .Call("c_check_list", x, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate") %and% checkListProps(x, types)
-  makeExpectation(res, info = info, label = vname(x, label))
 }
 
 checkListProps = function(x, types = character(0L)) {
@@ -84,3 +59,28 @@ checkListProps = function(x, types = character(0L)) {
   }
   return(sprintf("May only contain the following types: %s", collapse(types)))
 }
+
+#' @export
+#' @include makeAssertion.r
+#' @template assert
+#' @rdname checkList
+assertList = makeAssertionFunction(checkList)
+
+#' @export
+#' @rdname checkList
+assert_list = assertList
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkList
+testList = makeTestFunction(checkList)
+
+#' @export
+#' @rdname checkList
+test_list = testList
+
+#' @export
+#' @include makeExpectation.r
+#' @template expect
+#' @rdname checkList
+expect_list = makeExpectationFunction(checkList)

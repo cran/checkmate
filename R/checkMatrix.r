@@ -6,7 +6,7 @@
 #' @param any.missing [\code{logical(1)}]\cr
 #'  Are missing values allowed? Default is \code{TRUE}.
 #' @param all.missing [\code{logical(1)}]\cr
-#'  Are matricies with only missing values allowed? Default is \code{TRUE}.
+#'  Are matrices with only missing values allowed? Default is \code{TRUE}.
 #' @param min.rows [\code{integer(1)}]\cr
 #'  Minimum number of rows.
 #' @param min.cols [\code{integer(1)}]\cr
@@ -32,30 +32,30 @@
 #' colnames(x) = letters[1:3]
 #' testMatrix(x, nrows = 3, min.cols = 1, col.names = "named")
 checkMatrix = function(x, mode = NULL, any.missing = TRUE, all.missing = TRUE, min.rows = NULL, min.cols = NULL, nrows = NULL, ncols = NULL, row.names = NULL, col.names = NULL) {
-  .Call("c_check_matrix", x, mode, any.missing, all.missing, min.rows, min.cols, nrows, ncols, row.names, col.names, PACKAGE = "checkmate")
+  .Call(c_check_matrix, x, mode, any.missing, all.missing, min.rows, min.cols, nrows, ncols, row.names, col.names)
 }
 
-#' @rdname checkMatrix
-#' @useDynLib checkmate c_check_matrix
 #' @export
-assertMatrix = function(x, mode = NULL, any.missing = TRUE, all.missing = TRUE, min.rows = NULL, min.cols = NULL, nrows = NULL, ncols = NULL, row.names = NULL, col.names = NULL, add = NULL, .var.name) {
-  res = .Call("c_check_matrix", x, mode, any.missing, all.missing, min.rows, min.cols, nrows, ncols, row.names, col.names, PACKAGE = "checkmate")
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkMatrix
-#' @useDynLib checkmate c_check_matrix
+assertMatrix = makeAssertionFunction(checkMatrix)
+
 #' @export
-testMatrix = function(x, mode = NULL, any.missing = TRUE, all.missing = TRUE, min.rows = NULL, min.cols = NULL, nrows = NULL, ncols = NULL, row.names = NULL, col.names = NULL) {
-  res = .Call("c_check_matrix", x, mode, any.missing, all.missing, min.rows, min.cols, nrows, ncols, row.names, col.names, PACKAGE = "checkmate")
-  isTRUE(res)
-}
-
 #' @rdname checkMatrix
+assert_matrix = assertMatrix
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkMatrix
+testMatrix = makeTestFunction(checkMatrix)
+
+#' @export
+#' @rdname checkMatrix
+test_matrix = testMatrix
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @useDynLib checkmate c_check_matrix
-#' @export
-expect_matrix = function(x, mode = NULL, any.missing = TRUE, all.missing = TRUE, min.rows = NULL, min.cols = NULL, nrows = NULL, ncols = NULL, row.names = NULL, col.names = NULL, info = NULL, label = NULL) {
-  res = .Call("c_check_matrix", x, mode, any.missing, all.missing, min.rows, min.cols, nrows, ncols, row.names, col.names, PACKAGE = "checkmate")
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkMatrix
+expect_matrix = makeExpectationFunction(checkMatrix)

@@ -24,24 +24,27 @@ checkEnvironment = function(x, contains = character(0L)) {
   return(TRUE)
 }
 
-#' @rdname checkEnvironment
 #' @export
-assertEnvironment = function(x, contains = character(0L), add = NULL, .var.name) {
-  res = checkEnvironment(x, contains)
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkEnvironment
+assertEnvironment = makeAssertionFunction(checkEnvironment)
+
 #' @export
-testEnvironment = function(x, contains = character(0L)) {
-  res = checkEnvironment(x, contains)
-  isTRUE(res)
-}
-
 #' @rdname checkEnvironment
+assert_environment = assertEnvironment
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkEnvironment
+testEnvironment = makeTestFunction(checkEnvironment)
+
+#' @export
+#' @rdname checkEnvironment
+test_environment = testEnvironment
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @export
-expect_environment = function(x, contains = character(0L), info = NULL, label = NULL) {
-  res = checkEnvironment(x, contains)
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkEnvironment
+expect_environment = makeExpectationFunction(checkEnvironment)

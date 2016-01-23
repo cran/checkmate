@@ -16,24 +16,27 @@ checkChoice = function(x, choices) {
   return(TRUE)
 }
 
-#' @rdname checkChoice
 #' @export
-assertChoice = function(x, choices, add = NULL, .var.name) {
-  res = checkChoice(x, choices)
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkChoice
+assertChoice = makeAssertionFunction(checkChoice)
+
 #' @export
-testChoice = function(x, choices) {
-  res = checkChoice(x, choices)
-  isTRUE(res)
-}
-
 #' @rdname checkChoice
+assert_choice = assertChoice
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkChoice
+testChoice = makeTestFunction(checkChoice)
+
+#' @export
+#' @rdname checkChoice
+test_choice = testChoice
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @export
-expect_choice = function(x, choices, info = NULL, label = NULL) {
-  res = checkChoice(x, choices)
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkChoice
+expect_choice = makeExpectationFunction(checkChoice)

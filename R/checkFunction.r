@@ -54,24 +54,27 @@ checkFunction = function(x, args = NULL, ordered = FALSE, nargs = NULL) {
   return(TRUE)
 }
 
-#' @rdname checkFunction
 #' @export
-assertFunction = function(x, args = NULL, ordered = FALSE, nargs = NULL, add = NULL, .var.name) {
-  res = checkFunction(x, args, ordered, nargs)
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkFunction
+assertFunction = makeAssertionFunction(checkFunction)
+
 #' @export
-testFunction = function(x, args = NULL, ordered = FALSE, nargs = NULL) {
-  res = checkFunction(x, args, ordered, nargs)
-  isTRUE(res)
-}
-
 #' @rdname checkFunction
+assert_function = assertFunction
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkFunction
+testFunction = makeTestFunction(checkFunction)
+
+#' @export
+#' @rdname checkFunction
+test_function = testFunction
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @export
-expect_function = function(x, args = NULL, ordered = FALSE, nargs = NULL, info = NULL, label = NULL) {
-  res = checkFunction(x, args, ordered, nargs)
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkFunction
+expect_function = makeExpectationFunction(checkFunction)

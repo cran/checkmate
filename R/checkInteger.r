@@ -15,30 +15,30 @@
 #' testInteger(1.)
 #' testInteger(1:2, lower = 1, upper = 2, any.missing = FALSE)
 checkInteger = function(x, lower = -Inf, upper = Inf, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  .Call("c_check_integer", x, lower, upper, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
+  .Call(c_check_integer, x, lower, upper, any.missing, all.missing, len, min.len, max.len, unique, names)
 }
 
-#' @rdname checkInteger
-#' @useDynLib checkmate c_check_integer
 #' @export
-assertInteger = function(x, lower = -Inf, upper = Inf, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, add = NULL, .var.name) {
-  res = .Call("c_check_integer", x, lower, upper, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkInteger
-#' @useDynLib checkmate c_check_integer
+assertInteger = makeAssertionFunction(checkInteger)
+
 #' @export
-testInteger = function(x, lower = -Inf, upper = Inf, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  res = .Call("c_check_integer", x, lower, upper, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  isTRUE(res)
-}
-
 #' @rdname checkInteger
+assert_integer = assertInteger
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkInteger
+testInteger = makeTestFunction(checkInteger)
+
+#' @export
+#' @rdname checkInteger
+test_integer = testInteger
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @useDynLib checkmate c_check_integer
-#' @export
-expect_integer = function(x, lower = -Inf, upper = Inf, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, info = NULL, label = NULL) {
-  res = .Call("c_check_integer", x, lower, upper, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkInteger
+expect_integer = makeExpectationFunction(checkInteger)

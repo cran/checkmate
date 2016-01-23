@@ -24,24 +24,27 @@ checkSubset = function(x, choices, empty.ok = TRUE) {
   return(TRUE)
 }
 
-#' @rdname checkSubset
 #' @export
-assertSubset = function(x, choices, empty.ok = TRUE, add = NULL, .var.name) {
-  res = checkSubset(x, choices, empty.ok)
-  makeAssertion(res, vname(x, .var.name), add)
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkSubset
+assertSubset = makeAssertionFunction(checkSubset)
+
 #' @export
-testSubset = function(x, choices, empty.ok = TRUE) {
-  res = checkSubset(x, choices, empty.ok)
-  isTRUE(res)
-}
-
 #' @rdname checkSubset
+assert_subset = assertSubset
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkSubset
+testSubset = makeTestFunction(checkSubset)
+
+#' @export
+#' @rdname checkSubset
+test_subset = testSubset
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @export
-expect_subset = function(x, choices, empty.ok = TRUE, info = NULL, label = NULL) {
-  res = checkSubset(x, choices, empty.ok)
-  makeExpectation(res, info = info, label = vname(x, label))
-}
+#' @rdname checkSubset
+expect_subset = makeExpectationFunction(checkSubset)

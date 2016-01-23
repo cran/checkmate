@@ -23,48 +23,42 @@
 #' testCharacter(letters, min.chars = 2)
 #' testCharacter("example", pattern = "xa")
 checkCharacter = function(x, min.chars = NULL, pattern = NULL, fixed = FALSE, ignore.case = FALSE, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,  unique = FALSE, names = NULL) {
-  .Call("c_check_character", x, min.chars, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate") %and%
+  checkCharacterProps = function(x, pattern = NULL, fixed = FALSE, ignore.case = FALSE) {
+    if (!is.null(pattern)) {
+      qassert(pattern, "S1")
+      qassert(fixed, "B1")
+      qassert(ignore.case, "B1")
+      ok = grepl(pattern, x, fixed = fixed, ignore.case = ignore.case)
+      if(!all(ok))
+        return(sprintf("Must comply to pattern '%s", pattern))
+    }
+    return(TRUE)
+  }
+  .Call(c_check_character, x, min.chars, any.missing, all.missing, len, min.len, max.len, unique, names) %and%
   checkCharacterProps(x, pattern, fixed, ignore.case)
 }
 
-#' @rdname checkCharacter
-#' @useDynLib checkmate c_check_character
 #' @export
-assertCharacter = function(x, min.chars = NULL, pattern = NULL, fixed = FALSE, ignore.case = FALSE, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,  unique = FALSE, names = NULL, add = NULL, .var.name) {
-  {
-    res = .Call("c_check_character", x, min.chars, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-    makeAssertion(res, vname(x, .var.name), add)
-  } %and% {
-    res = checkCharacterProps(x, pattern, fixed, ignore.case)
-    makeAssertion(res, vname(x, .var.name), add)
-  }
-}
-
+#' @include makeAssertion.r
+#' @template assert
 #' @rdname checkCharacter
-#' @useDynLib checkmate c_check_character
+assertCharacter = makeAssertionFunction(checkCharacter)
+
 #' @export
-testCharacter = function(x, min.chars = NULL, pattern = NULL, fixed = FALSE, ignore.case = FALSE, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,  unique = FALSE, names = NULL) {
-  res = .Call("c_check_character", x, min.chars, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate")
-  isTRUE(res) && isTRUE(checkCharacterProps(x, pattern, fixed, ignore.case))
-}
-
 #' @rdname checkCharacter
+assert_character = assertCharacter
+
+#' @export
+#' @include makeTest.r
+#' @rdname checkCharacter
+testCharacter = makeTestFunction(checkCharacter)
+
+#' @export
+#' @rdname checkCharacter
+test_character = testCharacter
+
+#' @export
+#' @include makeExpectation.r
 #' @template expect
-#' @useDynLib checkmate c_check_character
-#' @export
-expect_character = function(x, min.chars = NULL, pattern = NULL, fixed = FALSE, ignore.case = FALSE, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,  unique = FALSE, names = NULL, info = NULL, label = NULL) {
-  res = .Call("c_check_character", x, min.chars, any.missing, all.missing, len, min.len, max.len, unique, names, PACKAGE = "checkmate") %and% checkCharacterProps(x, pattern, fixed, ignore.case)
-  makeExpectation(res, info = info, label = vname(x, label))
-}
-
-checkCharacterProps = function(x, pattern = NULL, fixed = FALSE, ignore.case = FALSE) {
-  if (!is.null(pattern)) {
-    qassert(pattern, "S1")
-    qassert(fixed, "B1")
-    qassert(ignore.case, "B1")
-    ok = grepl(pattern, x, fixed = fixed, ignore.case = ignore.case)
-    if(!all(ok))
-      return(sprintf("Must comply to pattern '%s", pattern))
-  }
-  return(TRUE)
-}
+#' @rdname checkCharacter
+expect_character = makeExpectationFunction(checkCharacter)
