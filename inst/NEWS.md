@@ -1,4 +1,8 @@
-# Version 1.7 (2016-01-23)
+# Version 1.7.1 (2016-02-02)
+* Fixed a segfault while checking an upper bound in qassert/qtest.
+* Some minor speedups
+
+# Version 1.7.0 (2016-01-23)
 * Added alias functions for all functions in CamelCase style, e.g.
   `assert_numeric` is the new alias for `assertNumeric` and `test_matrix` is the
   alias for `test_matrix`.

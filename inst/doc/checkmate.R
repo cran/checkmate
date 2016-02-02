@@ -79,7 +79,7 @@ autoplot(mb)
 
 ## ----dev="svg",fig.width=6,fig.height=4----------------------------------
 x = sample(letters, 10000, replace = TRUE)
-r = function(x) stopifnot(is.character(x) && !any(is.na(x)) && all(nzchar(x)))
+r = function(x) stopifnot(is.character(x) && !any(is.na(x)) && all(nchar(x) > 0))
 cm = function(x) assertCharacter(x, any.missing = FALSE, min.chars = 1)
 cmq = function(x) qassert(x, "S+[1,]")
 mb = microbenchmark(r(x), cm(x), cmq(x))

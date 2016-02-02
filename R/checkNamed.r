@@ -5,7 +5,7 @@
 #' @param type [character(1)]\cr
 #'  Select the check(s) to perform.
 #'  \dQuote{unnamed} checks \code{x} to be unnamed.
-#'  \dQuote{named} (default) checks \code{x} to be named which excludes names to be \code{NA} or emtpy (\code{""}).
+#'  \dQuote{named} (default) checks \code{x} to be named which excludes names to be \code{NA} or empty (\code{""}).
 #'  \dQuote{unique} additionally tests for non-duplicated names.
 #'  \dQuote{strict} checks for unique names which comply to R's variable name restrictions.
 #'  Note that for zero-length \code{x} every name check evaluates to \code{TRUE}.
@@ -26,7 +26,7 @@ checkNamed = function(x, type = "named") {
 #' @include makeAssertion.r
 #' @template assert
 #' @rdname checkNamed
-assertNamed = makeAssertionFunction(checkNamed)
+assertNamed = makeAssertionFunction(checkNamed, c.fun = "c_check_named")
 
 #' @export
 #' @rdname checkNamed
@@ -35,7 +35,7 @@ assert_named = assertNamed
 #' @export
 #' @include makeTest.r
 #' @rdname checkNamed
-testNamed = makeTestFunction(checkNamed)
+testNamed = makeTestFunction(checkNamed, c.fun = "c_check_named")
 
 #' @export
 #' @rdname checkNamed
@@ -46,4 +46,4 @@ test_named = testNamed
 # #' @include makeExpectation.r
 # #' @template expect
 # #' @rdname checkNamed
-expect_named = makeExpectationFunction(checkNamed)
+expect_named = makeExpectationFunction(checkNamed, c.fun = "c_check_named")

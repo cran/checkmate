@@ -91,13 +91,21 @@ test_that("length", {
 
 test_that("bounds", {
   xx = 1:3
-  expect_succ_all(xx, "i+[1,3]")
   expect_succ_all(xx, "i+(0,4)")
   expect_succ_all(xx, "i+(0.9999,3.0001)")
   expect_succ_all(xx, "i+(0,1e2)")
-  expect_fail_all(xx, "i+(1,3]")
-  expect_fail_all(xx, "i+[1,3)")
   expect_succ_all(1, "n[0, 100]")
+
+  expect_fail_all(xx, "i+[1,2)")
+  expect_fail_all(xx, "i+[1,2]")
+  expect_fail_all(xx, "i+[1,3)")
+  expect_succ_all(xx, "i+[1,3]")
+
+  expect_fail_all(xx, "i+(2,3]")
+  expect_fail_all(xx, "i+[2,2]")
+  expect_fail_all(xx, "i+(1,3)")
+  expect_succ_all(xx, "i+[1,3]")
+
 
   expect_succ_all(xx, "i[1,)")
   expect_succ_all(xx, "i[,3]")
@@ -235,9 +243,16 @@ test_that("logicals are not numeric", {
   expect_fail_all(TRUE, "N")
 })
 
-test_that("qexpect works", {
-  expect_fail_all(TRUE, "i")
-  expect_fail_all(TRUE, "I")
-  expect_fail_all(TRUE, "n")
-  expect_fail_all(TRUE, "N")
+test_that("error messages are properly generated", {
+  expect_error(qassert(1, "N22"), "== 22")
+  expect_error(qassert(1:3, "N?"), "<= 1")
+  expect_error(qassert(integer(0), "N+"), ">= 1")
+
+  expect_error(qassert(1, "N[2,]"), ">= 2")
+  expect_error(qassert(1, "N(2,]"), "> 2")
+  expect_error(qassert(1, "N[,0]"), "<= 0")
+  expect_error(qassert(1, "N[,0)"), "< 0")
+
+  expect_error(qassert(Inf, "N[)"), "!= inf")
+  expect_error(qassert(-Inf, "N(]"), "!= -inf")
 })
