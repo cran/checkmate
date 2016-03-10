@@ -7,7 +7,6 @@
 #' @template x
 #' @inheritParams checkVector
 #' @template checker
-#' @family basetypes
 #' @useDynLib checkmate c_check_atomic
 #' @export
 #' @family basetypes
@@ -17,7 +16,6 @@
 checkAtomic = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
   .Call(c_check_atomic, x, any.missing, all.missing, len, min.len, max.len, unique, names)
 }
-
 
 #' @export
 #' @include makeAssertion.r
