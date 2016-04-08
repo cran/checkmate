@@ -2,6 +2,18 @@
 #include "any_missing.h"
 #include "is_integerish.h"
 
+const char * guessType(SEXP x) {
+    SEXP attr = getAttrib(x, R_ClassSymbol);
+    if (!isNull(attr))
+        return CHAR(STRING_ELT(attr, 0));
+
+    attr = getAttrib(x, R_DimSymbol);
+    if (!isNull(attr) && isVectorAtomic(x))
+        return length(attr) == 2 ? "matrix" : "array";
+
+    return type2char(TYPEOF(x));
+}
+
 Rboolean isStrictlyNumeric(SEXP x) {
     switch(TYPEOF(x)) {
         case REALSXP: return TRUE;
@@ -31,29 +43,23 @@ Rboolean isRList(SEXP x) {
  * Here are our own wrappers
  * */
 R_len_t get_nrows(SEXP x) {
-    if (isVector(x) || isList(x)) {
-        if (isFrame(x))
-            return length(getAttrib(x, R_RowNamesSymbol));
-    } else {
+    if (!isVector(x) && !isList(x))
         error("Object does not have a dimension");
-    }
+
+    if (isFrame(x))
+        return length(getAttrib(x, R_RowNamesSymbol));
     SEXP dim = getAttrib(x, R_DimSymbol);
-    if (dim == R_NilValue)
-        return length(x);
-    return INTEGER(dim)[0];
+    return (dim == R_NilValue) ? length(x) : INTEGER(dim)[0];
 }
 
 R_len_t get_ncols(SEXP x) {
-    if (isVector(x) || isList(x)) {
-        if (isFrame(x))
-            return length(x);
-        SEXP dim = getAttrib(x, R_DimSymbol);
-        if (length(dim) >= 2)
-            return INTEGER(dim)[1];
-    } else {
+    if (!isVector(x) && !isList(x))
         error("Object does not have a dimension");
-    }
-    return 1;
+
+    if (isFrame(x))
+        return length(x);
+    SEXP dim = getAttrib(x, R_DimSymbol);
+    return (length(dim) >= 2) ? INTEGER(dim)[1] : 1;
 }
 
 

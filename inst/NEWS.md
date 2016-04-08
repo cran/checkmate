@@ -1,3 +1,16 @@
+# Version 1.7.4 (2016-04-08)
+* Compatibility with the upcoming testthat version.
+* `expect_` functions now return the checked object invisibly.
+* Changed default of argument `.var.name` for assertions and `label` for
+  expectations: They now default to the return value of the exported function
+  `vname` (instead of missing which confuses some linters).
+* Fixed error message in convert functions: Variable name was not properly
+  looked up by the heuristic.
+* Fixed a bug in `qassertr` and `qtestr` where the error message was not
+  properly generated if multiple rules were provided.
+* New argument `depth` for `qtestr` to control the recursion depth while
+  checking nested lists.
+
 # Version 1.7.3 (2016-03-10)
 * Added `checkDate()`
 * Argument `.var.name` of assert functions now has \code{NULL} as default value
