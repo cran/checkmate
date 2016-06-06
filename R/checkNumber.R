@@ -3,20 +3,24 @@
 #' @templateVar fn Number
 #' @template x
 #' @template na-handling
-#' @param na.ok [\code{logical(1)}]\cr
-#'  Are missing values allowed? Default is \code{FALSE}.
+#' @template na.ok
 #' @template bounds
 #' @param finite [\code{logical(1)}]\cr
 #'  Check for only finite values? Default is \code{FALSE}.
+#' @template null.ok
 #' @template checker
 #' @useDynLib checkmate c_check_number
 #' @export
 #' @examples
 #' testNumber(1)
 #' testNumber(1:2)
-checkNumber = function(x, na.ok = FALSE, lower = -Inf, upper = Inf, finite = FALSE) {
-  .Call(c_check_number, x, na.ok, lower, upper, finite)
+checkNumber = function(x, na.ok = FALSE, lower = -Inf, upper = Inf, finite = FALSE, null.ok = FALSE) {
+  .Call(c_check_number, x, na.ok, lower, upper, finite, null.ok)
 }
+
+#' @export
+#' @rdname checkNumber
+check_number = checkNumber
 
 #' @export
 #' @include makeAssertion.R

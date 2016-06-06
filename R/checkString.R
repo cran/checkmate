@@ -6,9 +6,9 @@
 #' @templateVar fn String
 #' @template x
 #' @template na-handling
-#' @param na.ok [\code{logical(1)}]\cr
-#'  Are missing values allowed? Default is \code{FALSE}.
+#' @template na.ok
 #' @inheritParams checkCharacter
+#' @template null.ok
 #' @template checker
 #' @family scalars
 #' @export
@@ -16,10 +16,14 @@
 #' @examples
 #' testString("a")
 #' testString(letters)
-checkString = function(x, na.ok = FALSE, min.chars = NULL, pattern = NULL, fixed = NULL, ignore.case = FALSE) {
-  .Call(c_check_string, x, na.ok, min.chars) %and%
+checkString = function(x, na.ok = FALSE, min.chars = NULL, pattern = NULL, fixed = NULL, ignore.case = FALSE, null.ok = FALSE) {
+  .Call(c_check_string, x, na.ok, min.chars, null.ok) %and%
   checkCharacterPattern(x, pattern, fixed, ignore.case)
 }
+
+#' @export
+#' @rdname checkString
+check_string = checkString
 
 #' @export
 #' @include makeAssertion.R

@@ -2,6 +2,7 @@
 #'
 #' @templateVar fn ScalarNA
 #' @template x
+#' @template null.ok
 #' @template checker
 #' @family scalars
 #' @export
@@ -9,11 +10,20 @@
 #' testScalarNA(1)
 #' testScalarNA(NA_real_)
 #' testScalarNA(rep(NA, 2))
-checkScalarNA = function(x) {
+checkScalarNA = function(x, null.ok = FALSE) {
+  if (is.null(x)) {
+    if (identical(null.ok, TRUE))
+      return(TRUE)
+    return("Must be a scalar missing value, not 'NULL'")
+  }
   if (length(x) != 1L || !is.na(x))
-    return("Must be a scalar missing value")
+    return(paste0("Must be a scalar missing value", if (isTRUE(null.ok)) " (or 'NULL')" else ""))
   return(TRUE)
 }
+
+#' @export
+#' @rdname checkScalarNA
+check_scalar_na = checkScalarNA
 
 #' @export
 #' @include makeAssertion.R

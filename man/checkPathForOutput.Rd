@@ -4,12 +4,15 @@
 \alias{assertPathForOutput}
 \alias{assert_path_for_output}
 \alias{checkPathForOutput}
+\alias{check_path_for_output}
 \alias{expect_path_for_output}
 \alias{testPathForOutput}
 \alias{test_path_for_output}
 \title{Check if a path is suited for creating an output file}
 \usage{
 checkPathForOutput(x, overwrite = FALSE)
+
+check_path_for_output(x, overwrite = FALSE)
 
 assertPathForOutput(x, overwrite = FALSE, .var.name = vname(x),
   add = NULL)
@@ -75,6 +78,7 @@ testPathForOutput(file.path(tempdir(), "process.log"))
 }
 \seealso{
 Other filesystem: \code{\link{checkAccess}},
-  \code{\link{checkDirectory}}, \code{\link{checkFile}}
+  \code{\link{checkDirectoryExists}},
+  \code{\link{checkFileExists}}
 }
 

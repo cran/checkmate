@@ -13,21 +13,26 @@
 #' @param nargs [\code{integer(1)}]\cr
 #'  Required number of arguments, without \code{...}.
 #'  Default is \code{NULL} (no check).
+#' @template null.ok
 #' @template checker
 #' @family basetypes
 #' @export
 #' @examples
 #' testFunction(mean)
 #' testFunction(mean, args = "x")
-checkFunction = function(x, args = NULL, ordered = FALSE, nargs = NULL) {
-  qassert(ordered, "B1")
-  x = try(match.fun(x), silent = TRUE)
-  if (inherits(x, "try-error"))
-    return("Function not found")
+checkFunction = function(x, args = NULL, ordered = FALSE, nargs = NULL, null.ok = FALSE) {
+  if (is.null(x)) {
+    if (identical(null.ok, TRUE))
+      return(TRUE)
+    return("Must be a function, not 'NULL'")
+  }
+  xf = try(match.fun(x), silent = TRUE)
+  if (inherits(xf, "try-error"))
+    return(sprintf("Must be a function%s, not '%s'", if (isTRUE(null.ok)) " (or 'NULL')" else "", guessType(x)))
 
   if (!is.null(args)) {
     qassert(args, "S")
-    fargs = names(formals(x)) %??% character(0L)
+    fargs = names(formals(xf)) %??% character(0L)
 
     if (length(args) == 0L) {
       if (length(fargs) > 0L)
@@ -35,6 +40,7 @@ checkFunction = function(x, args = NULL, ordered = FALSE, nargs = NULL) {
       return(TRUE)
     }
 
+    qassert(ordered, "B1")
     if (ordered) {
       if (any(args != head(fargs, length(args)))) {
         return(sprintf("Must have first formal arguments (ordered): %s", paste0(args, collapse = ",")))
@@ -48,13 +54,17 @@ checkFunction = function(x, args = NULL, ordered = FALSE, nargs = NULL) {
 
   if (!is.null(nargs)) {
     nargs = asCount(nargs)
-    fnargs = length(setdiff(names(formals(x)) %??% character(0L), "..."))
+    fnargs = length(setdiff(names(formals(xf)) %??% character(0L), "..."))
     if (nargs != fnargs)
       return(sprintf("Must have exactly %i formal arguments, but has %i", nargs, fnargs))
   }
 
   return(TRUE)
 }
+
+#' @export
+#' @rdname checkFunction
+check_function = checkFunction
 
 #' @export
 #' @include makeAssertion.R

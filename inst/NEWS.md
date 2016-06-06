@@ -1,3 +1,14 @@
+# Version 1.8.0 (2016-06-06)
+* Most functions now support the handling of default arguments encoded as `NULL`
+  via argument `null.ok`.
+* Functions `*File` and `*Directory` are deprecated due to name clashes and will
+  be removed in a future version. Please use `*FileExists` or `*DirectoryExists`
+  instead.
+* New helper function `matchArg` to provide a simple an easy way for partial
+  argument matching in combination with an AssertCollection.
+* Added alias functions for all check functions (`check_*`)
+  to provide support for the underscore programming style in `assert()`.
+
 # Version 1.7.4 (2016-04-08)
 * Compatibility with the upcoming testthat version.
 * `expect_` functions now return the checked object invisibly.
@@ -34,7 +45,7 @@
 * Some minor speedups
 
 # Version 1.7.0 (2016-01-23)
-* Added alias functions for all functions in CamelCase style, e.g.
+* Added alias functions for all functions to support the underscore style, e.g.
   `assert_numeric` is the new alias for `assertNumeric` and `test_matrix` is the
   alias for `test_matrix`.
 * All assert functions now invisibly return the tested object instead of `TRUE`

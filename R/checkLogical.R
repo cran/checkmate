@@ -4,6 +4,7 @@
 #' @template x
 #' @template na-handling
 #' @inheritParams checkVector
+#' @template null.ok
 #' @template checker
 #' @family basetypes
 #' @useDynLib checkmate c_check_logical
@@ -11,9 +12,13 @@
 #' @examples
 #' testLogical(TRUE)
 #' testLogical(TRUE, min.len = 1)
-checkLogical = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL) {
-  .Call(c_check_logical, x, any.missing, all.missing, len, min.len, max.len, unique, names)
+checkLogical = function(x, any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL, unique = FALSE, names = NULL, null.ok = FALSE) {
+  .Call(c_check_logical, x, any.missing, all.missing, len, min.len, max.len, unique, names, null.ok)
 }
+
+#' @export
+#' @rdname checkLogical
+check_logical = checkLogical
 
 #' @export
 #' @include makeAssertion.R

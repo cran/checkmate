@@ -6,8 +6,8 @@
 #' @templateVar fn Flag
 #' @template x
 #' @template na-handling
-#' @param na.ok [\code{logical(1)}]\cr
-#'  Are missing values allowed? Default is \code{FALSE}.
+#' @template na.ok
+#' @template null.ok
 #' @template checker
 #' @family scalars
 #' @useDynLib checkmate c_check_flag
@@ -15,9 +15,13 @@
 #' @examples
 #' testFlag(TRUE)
 #' testFlag(1)
-checkFlag = function(x, na.ok = FALSE) {
-  .Call(c_check_flag, x, na.ok)
+checkFlag = function(x, na.ok = FALSE, null.ok = FALSE) {
+  .Call(c_check_flag, x, na.ok, null.ok)
 }
+
+#' @export
+#' @rdname checkFlag
+check_flag = checkFlag
 
 #' @export
 #' @include makeAssertion.R

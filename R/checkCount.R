@@ -6,12 +6,12 @@
 #' @templateVar fn Count
 #' @template x
 #' @template na-handling
-#' @param na.ok [\code{logical(1)}]\cr
-#'  Are missing values allowed? Default is \code{FALSE}.
+#' @template na.ok
 #' @param positive [\code{logical(1)}]\cr
 #'  Must \code{x} be positive (>= 1)?
 #'  Default is \code{FALSE}, allowing 0.
 #' @template tol
+#' @template null.ok
 #' @template checker
 #' @family scalars
 #' @useDynLib checkmate c_check_count
@@ -19,9 +19,13 @@
 #' @examples
 #' testCount(1)
 #' testCount(-1)
-checkCount = function(x, na.ok = FALSE, positive = FALSE, tol = sqrt(.Machine$double.eps)) {
-  .Call(c_check_count, x, na.ok, positive, tol)
+checkCount = function(x, na.ok = FALSE, positive = FALSE, tol = sqrt(.Machine$double.eps), null.ok = FALSE) {
+  .Call(c_check_count, x, na.ok, positive, tol, null.ok)
 }
+
+#' @export
+#' @rdname checkCount
+check_count = checkCount
 
 #' @export
 #' @include makeAssertion.R
