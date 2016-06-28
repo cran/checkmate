@@ -42,6 +42,14 @@ fact <- function(n, method = "stirling") {
     sqrt(2 * pi * n) * (n / exp(1))^n
 }
 
+## ------------------------------------------------------------------------
+f <- function(x) {
+  assert(
+    checkClass(x, "foo"),
+    checkClass(x, "bar")
+  )
+}
+
 ## ----eval=FALSE----------------------------------------------------------
 #  # file: tests/test-all.R
 #  library(testthat)
