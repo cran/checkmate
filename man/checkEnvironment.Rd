@@ -56,9 +56,16 @@ the heuristic implemented in \code{\link{vname}}.}
 }
 \value{
 Depending on the function prefix:
- If the check is successful, the functions return \code{TRUE}. If the check
- is not successful, \code{assertEnvironment}/\code{assert_environment}
- throws an error message, \code{testEnvironment}/\code{test_environment}
+ If the check is successful, the functions 
+ \code{assertEnvironment}/\code{assert_environment} return 
+ \code{x} invisibly, whereas
+ \code{checkEnvironment}/\code{check_environment} and 
+ \code{testEnvironment}/\code{test_environment} return 
+ \code{TRUE}.
+ If the check is not successful, 
+ \code{assertEnvironment}/\code{assert_environment}
+ throws an error message, 
+ \code{testEnvironment}/\code{test_environment}
  returns \code{FALSE},
  and \code{checkEnvironment} returns a string with the error message.
  The function \code{expect_environment} always returns an
@@ -76,11 +83,12 @@ testEnvironment(ee, contains = "a")
 Other basetypes: \code{\link{checkArray}},
   \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
   \code{\link{checkComplex}}, \code{\link{checkDataFrame}},
-  \code{\link{checkDataTable}}, \code{\link{checkFactor}},
+  \code{\link{checkDate}}, \code{\link{checkFactor}},
   \code{\link{checkFunction}},
   \code{\link{checkIntegerish}},
   \code{\link{checkInteger}}, \code{\link{checkList}},
   \code{\link{checkLogical}}, \code{\link{checkMatrix}},
-  \code{\link{checkNumeric}}, \code{\link{checkVector}}
+  \code{\link{checkNull}}, \code{\link{checkNumeric}},
+  \code{\link{checkVector}}
 }
 

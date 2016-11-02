@@ -82,11 +82,13 @@ expect_fail_all = function(part, x, ..., cc = as.character(substitute(part)), lc
   fun = match.fun(s)
   expect_error(fun(x, ..., .var.name = xn), xn, info = s, label = xn)
   expect_error(fun(x, ...), "'x'", info = s, label = xn)
+  expect_is(tryCatch(fun(x, ...), condition = function(c) c), c("assertion_error", "error", "condition"))
 
   s = paste0("assert_", lc)
   fun = match.fun(s)
   expect_error(fun(x, ..., .var.name = xn), xn, info = s, label = xn)
   expect_error(fun(x, ...), "'x'", info = s, label = xn)
+  expect_is(tryCatch(fun(x, ...), condition = function(c) c), c("assertion_error", "error", "condition"))
 
   s = paste0("expect_", lc)
   fun = match.fun(s)
@@ -94,4 +96,8 @@ expect_fail_all = function(part, x, ..., cc = as.character(substitute(part)), lc
   expect_expectation_failed(fun(x, ..., label = xn), pattern = xn, info = s, label = xn)
 
   invisible(TRUE)
+}
+
+vlapply = function (x, fun, ..., use.names = TRUE) {
+    vapply(X = x, FUN = fun, ..., FUN.VALUE = NA, USE.NAMES = use.names)
 }

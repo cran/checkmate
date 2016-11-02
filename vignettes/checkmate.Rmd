@@ -74,7 +74,7 @@ The functions can be split into four functional groups, indicated by their prefi
 
 If prefixed with `assert`, an error is thrown if the corresponding check fails.
 Otherwise, the checked object is returned invisibly.
-There are many different coding styles out there in the wild, but most R programmers stick to either `CamelCase` or `underscore_case`.
+There are many different coding styles out there in the wild, but most R programmers stick to either `camelBack` or `underscore_case`.
 Therefore, `checkmate` offers all functions in both flavors: `assert_count` is just an alias for `assertCount` but allows you to retain your favorite style.
 
 The family of functions prefixed with `test` always return the check result as logical value.
@@ -82,83 +82,15 @@ Again, you can use `test_count` and `testCount` interchangeably.
 
 Functions starting with `check` return the error message as a string (or `TRUE` otherwise) and can be used if you need more control and, e.g., want to grep on the returned error message.
 
-`expect` is the last family of functions and is intended to be used with the [testthat package](http://cran.r-project.org/package=testthat).
+`expect` is the last family of functions and is intended to be used with the [testthat package](https://cran.r-project.org/package=testthat).
 All performed checks are logged into the `testthat` reporter.
 Because `testthat` uses the `underscore_case`, the extension functions only come in the underscore style.
 
-
-### Scalars
-
-* [checkFlag](https://mllg.github.io/checkmate/checkFlag)
-* [checkCount](https://mllg.github.io/checkmate/checkCount)
-* [checkInt](https://mllg.github.io/checkmate/checkInt)
-* [checkNumber](https://mllg.github.io/checkmate/checkNumber)
-* [checkString](https://mllg.github.io/checkmate/checkString)
-* [checkScalar](https://mllg.github.io/checkmate/checkScalar)
-* [checkScalarNA](https://mllg.github.io/checkmate/checkScalarNA)
-
-
-### Vectors
-
-* [checkLogical](https://mllg.github.io/checkmate/checkLogical)
-* [checkNumeric](https://mllg.github.io/checkmate/checkNumeric)
-* [checkInteger](https://mllg.github.io/checkmate/checkInteger)
-* [checkIntegerish](https://mllg.github.io/checkmate/checkIntegerish)
-* [checkComplex](https://mllg.github.io/checkmate/checkComplex)
-* [checkCharacter](https://mllg.github.io/checkmate/checkCharacter)
-* [checkFactor](https://mllg.github.io/checkmate/checkFactor)
-* [checkList](https://mllg.github.io/checkmate/checkList)
-* [checkVector](https://mllg.github.io/checkmate/checkVector)
-* [checkAtomic](https://mllg.github.io/checkmate/checkAtomic)
-* [checkAtomicVector](https://mllg.github.io/checkmate/checkAtomicVector)
-
-
-### Attributes
-
-* [checkClass](https://mllg.github.io/checkmate/checkClass)
-* [checkNames](https://mllg.github.io/checkmate/checkNames)
-* [checkNamed](https://mllg.github.io/checkmate/checkNamed)
-
-
-### Choices and Subsets
-
-* [checkChoice](https://mllg.github.io/checkmate/checkChoice)
-* [checkSubset](https://mllg.github.io/checkmate/checkSubset)
-* [checkSetEqual](https://mllg.github.io/checkmate/checkSetEqual)
-
-
-### Matrices, Arrays and Data Frame
-
-* [checkMatrix](https://mllg.github.io/checkmate/checkMatrix)
-* [checkArray](https://mllg.github.io/checkmate/checkArray)
-* [checkDataFrame](https://mllg.github.io/checkmate/checkDataFrame)
-* [checkDataTable](https://mllg.github.io/checkmate/checkDataTable)
-
-
-### Safe Coercion to integer
-
-* [asCount](https://mllg.github.io/checkmate/asInteger)
-* [asInt](https://mllg.github.io/checkmate/asInteger)
-* [asInteger](https://mllg.github.io/checkmate/asInteger)
-
-
-### Other builtin
-
-* [checkNull](https://mllg.github.io/checkmate/checkNull)
-* [checkEnvironment](https://mllg.github.io/checkmate/checkEnvironment)
-* [checkFunction](https://mllg.github.io/checkmate/checkFunction)
-
-
-### File IO:
-
-* [checkFile](https://mllg.github.io/checkmate/checkFile)
-* [checkDirectory](https://mllg.github.io/checkmate/checkDirectory)
-* [checkPathForOutput](https://mllg.github.io/checkmate/checkPathForOutput)
-
+All functions are categorized into objects to check on the [package help page](https://mllg.github.io/checkmate/reference/checkmate-package).
 
 ## In case you miss flexibility
 
-You can use [assert](https://mllg.github.io/checkmate/assert) to perform multiple checks at once and throw an assertion if all checks fail.
+You can use [assert](https://mllg.github.io/checkmate/reference/assert) to perform multiple checks at once and throw an assertion if all checks fail.
 
 Here is an example where we check that x is either of class `foo` or class `bar`:
 
@@ -171,7 +103,7 @@ f <- function(x) {
 }
 ```
 
-Note that `assert(, combine = "or") and `assert(, combine = "and")` allow to control the logical
+Note that `assert(, combine = "or")` and `assert(, combine = "and")` allow to control the logical
 combination of the specified checks, and that the former is the default.
 
 
@@ -182,12 +114,12 @@ E.g., `qassert(x, "I+")` asserts that `x` is an integer vector with at least one
 This very simple domain specific language covers a large variety of frequent argument checks with only a few keystrokes.
 You choose what you like best.
 
-* [qassert](https://mllg.github.io/checkmate/qassert)
-* [qassertr](https://mllg.github.io/checkmate/qassert)
+* [qassert](https://mllg.github.io/checkmate/reference/qassert)
+* [qassertr](https://mllg.github.io/checkmate/reference/qassert)
 
 
 ## checkmate as testthat extension
-To extend [testthat](http://cran.r-project.org/package=testthat), you need to IMPORT, DEPEND or SUGGEST on the `checkmate` package.
+To extend [testthat](https://cran.r-project.org/package=testthat), you need to IMPORT, DEPEND or SUGGEST on the `checkmate` package.
 Here is a minimal example:
 ```{r,eval=FALSE}
 # file: tests/test-all.R
@@ -283,6 +215,45 @@ print(mb)
 autoplot(mb)
 ```
 
+## Extending checkmate
+
+To extend checkmate a custom `check*` function has to be written.
+For example, to check for a square matrix one can re-use parts of checkmate and extend the check with additional functionality:
+```{r}
+checkSquareMatrix = function(x, mode = NULL) {
+  # check functions must return TRUE on success
+  # and a custom error message otherwise
+  res = checkMatrix(x, mode = mode)
+  if (!isTRUE(res))
+    return(res)
+  if (nrow(x) != ncol(x))
+    return("Must be square")
+  return(TRUE)
+}
+
+# a quick test:
+X = matrix(1:9, nrow = 3)
+checkSquareMatrix(X)
+checkSquareMatrix(X, mode = "character")
+checkSquareMatrix(X[1:2, ])
+```
+The respective counterparts to the `check`-function can be created using the constructors [makeAssertionFunction](https://mllg.github.io/checkmate/reference/makeAssertion), [makeTestFunction](https://mllg.github.io/checkmate/reference/makeTest) and [makeExpectationFunction](https://mllg.github.io/checkmate/reference/makeExpectation):
+```{r}
+# For assertions:
+assert_square_matrix = assertSquareMatrix = makeAssertionFunction(checkSquareMatrix)
+print(assertSquareMatrix)
+
+# For tests:
+test_square_matrix = testSquareMatrix = makeTestFunction(checkSquareMatrix)
+print(testSquareMatrix)
+
+# For expectations:
+expect_square_matrix = makeExpectationFunction(checkSquareMatrix)
+print(expect_square_matrix)
+```
+Note that all the additional arguments `.var.name`, `add`, `info` and `label` are automatically joined with the function arguments of your custom check function.
+Also note that if you define these functions inside an R package, the constructors are called at build-time (thus, there is no negative impact on the runtime).
+
 ## Calling checkmate from C/C++
 
 The package registers two functions which can be used in other packages' C/C++ code for argument checks.
@@ -290,36 +261,20 @@ The package registers two functions which can be used in other packages' C/C++ c
 SEXP qassert(SEXP x, const char *rule, const char *name);
 Rboolean qtest(SEXP x, const char *rule);
 ```
-These are the counterparts to [qassert](https://mllg.github.io/checkmate/qassert) and [qtest](https://mllg.github.io/checkmate/qassert).
+These are the counterparts to [qassert](https://mllg.github.io/checkmate/reference/qassert) and [qtest](https://mllg.github.io/checkmate/reference/qassert).
 Due to their simplistic interface, they perfectly suit the requirements of most type checks in C/C++.
 
 For detailed background information on the register mechanism, see the [Exporting C Code](http://r-pkgs.had.co.nz/src.html#clang) section in Hadley's Book "R Packages" or [WRE](https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Registering-native-routines).
 Here is a step-by-step guide to get you started:
 
 1. Add `checkmate` to your "Imports" and LinkingTo" sections in your DESCRIPTION file.
-2. Include the provided header file `checkmate.h`.
-   Unfortunately, the include is a bit tedious at the moment and you have to make sure to include the header only once.
-   To work around this issue, write your own header file "include_checkmate.h" (see below for an example).
-3. In every file you want to use `qtest` or `qassert`, include `checkmate.h` or `include_checkmate.h`, respectively.
+2. Create a stub file C source file which pulls in the provided C functions in order to compile them for your package. See example below.
+3. Include the provided header file `<checkmate.h>` in each compilation unit where you want to use checkmate.
 
 ```{c,eval=FALSE}
-/* Examplary header file as workaround for (2) */
-#ifndef INCLUDE_CHECKMATE_H_
-#define INCLUDE_CHECKMATE_H_
+/* Example for (2), "checkmate_stub.c":*/
 #include <checkmate.h>
-#endif
-```
-```{c,eval=FALSE}
-#include "include_checkmate.h"
-/* alternative: #include <checkmate.h> */
-
-SEXP double(SEXP x) {
-  /* x must be a numeric, not NA and must have length 1 */
-  qassert(x, "N1");
-
-  num = REAL(x)[0];
-  return ScalarReal(num * num);
-}
+#include <checkmate_stub.c>
 ```
 
 ## Session Info

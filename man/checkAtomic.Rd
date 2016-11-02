@@ -78,9 +78,16 @@ the heuristic implemented in \code{\link{vname}}.}
 }
 \value{
 Depending on the function prefix:
- If the check is successful, the functions return \code{TRUE}. If the check
- is not successful, \code{assertAtmoic}/\code{assert_atmoic}
- throws an error message, \code{testAtmoic}/\code{test_atmoic}
+ If the check is successful, the functions 
+ \code{assertAtmoic}/\code{assert_atmoic} return 
+ \code{x} invisibly, whereas
+ \code{checkAtmoic}/\code{check_atmoic} and 
+ \code{testAtmoic}/\code{test_atmoic} return 
+ \code{TRUE}.
+ If the check is not successful, 
+ \code{assertAtmoic}/\code{assert_atmoic}
+ throws an error message, 
+ \code{testAtmoic}/\code{test_atmoic}
  returns \code{FALSE},
  and \code{checkAtmoic} returns a string with the error message.
  The function \code{expect_atmoic} always returns an
@@ -98,13 +105,13 @@ Other atomicvector: \code{\link{checkAtomicVector}},
 
 Other basetypes: \code{\link{checkArray}},
   \code{\link{checkCharacter}}, \code{\link{checkComplex}},
-  \code{\link{checkDataFrame}},
-  \code{\link{checkDataTable}},
+  \code{\link{checkDataFrame}}, \code{\link{checkDate}},
   \code{\link{checkEnvironment}},
   \code{\link{checkFactor}}, \code{\link{checkFunction}},
   \code{\link{checkIntegerish}},
   \code{\link{checkInteger}}, \code{\link{checkList}},
   \code{\link{checkLogical}}, \code{\link{checkMatrix}},
-  \code{\link{checkNumeric}}, \code{\link{checkVector}}
+  \code{\link{checkNull}}, \code{\link{checkNumeric}},
+  \code{\link{checkVector}}
 }
 

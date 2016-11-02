@@ -10,6 +10,12 @@ Rboolean isStrictlyNumeric(SEXP x) {
     return FALSE;
 }
 
+Rboolean isAtomicVector(SEXP x) {
+    if (!isVectorAtomic(x))
+        return FALSE;
+    return isNull(getAttrib(x, R_DimSymbol));
+}
+
 /* Checks for a regular list, i.e. not a data frame, not NULL */
 Rboolean isRList(SEXP x) {
     if (TYPEOF(x) == VECSXP) {
@@ -30,9 +36,6 @@ Rboolean isRList(SEXP x) {
  * Here are our own wrappers
  * */
 R_len_t get_nrows(SEXP x) {
-    if (!isVector(x) && !isList(x))
-        error("Object does not have a dimension");
-
     if (isFrame(x))
         return length(getAttrib(x, R_RowNamesSymbol));
     SEXP dim = getAttrib(x, R_DimSymbol);
@@ -40,9 +43,6 @@ R_len_t get_nrows(SEXP x) {
 }
 
 R_len_t get_ncols(SEXP x) {
-    if (!isVector(x) && !isList(x))
-        error("Object does not have a dimension");
-
     if (isFrame(x))
         return length(x);
     SEXP dim = getAttrib(x, R_DimSymbol);
@@ -68,7 +68,7 @@ const char * asString(SEXP x, const char *vname) {
 }
 
 R_xlen_t asCount(SEXP x, const char *vname) {
-    if (!isIntegerish(x, INTEGERISH_DEFAULT_TOL) || xlength(x) != 1)
+    if (!isIntegerish(x, INTEGERISH_DEFAULT_TOL, FALSE) || xlength(x) != 1)
         error("Argument '%s' must be a count", vname);
     int xi = asInteger(x);
     if (xi == NA_INTEGER)

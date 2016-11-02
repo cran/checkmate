@@ -34,9 +34,16 @@ Collection to store assertion messages. See \code{\link{AssertCollection}}.}
 }
 \value{
 Depending on the function prefix:
- If the check is successful, the functions return \code{TRUE}. If the check
- is not successful, \code{assertNull}/\code{assert_null}
- throws an error message, \code{testNull}/\code{test_null}
+ If the check is successful, the functions 
+ \code{assertNull}/\code{assert_null} return 
+ \code{x} invisibly, whereas
+ \code{checkNull}/\code{check_null} and 
+ \code{testNull}/\code{test_null} return 
+ \code{TRUE}.
+ If the check is not successful, 
+ \code{assertNull}/\code{assert_null}
+ throws an error message, 
+ \code{testNull}/\code{test_null}
  returns \code{FALSE},
  and \code{checkNull} returns a string with the error message.
  The function \code{expect_null} always returns an
@@ -48,5 +55,16 @@ Check if an argument is NULL
 \examples{
 testNull(NULL)
 testNull(1)
+}
+\seealso{
+Other basetypes: \code{\link{checkArray}},
+  \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
+  \code{\link{checkComplex}}, \code{\link{checkDataFrame}},
+  \code{\link{checkDate}}, \code{\link{checkEnvironment}},
+  \code{\link{checkFactor}}, \code{\link{checkFunction}},
+  \code{\link{checkIntegerish}},
+  \code{\link{checkInteger}}, \code{\link{checkList}},
+  \code{\link{checkLogical}}, \code{\link{checkMatrix}},
+  \code{\link{checkNumeric}}, \code{\link{checkVector}}
 }
 

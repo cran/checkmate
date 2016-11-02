@@ -1,6 +1,6 @@
 #include "qassert.h"
 #include "helper.h"
-#include "guessType.h"
+#include "guess_type.h"
 #include "any_missing.h"
 #include "is_integerish.h"
 
@@ -56,14 +56,14 @@ static inline Rboolean dd_ge(const double x, const double y) { return x >= y; }
 static inline Rboolean dd_ne(const double x, const double y) { return x != y; }
 static inline Rboolean is_class_logical(SEXP x) { return isLogical(x); }
 static inline Rboolean is_class_integer(SEXP x) { return isInteger(x); }
-static inline Rboolean is_class_integerish(SEXP x) { return isIntegerish(x, INTEGERISH_DEFAULT_TOL); }
+static inline Rboolean is_class_integerish(SEXP x) { return isIntegerish(x, INTEGERISH_DEFAULT_TOL, TRUE); }
 static inline Rboolean is_class_double(SEXP x) { return isReal(x); }
 static inline Rboolean is_class_numeric(SEXP x) { return isStrictlyNumeric(x); }
 static inline Rboolean is_class_complex(SEXP x) { return isComplex(x); }
 static inline Rboolean is_class_string(SEXP x) { return isString(x); }
 static inline Rboolean is_class_factor(SEXP x) { return isFactor(x); }
 static inline Rboolean is_class_atomic(SEXP x) { return isNull(x) || isVectorAtomic(x); }
-static inline Rboolean is_class_atomic_vector(SEXP x) { return isVectorAtomic(x); }
+static inline Rboolean is_class_atomic_vector(SEXP x) { return isAtomicVector(x); }
 static inline Rboolean is_class_list(SEXP x) { return isRList(x); }
 static inline Rboolean is_class_matrix(SEXP x) { return isMatrix(x); }
 static inline Rboolean is_class_frame(SEXP x) { return isFrame(x); }
@@ -117,7 +117,7 @@ static msg_t check_bound(SEXP x, const bound_t bound) {
     } else if (isFactor(x)) {
         return check_bound(getAttrib(x, R_LevelsSymbol), bound);
     } else {
-        error("Bound checks only possible for numeric variables, strings and factors, not %s", guessType(x));
+        error("Bound checks only possible for numeric variables, strings and factors, not %s", guess_type(x));
     }
 
     return MSGT;
@@ -384,7 +384,7 @@ static void parse_rule(checker_t *checker, const char *rule) {
 /*********************************************************************************************************************/
 static msg_t check_rule(SEXP x, const checker_t *checker, const Rboolean err_msg) {
     if (checker->class.fun != NULL && !checker->class.fun(x)) {
-        return err_msg ? message("Must be of class '%s', not '%s'", CLSTR[checker->class.name], guessType(x)) : MSGF;
+        return err_msg ? message("Must be of class '%s', not '%s'", CLSTR[checker->class.name], guess_type(x)) : MSGF;
     }
 
     if (checker->missing.fun != NULL && checker->missing.fun(x)) {

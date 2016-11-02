@@ -103,16 +103,25 @@ the heuristic implemented in \code{\link{vname}}.}
 }
 \value{
 Depending on the function prefix:
- If the check is successful, the functions return \code{TRUE}. If the check
- is not successful, \code{assertIntegerish}/\code{assert_integerish}
- throws an error message, \code{testIntegerish}/\code{test_integerish}
+ If the check is successful, the functions 
+ \code{assertIntegerish}/\code{assert_integerish} return 
+ \code{x} invisibly, whereas
+ \code{checkIntegerish}/\code{check_integerish} and 
+ \code{testIntegerish}/\code{test_integerish} return 
+ \code{TRUE}.
+ If the check is not successful, 
+ \code{assertIntegerish}/\code{assert_integerish}
+ throws an error message, 
+ \code{testIntegerish}/\code{test_integerish}
  returns \code{FALSE},
  and \code{checkIntegerish} returns a string with the error message.
  The function \code{expect_integerish} always returns an
  \code{\link[testthat]{expectation}}.
 }
 \description{
-Check if an object is an integerish vector
+An integerish value is defined as value safely convertible to integer.
+This includes integers and numeric values which are close to an integer
+w.r.t. a numeric tolerance.
 }
 \details{
 This function does not distinguish between
@@ -128,11 +137,11 @@ testIntegerish(1:2, lower = 1L, upper = 2L, any.missing = FALSE)
 Other basetypes: \code{\link{checkArray}},
   \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
   \code{\link{checkComplex}}, \code{\link{checkDataFrame}},
-  \code{\link{checkDataTable}},
-  \code{\link{checkEnvironment}},
+  \code{\link{checkDate}}, \code{\link{checkEnvironment}},
   \code{\link{checkFactor}}, \code{\link{checkFunction}},
   \code{\link{checkInteger}}, \code{\link{checkList}},
   \code{\link{checkLogical}}, \code{\link{checkMatrix}},
-  \code{\link{checkNumeric}}, \code{\link{checkVector}}
+  \code{\link{checkNull}}, \code{\link{checkNumeric}},
+  \code{\link{checkVector}}
 }
 

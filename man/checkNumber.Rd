@@ -68,9 +68,16 @@ the heuristic implemented in \code{\link{vname}}.}
 }
 \value{
 Depending on the function prefix:
- If the check is successful, the functions return \code{TRUE}. If the check
- is not successful, \code{assertNumber}/\code{assert_number}
- throws an error message, \code{testNumber}/\code{test_number}
+ If the check is successful, the functions 
+ \code{assertNumber}/\code{assert_number} return 
+ \code{x} invisibly, whereas
+ \code{checkNumber}/\code{check_number} and 
+ \code{testNumber}/\code{test_number} return 
+ \code{TRUE}.
+ If the check is not successful, 
+ \code{assertNumber}/\code{assert_number}
+ throws an error message, 
+ \code{testNumber}/\code{test_number}
  returns \code{FALSE},
  and \code{checkNumber} returns a string with the error message.
  The function \code{expect_number} always returns an
@@ -87,5 +94,11 @@ This function does not distinguish between
 \examples{
 testNumber(1)
 testNumber(1:2)
+}
+\seealso{
+Other scalars: \code{\link{checkCount}},
+  \code{\link{checkFlag}}, \code{\link{checkInt}},
+  \code{\link{checkScalarNA}}, \code{\link{checkScalar}},
+  \code{\link{checkString}}
 }
 

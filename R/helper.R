@@ -1,5 +1,5 @@
 mstop = function(msg, ...) {
-  stop(simpleError(sprintf(msg, ...), call = sys.call(1L)))
+  stop(simpleError(message = sprintf(msg, ...), call = sys.call(1L)))
 }
 
 "%and%" = function(lhs, rhs) {
@@ -10,16 +10,15 @@ mstop = function(msg, ...) {
   !match(x, y, nomatch = 0L)
 }
 
-setClasses = function(x, cl) {
-  class(x) = cl
-  x
-}
-
 convertCamelCase = function(x) {
   tolower(gsub("((?<=[a-z0-9])[A-Z]|(?!^)[A-Z](?=[a-z]))", "_\\1", x, perl = TRUE))
 }
 
-#' @useDynLib checkmate c_guessType
+#' @useDynLib checkmate c_guess_type
 guessType = function(x) {
-  .Call(c_guessType, x)
+  .Call(c_guess_type, x)
+}
+
+isSameType = function(x, y) {
+  identical(typeof(x), typeof(y)) || (is.numeric(x) && is.numeric(y))
 }

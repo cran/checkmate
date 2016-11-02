@@ -102,9 +102,16 @@ Additional parameters used in a call of \code{\link{checkVector}}.}
 }
 \value{
 Depending on the function prefix:
- If the check is successful, the functions return \code{TRUE}. If the check
- is not successful, \code{assertList}/\code{assert_list}
- throws an error message, \code{testList}/\code{test_list}
+ If the check is successful, the functions 
+ \code{assertList}/\code{assert_list} return 
+ \code{x} invisibly, whereas
+ \code{checkList}/\code{check_list} and 
+ \code{testList}/\code{test_list} return 
+ \code{TRUE}.
+ If the check is not successful, 
+ \code{assertList}/\code{assert_list}
+ throws an error message, 
+ \code{testList}/\code{test_list}
  returns \code{FALSE},
  and \code{checkList} returns a string with the error message.
  The function \code{expect_list} always returns an
@@ -121,12 +128,11 @@ testList(as.list(iris), types = c("numeric", "factor"))
 Other basetypes: \code{\link{checkArray}},
   \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
   \code{\link{checkComplex}}, \code{\link{checkDataFrame}},
-  \code{\link{checkDataTable}},
-  \code{\link{checkEnvironment}},
+  \code{\link{checkDate}}, \code{\link{checkEnvironment}},
   \code{\link{checkFactor}}, \code{\link{checkFunction}},
   \code{\link{checkIntegerish}},
   \code{\link{checkInteger}}, \code{\link{checkLogical}},
-  \code{\link{checkMatrix}}, \code{\link{checkNumeric}},
-  \code{\link{checkVector}}
+  \code{\link{checkMatrix}}, \code{\link{checkNull}},
+  \code{\link{checkNumeric}}, \code{\link{checkVector}}
 }
 

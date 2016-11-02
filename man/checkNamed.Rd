@@ -31,8 +31,7 @@ Select the check(s) to perform.
 \dQuote{named} (default) checks \code{x} to be named which excludes names to be \code{NA} or empty (\code{""}).
 \dQuote{unique} additionally tests for non-duplicated names.
 \dQuote{strict} checks for unique names which comply to R's variable name restrictions.
-Note that for zero-length \code{x} every name check evaluates to \code{TRUE}.
-Also note that you can use \code{\link{checkSubset}} to check for a specific set of names.}
+Note that for zero-length \code{x} every name check evaluates to \code{TRUE}.}
 
 \item{.var.name}{[\code{character(1)}]\cr
 Name of the checked object to print in assertions. Defaults to
@@ -43,9 +42,16 @@ Collection to store assertion messages. See \code{\link{AssertCollection}}.}
 }
 \value{
 Depending on the function prefix:
- If the check is successful, the functions return \code{TRUE}. If the check
- is not successful, \code{assertNamed}/\code{assert_named}
- throws an error message, \code{testNamed}/\code{test_named}
+ If the check is successful, the functions 
+ \code{assertNamed}/\code{assert_named} return 
+ \code{x} invisibly, whereas
+ \code{checkNamed}/\code{check_named} and 
+ \code{testNamed}/\code{test_named} return 
+ \code{TRUE}.
+ If the check is not successful, 
+ \code{assertNamed}/\code{assert_named}
+ throws an error message, 
+ \code{testNamed}/\code{test_named}
  returns \code{FALSE},
  and \code{checkNamed} returns a string with the error message.
  The function \code{expect_named} always returns an
@@ -54,10 +60,18 @@ Depending on the function prefix:
 \description{
 Check if an argument is named
 }
+\note{
+These function are deprecated and will be removed in a future version.
+Please use \code{\link{checkNames}} instead.
+}
 \examples{
 x = 1:3
 testNamed(x, "unnamed")
 names(x) = letters[1:3]
 testNamed(x, "unique")
+}
+\seealso{
+Other attributes: \code{\link{checkClass}},
+  \code{\link{checkNames}}
 }
 

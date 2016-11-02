@@ -77,9 +77,16 @@ the heuristic implemented in \code{\link{vname}}.}
 }
 \value{
 Depending on the function prefix:
- If the check is successful, the functions return \code{TRUE}. If the check
- is not successful, \code{assertAtomicVector}/\code{assert_atomic_vector}
- throws an error message, \code{testAtomicVector}/\code{test_atomic_vector}
+ If the check is successful, the functions 
+ \code{assertAtomicVector}/\code{assert_atomic_vector} return 
+ \code{x} invisibly, whereas
+ \code{checkAtomicVector}/\code{check_atomic_vector} and 
+ \code{testAtomicVector}/\code{test_atomic_vector} return 
+ \code{TRUE}.
+ If the check is not successful, 
+ \code{assertAtomicVector}/\code{assert_atomic_vector}
+ throws an error message, 
+ \code{testAtomicVector}/\code{test_atomic_vector}
  returns \code{FALSE},
  and \code{checkAtomicVector} returns a string with the error message.
  The function \code{expect_atomic_vector} always returns an
@@ -89,9 +96,10 @@ Depending on the function prefix:
 An atomic vector is defined slightly different from specifications in
 \code{\link[base]{is.atomic}} and \code{\link[base]{is.vector}}:
 An atomic vector is either \code{logical}, \code{integer}, \code{numeric},
-\code{complex}, \code{character} or \code{raw} and can have any attributes.
-I.e., a \code{factor} is an atomic vector, but \code{NULL} is not.
-In short, this is equivalent to \code{is.atomic(x) && !is.null(x)}.
+\code{complex}, \code{character} or \code{raw} and can have any attributes except a
+dimension attribute (like matrices).
+I.e., a \code{factor} is an atomic vector, but a matrix or \code{NULL} are not.
+In short, this is mostly equivalent to \code{is.atomic(x) && !is.null(x) && is.null(dim(x))}.
 }
 \examples{
 testAtomicVector(letters, min.len = 1L, any.missing = FALSE)

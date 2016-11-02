@@ -10,8 +10,8 @@ test_that("checkIntegerish", {
 
   expect_true(testIntegerish(integer(0)))
   expect_false(testIntegerish(NULL))
-  expect_true(testIntegerish(TRUE))
-  expect_true(testIntegerish(FALSE))
+  expect_false(testIntegerish(TRUE))
+  expect_false(testIntegerish(FALSE))
   expect_true(testIntegerish(1L))
   expect_true(testIntegerish(c(-1, 0, 1)))
   expect_true(testIntegerish(1.))
@@ -52,4 +52,10 @@ test_that("bounds of vectors with only missings are not checked", {
   expect_true(checkInteger(NA_character_, upper = 10))
   expect_fail_all(Integerish, 0, lower = 1L)
   expect_fail_all(Integerish, 100, upper = 10L)
+})
+
+test_that("isIntegerish internal function", {
+  expect_true(isIntegerish(1))
+  expect_true(isIntegerish(1.))
+  expect_false(isIntegerish(1.1))
 })

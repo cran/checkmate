@@ -1,3 +1,14 @@
+# Version 1.8.2 (2016-xx-xx)
+* `*Matrix` and `*Array` now additionally allow to check for integerish storage
+  type via argument "mode".
+* Functions `*Count`, `*Int`, `*Number`, `*Integer`, `*Integerish` and
+  `*Numeric` do not accept logical values any more.
+* `checkAtomicVector` is now more restrictive and prohibits a dimension symbol.
+  Thus, a matrix is not considered an atomic vector any more.
+* Dropped support for AssertCollections in convert functions (`asInt`,
+  `asInteger` and `asCount`).
+* Added `checkTibble`.
+
 # Version 1.8.1 (2016-06-27)
 * Function `test_file` is longer exported.
 * `*Function` does not longer lookup functions with `match.fun`. As a result,
@@ -30,7 +41,7 @@
   checking nested lists.
 
 # Version 1.7.3 (2016-03-10)
-* Added `checkDate()`
+* Added `checkDate()`.
 * Argument `.var.name` of assert functions now has \code{NULL} as default value
   (instead of missing).
 * Fixed a bug in `*OS` functions.

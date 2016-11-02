@@ -95,9 +95,16 @@ the heuristic implemented in \code{\link{vname}}.}
 }
 \value{
 Depending on the function prefix:
- If the check is successful, the functions return \code{TRUE}. If the check
- is not successful, \code{assertInteger}/\code{assert_integer}
- throws an error message, \code{testInteger}/\code{test_integer}
+ If the check is successful, the functions 
+ \code{assertInteger}/\code{assert_integer} return 
+ \code{x} invisibly, whereas
+ \code{checkInteger}/\code{check_integer} and 
+ \code{testInteger}/\code{test_integer} return 
+ \code{TRUE}.
+ If the check is not successful, 
+ \code{assertInteger}/\code{assert_integer}
+ throws an error message, 
+ \code{testInteger}/\code{test_integer}
  returns \code{FALSE},
  and \code{checkInteger} returns a string with the error message.
  The function \code{expect_integer} always returns an
@@ -122,11 +129,11 @@ testInteger(1:2, lower = 1, upper = 2, any.missing = FALSE)
 Other basetypes: \code{\link{checkArray}},
   \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
   \code{\link{checkComplex}}, \code{\link{checkDataFrame}},
-  \code{\link{checkDataTable}},
-  \code{\link{checkEnvironment}},
+  \code{\link{checkDate}}, \code{\link{checkEnvironment}},
   \code{\link{checkFactor}}, \code{\link{checkFunction}},
   \code{\link{checkIntegerish}}, \code{\link{checkList}},
   \code{\link{checkLogical}}, \code{\link{checkMatrix}},
-  \code{\link{checkNumeric}}, \code{\link{checkVector}}
+  \code{\link{checkNull}}, \code{\link{checkNumeric}},
+  \code{\link{checkVector}}
 }
 

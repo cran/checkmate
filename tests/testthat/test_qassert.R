@@ -47,6 +47,7 @@ test_that("type and missingness", {
   expect_fail_all(xd, "D")
   expect_succ_all(xe, "e")
   expect_succ_all(xf, "f")
+  expect_fail_all(xf, "F")
 
   expect_fail_all(xd, "b")
   expect_fail_all(xd, "i")
@@ -186,7 +187,7 @@ test_that("atomic types", {
   expect_fail_all(xi, "V+")
   expect_succ_all(xr, "v+")
   expect_fail_all(xr, "V+")
-  expect_succ_all(xm, "v+")
+  expect_fail_all(xm, "v+")
   expect_fail_all(xm, "V+")
   expect_fail_all(xl, "v+")
   expect_fail_all(xl, "V+")

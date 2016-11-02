@@ -48,9 +48,16 @@ the heuristic implemented in \code{\link{vname}}.}
 }
 \value{
 Depending on the function prefix:
- If the check is successful, the functions return \code{TRUE}. If the check
- is not successful, \code{assertChoice}/\code{assert_choice}
- throws an error message, \code{testChoice}/\code{test_choice}
+ If the check is successful, the functions 
+ \code{assertChoice}/\code{assert_choice} return 
+ \code{x} invisibly, whereas
+ \code{checkChoice}/\code{check_choice} and 
+ \code{testChoice}/\code{test_choice} return 
+ \code{TRUE}.
+ If the check is not successful, 
+ \code{assertChoice}/\code{assert_choice}
+ throws an error message, 
+ \code{testChoice}/\code{test_choice}
  returns \code{FALSE},
  and \code{checkChoice} returns a string with the error message.
  The function \code{expect_choice} always returns an
@@ -59,8 +66,18 @@ Depending on the function prefix:
 \description{
 Check if an object is an element of a given set
 }
+\note{
+The object \code{x} must be of the same type as the set w.r.t. \code{\link[base]{typeof}}.
+Integers and doubles are both treated as numeric.
+}
 \examples{
 testChoice("x", letters)
+
+# x is converted before the comparison if necessary
+# note that this is subject to change in a future version
+testChoice(factor("a"), "a")
+testChoice(1, "1")
+testChoice(1, as.integer(1))
 }
 \seealso{
 Other set: \code{\link{checkSetEqual}},

@@ -47,7 +47,7 @@ Object to check.}
 
 \item{mode}{[\code{character(1)}]\cr
 Storage mode of the array. Arrays can hold vectors, i.e. \dQuote{logical},
-\dQuote{integer}, \dQuote{double}, \dQuote{numeric}, \dQuote{complex},
+\dQuote{integer}, \dQuote{integerish}, \dQuote{double}, \dQuote{numeric}, \dQuote{complex},
 \dQuote{character} and \dQuote{list}. You can also specify \dQuote{atomic}
 here to explicitly prohibit lists. Default is \code{NULL} (no check).}
 
@@ -100,9 +100,16 @@ the heuristic implemented in \code{\link{vname}}.}
 }
 \value{
 Depending on the function prefix:
- If the check is successful, the functions return \code{TRUE}. If the check
- is not successful, \code{assertMatrix}/\code{assert_matrix}
- throws an error message, \code{testMatrix}/\code{test_matrix}
+ If the check is successful, the functions 
+ \code{assertMatrix}/\code{assert_matrix} return 
+ \code{x} invisibly, whereas
+ \code{checkMatrix}/\code{check_matrix} and 
+ \code{testMatrix}/\code{test_matrix} return 
+ \code{TRUE}.
+ If the check is not successful, 
+ \code{assertMatrix}/\code{assert_matrix}
+ throws an error message, 
+ \code{testMatrix}/\code{test_matrix}
  returns \code{FALSE},
  and \code{checkMatrix} returns a string with the error message.
  The function \code{expect_matrix} always returns an
@@ -120,12 +127,15 @@ testMatrix(x, nrows = 3, min.cols = 1, col.names = "named")
 Other basetypes: \code{\link{checkArray}},
   \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
   \code{\link{checkComplex}}, \code{\link{checkDataFrame}},
-  \code{\link{checkDataTable}},
-  \code{\link{checkEnvironment}},
+  \code{\link{checkDate}}, \code{\link{checkEnvironment}},
   \code{\link{checkFactor}}, \code{\link{checkFunction}},
   \code{\link{checkIntegerish}},
   \code{\link{checkInteger}}, \code{\link{checkList}},
-  \code{\link{checkLogical}}, \code{\link{checkNumeric}},
-  \code{\link{checkVector}}
+  \code{\link{checkLogical}}, \code{\link{checkNull}},
+  \code{\link{checkNumeric}}, \code{\link{checkVector}}
+
+Other compound: \code{\link{checkArray}},
+  \code{\link{checkDataFrame}},
+  \code{\link{checkDataTable}}, \code{\link{checkTibble}}
 }
 

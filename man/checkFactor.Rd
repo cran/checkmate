@@ -120,9 +120,16 @@ the heuristic implemented in \code{\link{vname}}.}
 }
 \value{
 Depending on the function prefix:
- If the check is successful, the functions return \code{TRUE}. If the check
- is not successful, \code{assertFactor}/\code{assert_factor}
- throws an error message, \code{testFactor}/\code{test_factor}
+ If the check is successful, the functions 
+ \code{assertFactor}/\code{assert_factor} return 
+ \code{x} invisibly, whereas
+ \code{checkFactor}/\code{check_factor} and 
+ \code{testFactor}/\code{test_factor} return 
+ \code{TRUE}.
+ If the check is not successful, 
+ \code{assertFactor}/\code{assert_factor}
+ throws an error message, 
+ \code{testFactor}/\code{test_factor}
  returns \code{FALSE},
  and \code{checkFactor} returns a string with the error message.
  The function \code{expect_factor} always returns an
@@ -140,12 +147,12 @@ testFactor(x, empty.levels.ok = FALSE)
 Other basetypes: \code{\link{checkArray}},
   \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
   \code{\link{checkComplex}}, \code{\link{checkDataFrame}},
-  \code{\link{checkDataTable}},
-  \code{\link{checkEnvironment}},
+  \code{\link{checkDate}}, \code{\link{checkEnvironment}},
   \code{\link{checkFunction}},
   \code{\link{checkIntegerish}},
   \code{\link{checkInteger}}, \code{\link{checkList}},
   \code{\link{checkLogical}}, \code{\link{checkMatrix}},
-  \code{\link{checkNumeric}}, \code{\link{checkVector}}
+  \code{\link{checkNull}}, \code{\link{checkNumeric}},
+  \code{\link{checkVector}}
 }
 

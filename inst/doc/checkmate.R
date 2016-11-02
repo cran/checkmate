@@ -111,5 +111,36 @@ print(mb)
 autoplot(mb)
 
 ## ------------------------------------------------------------------------
+checkSquareMatrix = function(x, mode = NULL) {
+  # check functions must return TRUE on success
+  # and a custom error message otherwise
+  res = checkMatrix(x, mode = mode)
+  if (!isTRUE(res))
+    return(res)
+  if (nrow(x) != ncol(x))
+    return("Must be square")
+  return(TRUE)
+}
+
+# a quick test:
+X = matrix(1:9, nrow = 3)
+checkSquareMatrix(X)
+checkSquareMatrix(X, mode = "character")
+checkSquareMatrix(X[1:2, ])
+
+## ------------------------------------------------------------------------
+# For assertions:
+assert_square_matrix = assertSquareMatrix = makeAssertionFunction(checkSquareMatrix)
+print(assertSquareMatrix)
+
+# For tests:
+test_square_matrix = testSquareMatrix = makeTestFunction(checkSquareMatrix)
+print(testSquareMatrix)
+
+# For expectations:
+expect_square_matrix = makeExpectationFunction(checkSquareMatrix)
+print(expect_square_matrix)
+
+## ------------------------------------------------------------------------
 sessionInfo()
 

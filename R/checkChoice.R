@@ -5,10 +5,17 @@
 #' @param choices [\code{atomic}]\cr
 #'  Set of possible values.
 #' @template checker
+#' @template set
 #' @family set
 #' @export
 #' @examples
 #' testChoice("x", letters)
+#'
+#' # x is converted before the comparison if necessary
+#' # note that this is subject to change in a future version
+#' testChoice(factor("a"), "a")
+#' testChoice(1, "1")
+#' testChoice(1, as.integer(1))
 checkChoice = function(x, choices) {
   qassert(choices, "a")
   if (!qtest(x, "a1") || x %nin% choices)
