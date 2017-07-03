@@ -10,7 +10,10 @@ test_that("checkSubset", {
   expect_true(testSubset(character(0), letters, empty.ok = TRUE))
   expect_false(testSubset(NULL, letters, empty.ok = FALSE))
   expect_true(testSubset(character(0), letters, empty.ok = TRUE))
-  expect_true(testSubset(factor("a"), letters))
+  expect_false(testSubset(NULL, letters, empty.ok = FALSE))
+  expect_true(testSubset(NULL, letters, empty.ok = TRUE))
+  expect_false(testSubset(factor("a"), letters))
+  expect_true(testSubset(1., 1:2))
   expect_true(testSubset(factor("a"), factor(letters)))
 
   expect_true(testSubset(1L, 1:10))
@@ -20,4 +23,9 @@ test_that("checkSubset", {
 
   expect_error(assertSubset(-1, 1:2), "subset of")
   expect_error(assertSubset(1L, list()), "atomic")
+
+  # issue #109
+  expect_true(testSubset(character(0), character(0)))
+  expect_true(testSubset(integer(0), character(0)))
+  expect_error(assertSubset(1, integer(0)), "empty set")
 })

@@ -15,10 +15,14 @@ test_that("checkCharacter", {
 
   expect_true(testCharacter("a", min.chars = 1))
   expect_false(testCharacter("a", min.chars = 2))
+
   # treat NA_character_ as zero-length string
   expect_true(testCharacter(NA_character_, min.chars = 0))
-  expect_false(testCharacter(NA_character_, min.chars = 1))
-  expect_false(testCharacter(NA, min.chars = 1))
+  expect_true(testCharacter(NA_character_, min.chars = 1))
+  expect_false(testCharacter(NA_character_, min.chars = 1, any.missing = FALSE))
+  expect_false(testCharacter(c("", NA_character_), min.chars = 1))
+  expect_true(testCharacter(NA, min.chars = 1))
+  expect_true(testCharacter(character(0), min.chars = 1))
 
   x = c("abba", "baab")
   expect_true(testCharacter(x, pattern="a"))
@@ -37,4 +41,12 @@ test_that("checkCharacter", {
   expect_false(testCharacter(x, any.missing=FALSE, len=5))
 
   expect_error(assertCharacter(1), "character")
+})
+
+
+test_that("NAs are ignored for regexp matching (#106)", {
+  expect_true(testCharacter(c("a", NA, "b"), pattern = "^[ab]$", any.missing = TRUE))
+  expect_false(testCharacter(c("a", NA, "b"), pattern = "^[cd]$", any.missing = TRUE))
+  expect_true(testCharacter(c("a", NA, "bbbabbb"), fixed = "a", any.missing = TRUE))
+  expect_false(testCharacter(c("a", NA, "bbbabbb"), fixed = "b", any.missing = TRUE))
 })

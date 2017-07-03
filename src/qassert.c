@@ -67,7 +67,6 @@ static inline Rboolean is_class_atomic_vector(SEXP x) { return isAtomicVector(x)
 static inline Rboolean is_class_list(SEXP x) { return isRList(x); }
 static inline Rboolean is_class_matrix(SEXP x) { return isMatrix(x); }
 static inline Rboolean is_class_frame(SEXP x) { return isFrame(x); }
-static inline Rboolean is_class_function(SEXP x) { return isFunction(x); }
 static inline Rboolean is_class_environment(SEXP x) { return isEnvironment(x); }
 static inline Rboolean is_class_null(SEXP x) { return isNull(x); }
 
@@ -207,10 +206,6 @@ static int parse_class(checker_t *checker, const char *rule) {
             checker->class.fun = &is_class_frame;
             checker->class.name = CL_DATAFRAME;
             break;
-        /* case 'g': */
-        /*     checker->class.fun = &is_class_function; */
-        /*     checker->class.name = CL_FUNCTION; */
-        /*     break; */
         case 'e':
             checker->class.fun = &is_class_environment;
             checker->class.name = CL_ENVIRONMENT;
@@ -376,7 +371,7 @@ static void parse_rule(checker_t *checker, const char *rule) {
     rule += parse_bounds(checker, rule);
     if (rule[0] == '\0')
         return;
-    error("Additional chars found!");
+    error("Additional chars found in rule!");
 }
 
 /*********************************************************************************************************************/
@@ -444,7 +439,7 @@ SEXP qassert(SEXP x, const char *rule, const char *name) {
     return x;
 }
 
-SEXP c_qassert(SEXP x, SEXP rules, SEXP recursive) {
+SEXP attribute_hidden c_qassert(SEXP x, SEXP rules, SEXP recursive) {
     const Rboolean nrules = length(rules);
     R_len_t failed;
     if (!isString(rules))
@@ -525,7 +520,7 @@ Rboolean qtest(SEXP x, const char *rule) {
     return qtest1(x, &checker, 1);
 }
 
-SEXP c_qtest(SEXP x, SEXP rules, SEXP recursive, SEXP depth) {
+SEXP attribute_hidden c_qtest(SEXP x, SEXP rules, SEXP recursive, SEXP depth) {
     const R_len_t nrules = length(rules);
 
     if (!isString(rules))

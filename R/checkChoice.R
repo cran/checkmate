@@ -4,6 +4,7 @@
 #' @template x
 #' @param choices [\code{atomic}]\cr
 #'  Set of possible values.
+#' @template null.ok
 #' @template checker
 #' @template set
 #' @family set
@@ -11,15 +12,24 @@
 #' @examples
 #' testChoice("x", letters)
 #'
-#' # x is converted before the comparison if necessary
-#' # note that this is subject to change in a future version
+#' # x is not converted before the comparison (except for numerics)
 #' testChoice(factor("a"), "a")
 #' testChoice(1, "1")
 #' testChoice(1, as.integer(1))
-checkChoice = function(x, choices) {
+checkChoice = function(x, choices, null.ok = FALSE) {
   qassert(choices, "a")
-  if (!qtest(x, "a1") || x %nin% choices)
-    return(sprintf("Must be element of set {'%s'}", paste0(unique(choices), collapse = "','")))
+  qassert(null.ok, "B1")
+  if (is.null(x)) {
+    if (null.ok)
+      return(TRUE)
+    return(sprintf("Must be a subset of {'%s'}, not 'NULL'", paste0(choices, collapse = "','")))
+  }
+  if (!qtest(x, "a1"))
+    return(sprintf("Must be element of set {'%s'}, but is not atomic scalar", paste0(unique(choices), collapse = "','")))
+  if (!isSameType(x, choices))
+    return(sprintf("Must be element of set {'%s'}, but types do not match (%s != %s)", paste0(unique(choices), collapse = "','"), class(x)[1L], class(choices)[1L]))
+  if (x %nin% choices)
+    return(sprintf("Must be element of set {'%s'}, but is '%s'", paste0(unique(choices), collapse = "','"), x))
   return(TRUE)
 }
 

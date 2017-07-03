@@ -24,12 +24,14 @@
 #'   \item{\code{\link{checkNumeric}}}
 #'   \item{\code{\link{checkInteger}}}
 #'   \item{\code{\link{checkIntegerish}}}
+#'   \item{\code{\link{checkCharacter}}}
 #'   \item{\code{\link{checkComplex}}}
 #'   \item{\code{\link{checkFactor}}}
 #'   \item{\code{\link{checkList}}}
 #'   \item{\code{\link{checkVector}}}
 #'   \item{\code{\link{checkAtomic}}}
 #'   \item{\code{\link{checkAtomicVector}}}
+#'   \item{\code{\link{checkDate}}}
 #' }
 #'
 #' Check attributes:
@@ -94,7 +96,6 @@
 #'   \item{\code{\link{wf}} (which.first and which.last)}
 #' }
 #'
-#' @import backports
 #' @importFrom utils head tail packageVersion getFromNamespace
 "_PACKAGE"
 
@@ -120,6 +121,10 @@ checkmate$listtypefuns = list2env(list(
   "null"         = is.null
 ))
 
-.onUnload <- function (libpath) {
+.onLoad = function(libpath, pkgname) {
+  backports::import(pkgname, "dir.exists")
+}
+
+.onUnload = function (libpath) {
   library.dynam.unload("checkmate", libpath) # nocov
 }

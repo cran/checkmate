@@ -4,7 +4,7 @@
 \name{checkmate-package}
 \alias{checkmate}
 \alias{checkmate-package}
-\title{Fast and Versatile Argument Checks}
+\title{checkmate: Fast and Versatile Argument Checks}
 \description{
 \describe{
   \item{Homepage:}{\url{https://github.com/mllg/checkmate}}
@@ -31,12 +31,14 @@ Check vectors:
   \item{\code{\link{checkNumeric}}}
   \item{\code{\link{checkInteger}}}
   \item{\code{\link{checkIntegerish}}}
+  \item{\code{\link{checkCharacter}}}
   \item{\code{\link{checkComplex}}}
   \item{\code{\link{checkFactor}}}
   \item{\code{\link{checkList}}}
   \item{\code{\link{checkVector}}}
   \item{\code{\link{checkAtomic}}}
   \item{\code{\link{checkAtomicVector}}}
+  \item{\code{\link{checkDate}}}
 }
 
 Check attributes:
@@ -102,3 +104,20 @@ Misc:
 }
 }
 
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/mllg/checkmate}
+  \item Report bugs at \url{https://github.com/mllg/checkmate/issues}
+}
+
+}
+\author{
+\strong{Maintainer}: Michel Lang \email{michellang@gmail.com}
+
+Other contributors:
+\itemize{
+  \item Bernd Bischl \email{bernd_bischl@gmx.de} [contributor]
+}
+
+}
