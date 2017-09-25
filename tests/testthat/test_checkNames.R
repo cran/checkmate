@@ -35,7 +35,7 @@ test_that("checkNames", {
   expect_error(assertNames(c("a", "a"), "unique"), "unique")
 
   x = c("a", "1")
-  expect_error(assertNames(x, "strict"), "naming rules")
+  expect_error(assertNames(x, "strict"), "naming conventions")
 })
 
 test_that("argument 'type' is checked", {
@@ -86,7 +86,19 @@ test_that("checkNames / permutation.of", {
   expect_true(testNames(character(0), permutation.of = character(0)))
   expect_true(testNames(character(0), permutation.of = NULL))
   expect_false(testNames(NULL, permutation.of = NULL))
+})
 
+test_that("checkNames / must.include", {
+  x = 1:3
+  names(x) = letters[1:3]
+
+  expect_true(testNames(names(x), must.include = "a"))
+  expect_true(testNames(names(x), must.include = letters[3:1]))
+  expect_false(testNames(names(x), must.include = letters))
+  expect_true(testNames(names(x), must.include = character(0)))
+  expect_false(testNames(NULL, must.include = character(0)))
+  expect_true(testNames(character(0), must.include = character(0)))
+  expect_true(testNames(character(0), must.include = NULL))
 })
 
 test_that("checkNames / errors are useful", {
@@ -99,4 +111,9 @@ test_that("checkNames / errors are useful", {
     assertNames(rownames(foo), permutation.of = letters),
     "rownames\\(foo\\)"
   )
+})
+
+test_that("checkNames / NULL (#120)", {
+  expect_true(testNames(NULL, type = "unnamed"))
+  expect_false(testNames(NULL, type = "named"))
 })

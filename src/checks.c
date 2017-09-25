@@ -38,6 +38,10 @@ static char msg[255] = "";
     };
 
 #define ASSERT_TRUE(x) if (!(x)) return ScalarString(mkChar(msg));
+#define ASSERT_TRUE_UNPROTECT(x, p) \
+    Rboolean TMP = (x); \
+    UNPROTECT((p)); \
+    if (!TMP) return ScalarString(mkChar(msg));
 
 
 /*********************************************************************************************************************/
@@ -139,25 +143,33 @@ static Rboolean check_names(SEXP nn, const char * type, const char * what) {
     if (checks >= T_UNIQUE) {
         if (any_duplicated(nn, FALSE) != 0)
             return message("%s must be uniquely named", what);
-        if (checks >= T_STRICT && !check_strict_names(nn))
-            return message("%s must be named according to R's variable naming rules", what);
+        if (checks >= T_STRICT && !check_strict_names(nn)) {
+            return message("%s must be named according to R's variable naming conventions and may not contain special characters", what);
+        }
     }
     return TRUE;
 }
 
+static Rboolean check_named(SEXP x, const char * type, const char * what) {
+    SEXP nn = PROTECT(getAttrib(x, R_NamesSymbol));
+    Rboolean res = check_names(nn, type, what);
+    UNPROTECT(1);
+    return res;
+}
+
 static Rboolean check_vector_len(SEXP x, SEXP len, SEXP min_len, SEXP max_len) {
     if (!isNull(len)) {
-        R_xlen_t n = asCount(len, "len");
+        R_xlen_t n = asLength(len, "len");
         if (xlength(x) != n)
             return message("Must have length %g, but has length %g", (double)n, (double)xlength(x));
     }
     if (!isNull(min_len)) {
-        R_xlen_t n = asCount(min_len, "min.len");
+        R_xlen_t n = asLength(min_len, "min.len");
         if (xlength(x) < n)
             return message("Must have length >= %g, but has length %g", (double)n, (double)xlength(x));
     }
     if (!isNull(max_len)) {
-        R_xlen_t n = asCount(max_len, "max.len");
+        R_xlen_t n = asLength(max_len, "max.len");
         if (xlength(x) > n)
             return message("Must have length <= %g, but has length %g", (double)n, (double)xlength(x));
     }
@@ -179,10 +191,8 @@ static Rboolean check_vector_unique(SEXP x, SEXP unique) {
 }
 
 static Rboolean check_vector_names(SEXP x, SEXP names) {
-    if (!isNull(names) && xlength(x) > 0) {
-        SEXP nn = getAttrib(x, R_NamesSymbol);
-        return check_names(nn, asString(names, "names"), "Vector");
-    }
+    if (!isNull(names) && xlength(x) > 0)
+        return check_named(x, asString(names, "names"), "Vector");
     return TRUE;
 }
 
@@ -196,12 +206,12 @@ static Rboolean check_matrix_dims(SEXP x, SEXP min_rows, SEXP min_cols, SEXP row
     if (!isNull(min_rows) || !isNull(rows)) {
         R_len_t xrows = get_nrows(x);
         if (!isNull(min_rows)) {
-            R_len_t cmp = asCount(min_rows, "min.rows");
+            R_len_t cmp = asLength(min_rows, "min.rows");
             if (xrows < cmp)
                 return message("Must have at least %i rows, but has %i rows", cmp, xrows);
         }
         if (!isNull(rows)) {
-            R_len_t cmp = asCount(rows, "rows");
+            R_len_t cmp = asLength(rows, "rows");
             if (xrows != cmp)
                 return message("Must have exactly %i rows, but has %i rows", cmp, xrows);
         }
@@ -209,7 +219,7 @@ static Rboolean check_matrix_dims(SEXP x, SEXP min_rows, SEXP min_cols, SEXP row
     if (!isNull(min_cols) || !isNull(cols)) {
         R_len_t xcols = get_ncols(x);
         if (!isNull(min_cols)) {
-            R_len_t cmp = asCount(min_cols, "min.cols");
+            R_len_t cmp = asLength(min_cols, "min.cols");
             if (xcols < cmp)
                 return message("Must have at least %i cols, but has %i cols", cmp, xcols);
         }
@@ -273,16 +283,16 @@ static inline Rboolean is_scalar_na(SEXP x) {
 
 
 static Rboolean is_sorted_integer(SEXP x) {
-    R_len_t i = 0;
+    R_xlen_t i = 0;
     const int * const xi = INTEGER(x);
-    const R_len_t n = length(x);
+    const R_xlen_t n = xlength(x);
     while(xi[i] == NA_INTEGER) {
         i++;
         if (i == n)
             return TRUE;
     }
 
-    for (R_len_t j = i + 1; j < n; j++) {
+    for (R_xlen_t j = i + 1; j < n; j++) {
         if (xi[j] != NA_INTEGER) {
             if (xi[i] > xi[j])
                 return FALSE;
@@ -294,16 +304,16 @@ static Rboolean is_sorted_integer(SEXP x) {
 
 
 static Rboolean is_sorted_double(SEXP x) {
-    R_len_t i = 0;
+    R_xlen_t i = 0;
     const double * const xr = REAL(x);
-    const R_len_t n = length(x);
+    const R_xlen_t n = xlength(x);
     while(xr[i] == NA_REAL) {
         i++;
         if (i == n)
             return TRUE;
     }
 
-    for (R_len_t j = i + 1; j < n; j++) {
+    for (R_xlen_t j = i + 1; j < n; j++) {
         if (xr[j] != NA_REAL) {
             if (xr[i] > xr[j])
                 return FALSE;
@@ -315,7 +325,7 @@ static Rboolean is_sorted_double(SEXP x) {
 
 
 static Rboolean check_vector_sorted(SEXP x, SEXP sorted) {
-    if (asFlag(sorted, "sorted") && length(x) >= 2) {
+    if (asFlag(sorted, "sorted") && xlength(x) > 1) {
         Rboolean ok;
         switch(TYPEOF(x)) {
             case INTSXP: ok = is_sorted_integer(x); break;
@@ -359,22 +369,14 @@ SEXP attribute_hidden c_check_dataframe(SEXP x, SEXP any_missing, SEXP all_missi
     ASSERT_TRUE(check_matrix_dims(x, min_rows, min_cols, rows, cols));
 
     if (!isNull(row_names)) {
-        SEXP nn = getAttrib(x, install("row.names"));
-        if (isInteger(nn)) {
-            nn = PROTECT(coerceVector(nn, STRSXP));
-            Rboolean ok = check_names(nn, asString(row_names, "row.names"), "Rows");
-            UNPROTECT(1);
-            if (!ok)
-                return ScalarString(mkChar(msg));
-        } else {
-            ASSERT_TRUE(check_names(nn, asString(row_names, "row.names"), "Rows"));
-        }
+        SEXP nn = PROTECT(getAttrib(x, install("row.names")));
+        if (isInteger(nn))
+            nn = coerceVector(nn, STRSXP);
+        ASSERT_TRUE_UNPROTECT(check_names(nn, asString(row_names, "row.names"), "Rows"), 1);
     }
 
-    if (!isNull(col_names)) {
-        SEXP nn = getAttrib(x, R_NamesSymbol);
-        ASSERT_TRUE(check_names(nn, asString(col_names, "col.names"), "Columns"));
-    }
+    if (!isNull(col_names))
+        ASSERT_TRUE(check_named(x, asString(col_names, "col.names"), "Columns"));
     if (!asFlag(any_missing, "any.missing") && any_missing_frame(x))
         return result("Contains missing values");
     if (!asFlag(all_missing, "all.missing") && all_missing_frame(x))
@@ -438,17 +440,17 @@ SEXP attribute_hidden c_check_matrix(SEXP x, SEXP mode, SEXP any_missing, SEXP a
     ASSERT_TRUE(check_matrix_dims(x, min_rows, min_cols, rows, cols));
 
     if (!isNull(row_names) && xlength(x) > 0) {
-        SEXP nn = getAttrib(x, R_DimNamesSymbol);
+        SEXP nn = PROTECT(getAttrib(x, R_DimNamesSymbol));
         if (!isNull(nn))
             nn = VECTOR_ELT(nn, 0);
-        ASSERT_TRUE(check_names(nn, asString(row_names, "row.names"), "Rows"));
+        ASSERT_TRUE_UNPROTECT(check_names(nn, asString(row_names, "row.names"), "Rows"), 1);
     }
 
     if (!isNull(col_names) && xlength(x) > 0) {
-        SEXP nn = getAttrib(x, R_DimNamesSymbol);
+        SEXP nn = PROTECT(getAttrib(x, R_DimNamesSymbol));
         if (!isNull(nn))
             nn = VECTOR_ELT(nn, 1);
-        ASSERT_TRUE(check_names(nn, asString(col_names, "col.names"), "Columns"));
+        ASSERT_TRUE_UNPROTECT(check_names(nn, asString(col_names, "col.names"), "Columns"), 1);
     }
     ASSERT_TRUE(check_vector_missings(x, any_missing, all_missing));
     return ScalarLogical(TRUE);
@@ -484,15 +486,13 @@ SEXP attribute_hidden c_check_array(SEXP x, SEXP mode, SEXP any_missing, SEXP d,
 }
 
 SEXP attribute_hidden c_check_named(SEXP x, SEXP type) {
-    if (!isNull(type) && xlength(x) > 0) {
-        SEXP nn = getAttrib(x, R_NamesSymbol);
-        ASSERT_TRUE(check_names(nn, asString(type, "type"), "Object"));
-    }
+    if (!isNull(type) && xlength(x) > 0)
+        ASSERT_TRUE(check_named(x, asString(type, "type"), "Object"));
     return ScalarLogical(TRUE);
 }
 
 SEXP attribute_hidden c_check_names(SEXP x, SEXP type) {
-    if (!isString(x))
+    if (!(isString(x) || isNull(x)))
         return result("Must be a character vector of names");
     ASSERT_TRUE(check_names(x, asString(type, "type"), "Names"));
     return ScalarLogical(TRUE);
@@ -608,3 +608,4 @@ SEXP attribute_hidden c_check_scalar(SEXP x, SEXP na_ok, SEXP null_ok) {
 #undef HANDLE_TYPE_NULL
 #undef HANDLE_NA
 #undef ASSERT_TRUE
+#undef ASSERT_TRUE_UNPROTECT
