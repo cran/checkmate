@@ -20,7 +20,7 @@
 #' setkeyv(dt, "Sepal.Length", physical = FALSE)
 #' testDataTable(dt)
 #' testDataTable(dt, key = "Species", index = "Sepal.Length", any.missing = FALSE)
-checkDataTable = function(x, key = NULL, index = NULL, types = character(0L), any.missing = TRUE, all.missing = TRUE, min.rows = NULL, min.cols = NULL, nrows = NULL, ncols = NULL, row.names = NULL, col.names = NULL, null.ok = FALSE) {
+checkDataTable = function(x, key = NULL, index = NULL, types = character(0L), any.missing = TRUE, all.missing = TRUE, min.rows = NULL, max.rows = NULL, min.cols = NULL, max.cols = NULL, nrows = NULL, ncols = NULL, row.names = NULL, col.names = NULL, null.ok = FALSE) {
   if (!requireNamespace("data.table", quietly = TRUE))
     stop("Install package 'data.table' to perform checks of data tables")
 
@@ -35,7 +35,7 @@ checkDataTable = function(x, key = NULL, index = NULL, types = character(0L), an
     return(paste0("Must be a data.table", if (null.ok) " (or 'NULL')" else "", sprintf(", not %s", guessType(x))))
   }
 
-  checkDataFrame(x, types, any.missing, all.missing, min.rows, min.cols, nrows, ncols, row.names, col.names, null.ok = FALSE) %and%
+  checkDataFrame(x, types, any.missing, all.missing, min.rows, max.rows, min.cols, max.cols, nrows, ncols, row.names, col.names, null.ok = FALSE) %and%
     checkDataTableProps(x, key, index)
 }
 
@@ -62,7 +62,7 @@ check_data_table = checkDataTable
 #' @include makeAssertion.R
 #' @template assert
 #' @rdname checkDataTable
-assertDataTable = makeAssertionFunction(checkDataTable)
+assertDataTable = makeAssertionFunction(checkDataTable, use.namespace = FALSE)
 
 #' @export
 #' @rdname checkDataTable
@@ -81,4 +81,4 @@ test_data_table = testDataTable
 #' @include makeExpectation.R
 #' @template expect
 #' @rdname checkDataTable
-expect_data_table = makeExpectationFunction(checkDataTable)
+expect_data_table = makeExpectationFunction(checkDataTable, use.namespace = FALSE)

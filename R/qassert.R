@@ -40,6 +40,7 @@
 #'      \code{[lL]} \tab List. Missingness is defined as \code{NULL} element.\cr
 #'      \code{[mM]} \tab Matrix.\cr
 #'      \code{[dD]} \tab Data.frame. Missingness is checked recursively on columns.\cr
+#'      \code{[pP]} \tab POSIXct date.\cr
 #'      \code{[e]}  \tab Environment.\cr
 #'      \code{[0]}  \tab \code{NULL}.\cr
 #'      \code{[*]}  \tab placeholder to allow any type.
@@ -102,8 +103,8 @@
 #' qtest(iris, "D+")
 qassert = function(x, rules, .var.name = vname(x)) {
   res = .Call(c_qassert, x, rules, FALSE)
-  if (!identical(res, TRUE))
-    mstop(qmsg(res, .var.name))
+  if (!isTRUE(res))
+    mstop(qmsg(res, .var.name), call. = sys.call(-1L))
   invisible(x)
 }
 
@@ -121,7 +122,7 @@ qtest = function(x, rules) {
 #' @export
 qexpect = function(x, rules, info = NULL, label = vname(x)) {
   res = .Call(c_qassert, x, rules, FALSE)
-  if (!identical(res, TRUE))
+  if (!isTRUE(res))
     res = qmsg(res, label)
   makeExpectation(x, res, info = info, label = label)
 }

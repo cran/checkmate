@@ -24,8 +24,8 @@ testSubset(x, choices, empty.ok = TRUE, fmatch = FALSE)
 
 test_subset(x, choices, empty.ok = TRUE, fmatch = FALSE)
 
-expect_subset(x, choices, empty.ok = TRUE, fmatch = FALSE, info = NULL,
-  label = vname(x))
+expect_subset(x, choices, empty.ok = TRUE, fmatch = FALSE,
+  info = NULL, label = vname(x))
 }
 \arguments{
 \item{x}{[any]\cr
@@ -95,5 +95,6 @@ testSubset(1, as.integer(1))
 }
 \seealso{
 Other set: \code{\link{checkChoice}},
-  \code{\link{checkSetEqual}}
+  \code{\link{checkDisjunct}}, \code{\link{checkSetEqual}}
 }
+\concept{set}

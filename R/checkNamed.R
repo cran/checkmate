@@ -22,7 +22,7 @@
 #' names(x) = letters[1:3]
 #' testNamed(x, "unique")
 checkNamed = function(x, type = "named") {
-  .Deprecated("checkNames", "checkmate")
+  .Deprecated(new = "checkNames", old = "checkNamed", package = "checkmate")
   .Call(c_check_named, x, type)
 }
 
@@ -34,7 +34,7 @@ check_named = checkNamed
 #' @include makeAssertion.R
 #' @template assert
 #' @rdname checkNamed
-assertNamed = makeAssertionFunction(checkNamed, c.fun = "c_check_named")
+assertNamed = makeAssertionFunction(checkNamed, c.fun = "c_check_named", use.namespace = FALSE)
 
 #' @export
 #' @rdname checkNamed
@@ -54,4 +54,4 @@ test_named = testNamed
 # #' @include makeExpectation.R
 # #' @template expect
 # #' @rdname checkNamed
-expect_named = makeExpectationFunction(checkNamed, c.fun = "c_check_named")
+expect_named = makeExpectationFunction(checkNamed, c.fun = "c_check_named", use.namespace = FALSE)

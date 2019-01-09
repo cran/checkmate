@@ -10,23 +10,25 @@
 \alias{expect_number}
 \title{Check if an argument is a single numeric value}
 \usage{
-checkNumber(x, na.ok = FALSE, lower = -Inf, upper = Inf, finite = FALSE,
-  null.ok = FALSE)
+checkNumber(x, na.ok = FALSE, lower = -Inf, upper = Inf,
+  finite = FALSE, null.ok = FALSE)
 
 check_number(x, na.ok = FALSE, lower = -Inf, upper = Inf,
   finite = FALSE, null.ok = FALSE)
 
 assertNumber(x, na.ok = FALSE, lower = -Inf, upper = Inf,
-  finite = FALSE, null.ok = FALSE, .var.name = vname(x), add = NULL)
+  finite = FALSE, null.ok = FALSE, .var.name = vname(x),
+  add = NULL)
 
 assert_number(x, na.ok = FALSE, lower = -Inf, upper = Inf,
-  finite = FALSE, null.ok = FALSE, .var.name = vname(x), add = NULL)
+  finite = FALSE, null.ok = FALSE, .var.name = vname(x),
+  add = NULL)
 
-testNumber(x, na.ok = FALSE, lower = -Inf, upper = Inf, finite = FALSE,
-  null.ok = FALSE)
+testNumber(x, na.ok = FALSE, lower = -Inf, upper = Inf,
+  finite = FALSE, null.ok = FALSE)
 
-test_number(x, na.ok = FALSE, lower = -Inf, upper = Inf, finite = FALSE,
-  null.ok = FALSE)
+test_number(x, na.ok = FALSE, lower = -Inf, upper = Inf,
+  finite = FALSE, null.ok = FALSE)
 
 expect_number(x, na.ok = FALSE, lower = -Inf, upper = Inf,
   finite = FALSE, null.ok = FALSE, info = NULL, label = vname(x))
@@ -39,10 +41,10 @@ Object to check.}
 Are missing values allowed? Default is \code{FALSE}.}
 
 \item{lower}{[\code{numeric(1)}]\cr
-Lower value all elements of \code{x} must be greater than.}
+Lower value all elements of \code{x} must be greater than or equal to.}
 
 \item{upper}{[\code{numeric(1)}]\cr
-Upper value all elements of \code{x} must be lower than.}
+Upper value all elements of \code{x} must be lower than or equal to.}
 
 \item{finite}{[\code{logical(1)}]\cr
 Check for only finite values? Default is \code{FALSE}.}
@@ -101,3 +103,4 @@ Other scalars: \code{\link{checkCount}},
   \code{\link{checkScalarNA}}, \code{\link{checkScalar}},
   \code{\link{checkString}}
 }
+\concept{scalars}

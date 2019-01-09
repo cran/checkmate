@@ -8,6 +8,11 @@
 #' and (b) double vectors with all elements being within \code{tol}
 #' range of an integer.
 #'
+#' Note that these functions may be deprecated in the future.
+#' Instead, it is advised to use \code{\link{assertCount}},
+#' \code{\link{assertInt}} or \code{\link{assertIntegerish}} with
+#' argument \code{coerce} set to \code{TRUE} instead.
+#'
 #' @param x [any]\cr
 #'  Object to convert.
 #' @template na-handling

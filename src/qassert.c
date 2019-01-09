@@ -2,16 +2,17 @@
 #include "helper.h"
 #include "guess_type.h"
 #include "any_missing.h"
-#include "is_integerish.h"
+#include "integerish.h"
+#include "backports.h"
 
 typedef enum {
     CL_LOGICAL, CL_INTEGER, CL_INTEGERISH, CL_NUMERIC, CL_DOUBLE, CL_STRING, CL_FACTOR, CL_LIST, CL_COMPLEX,
-    CL_ATOMIC, CL_ATOMIC_VECTOR, CL_MATRIX, CL_DATAFRAME, CL_FUNCTION, CL_ENVIRONMENT, CL_NULL, CL_NONE
+    CL_ATOMIC, CL_ATOMIC_VECTOR, CL_MATRIX, CL_DATAFRAME, CL_POSIX, CL_FUNCTION, CL_ENVIRONMENT, CL_NULL, CL_NONE
 } class_t;
 
 static const char * CLSTR[] = {
      "logical", "integer", "integerish", "numeric", "double", "string", "factor", "list", "complex",
-     "atomic", "atomic vector", "matrix", "data frame", "function", "environment", "NULL"
+     "atomic", "atomic vector", "matrix", "data frame", "POSIXct", "function", "environment", "NULL"
 };
 
 typedef enum { LT, LE, EQ, GE, GT, NE, NONE } cmp_t;
@@ -26,8 +27,9 @@ typedef struct {
         Rboolean(*fun)(SEXP);
         class_t name;
     } class;
-    struct {
-        Rboolean(*fun)(SEXP);
+    union {
+        R_xlen_t(*pos1d)(SEXP);
+        pos2d_t(*pos2d)(SEXP);
     } missing;
     struct {
         ll_cmp fun;
@@ -54,21 +56,6 @@ static inline Rboolean dd_gt(const double x, const double y) { return x >  y; }
 static inline Rboolean dd_le(const double x, const double y) { return x <= y; }
 static inline Rboolean dd_ge(const double x, const double y) { return x >= y; }
 static inline Rboolean dd_ne(const double x, const double y) { return x != y; }
-static inline Rboolean is_class_logical(SEXP x) { return isLogical(x); }
-static inline Rboolean is_class_integer(SEXP x) { return isInteger(x); }
-static inline Rboolean is_class_integerish(SEXP x) { return isIntegerish(x, INTEGERISH_DEFAULT_TOL, TRUE); }
-static inline Rboolean is_class_double(SEXP x) { return isReal(x); }
-static inline Rboolean is_class_numeric(SEXP x) { return isStrictlyNumeric(x); }
-static inline Rboolean is_class_complex(SEXP x) { return isComplex(x); }
-static inline Rboolean is_class_string(SEXP x) { return isString(x); }
-static inline Rboolean is_class_factor(SEXP x) { return isFactor(x); }
-static inline Rboolean is_class_atomic(SEXP x) { return isNull(x) || isVectorAtomic(x); }
-static inline Rboolean is_class_atomic_vector(SEXP x) { return isAtomicVector(x); }
-static inline Rboolean is_class_list(SEXP x) { return isRList(x); }
-static inline Rboolean is_class_matrix(SEXP x) { return isMatrix(x); }
-static inline Rboolean is_class_frame(SEXP x) { return isFrame(x); }
-static inline Rboolean is_class_environment(SEXP x) { return isEnvironment(x); }
-static inline Rboolean is_class_null(SEXP x) { return isNull(x); }
 
 static const msg_t MSGT = { .ok = TRUE };
 static const msg_t MSGF = { .ok = FALSE };
@@ -87,7 +74,7 @@ static msg_t message(const char *fmt, ...) {
 /*********************************************************************************************************************/
 static msg_t check_bound(SEXP x, const bound_t bound) {
     if (isReal(x)) {
-        const double *xp = REAL(x);
+        const double *xp = REAL_RO(x);
         const double * const xend = xp + xlength(x);
         for (; xp != xend; xp++) {
             if (!ISNAN(*xp) && !bound.fun(*xp, bound.cmp)) {
@@ -99,7 +86,7 @@ static msg_t check_bound(SEXP x, const bound_t bound) {
             }
         }
     } else if (isInteger(x)) {
-        const int *xp = INTEGER(x);
+        const int *xp = INTEGER_RO(x);
         const int * const xend = xp + xlength(x);
         for (; xp != xend; xp++) {
             if (*xp != NA_INTEGER && !bound.fun((double) *xp, bound.cmp))
@@ -126,85 +113,92 @@ static msg_t check_bound(SEXP x, const bound_t bound) {
 /* First step: Parse string and built checker_t object                                                               */
 /*********************************************************************************************************************/
 static int parse_class(checker_t *checker, const char *rule) {
-    checker->missing.fun = NULL;
+    checker->missing.pos1d = NULL;
+    checker->missing.pos2d = NULL;
     switch(rule[0]) {
         case 'B':
-            checker->missing.fun = &any_missing_logical;
+            checker->missing.pos1d = &find_missing_logical;
         case 'b':
             checker->class.fun = &is_class_logical;
             checker->class.name = CL_LOGICAL;
             break;
         case 'I':
-            checker->missing.fun = &any_missing_integer;
+            checker->missing.pos1d = &find_missing_integer;
         case 'i':
             checker->class.fun = &is_class_integer;
             checker->class.name = CL_INTEGER;
             break;
         case 'X':
-            checker->missing.fun = &any_missing_integerish;
+            checker->missing.pos1d = &find_missing_integerish;
         case 'x':
             checker->class.fun = &is_class_integerish;
             checker->class.name = CL_INTEGERISH;
             break;
         case 'N':
-            checker->missing.fun = &any_missing_numeric;
+            checker->missing.pos1d = &find_missing_numeric;
         case 'n':
             checker->class.fun = &is_class_numeric;
             checker->class.name = CL_NUMERIC;
             break;
         case 'R':
-            checker->missing.fun = &any_missing_double;
+            checker->missing.pos1d = &find_missing_double;
         case 'r':
             checker->class.fun = &is_class_double;
             checker->class.name = CL_DOUBLE;
             break;
         case 'S':
-            checker->missing.fun = &any_missing_string;
+            checker->missing.pos1d = &find_missing_string;
         case 's':
             checker->class.fun = &is_class_string;
             checker->class.name = CL_STRING;
             break;
         case 'F':
-            checker->missing.fun = &any_missing_integer;
+            checker->missing.pos1d = &find_missing_integer;
         case 'f':
             checker->class.fun = &is_class_factor;
             checker->class.name = CL_FACTOR;
             break;
         case 'L':
-            checker->missing.fun = &any_missing_list;
+            checker->missing.pos1d = &find_missing_list;
         case 'l':
             checker->class.fun = &is_class_list;
             checker->class.name = CL_LIST;
             break;
         case 'C':
-            checker->missing.fun = &any_missing_complex;
+            checker->missing.pos1d = &find_missing_complex;
         case 'c':
             checker->class.fun = &is_class_complex;
             checker->class.name = CL_COMPLEX;
             break;
         case 'A':
-            checker->missing.fun = &any_missing_atomic;
+            checker->missing.pos1d = &find_missing_vector;
         case 'a':
             checker->class.fun = &is_class_atomic;
             checker->class.name = CL_ATOMIC;
             break;
         case 'V':
-            checker->missing.fun = &any_missing_atomic;
+            checker->missing.pos1d = &find_missing_vector;
         case 'v':
             checker->class.fun = &is_class_atomic_vector;
             checker->class.name = CL_ATOMIC_VECTOR;
             break;
         case 'M':
-            checker->missing.fun = &any_missing_matrix;
+            checker->missing.pos2d = &find_missing_matrix;
         case 'm':
             checker->class.fun = &is_class_matrix;
             checker->class.name = CL_MATRIX;
             break;
         case 'D':
-            checker->missing.fun = &any_missing_frame;
+            checker->missing.pos2d = &find_missing_frame;
         case 'd':
             checker->class.fun = &is_class_frame;
             checker->class.name = CL_DATAFRAME;
+            break;
+        case 'P':
+            checker->missing.pos1d = &find_missing_double;
+        case 'p':
+            checker->class.fun = &is_class_posixct;
+            checker->class.name = CL_POSIX;
             break;
         case 'e':
             checker->class.fun = &is_class_environment;
@@ -225,9 +219,14 @@ static int parse_class(checker_t *checker, const char *rule) {
 }
 
 static int parse_length(checker_t *checker, const char *rule) {
+    checker->len.fun = NULL;
+    checker->len.op = NONE;
+    checker->len.cmp = 0;
+
     switch(rule[0]) {
+        case '\0':
+            return 0;
         case '*':
-            checker->len.fun = NULL;
             return 1;
         case '?':
             checker->len.fun = &ii_le;
@@ -241,9 +240,6 @@ static int parse_length(checker_t *checker, const char *rule) {
             return 1;
         case '(':
         case '[':
-        case '\0':
-            checker->len.fun = NULL;
-            checker->len.op = NONE;
             return 0;
     }
 
@@ -382,8 +378,19 @@ static msg_t check_rule(SEXP x, const checker_t *checker, const Rboolean err_msg
         return err_msg ? message("Must be of class '%s', not '%s'", CLSTR[checker->class.name], guess_type(x)) : MSGF;
     }
 
-    if (checker->missing.fun != NULL && checker->missing.fun(x)) {
-        return err_msg ? message("May not contain missing values") : MSGF;
+    if (checker->missing.pos2d != NULL) {
+        pos2d_t pos = checker->missing.pos2d(x);
+        if (pos.i > 0) {
+        return err_msg ?
+            message("May not contain missing values, first at column %i, element %i", pos.j, pos.i) :
+            MSGF;
+        }
+    }
+
+    if (checker->missing.pos1d != NULL) {
+        R_xlen_t pos = checker->missing.pos1d(x);
+        if (pos > 0)
+            return err_msg ? message("May not contain missing values, first at position %i", pos) : MSGF;
     }
 
     if (checker->len.fun != NULL && !checker->len.fun(xlength(x), checker->len.cmp)) {
@@ -458,7 +465,7 @@ SEXP attribute_hidden c_qassert(SEXP x, SEXP rules, SEXP recursive) {
         result[i].ok = TRUE;
     }
 
-    if (LOGICAL(recursive)[0]) {
+    if (LOGICAL_RO(recursive)[0]) {
         failed = qassert_list(x, checker, result, nrules);
     } else {
         failed = qassert1(x, checker, result, nrules);
@@ -496,7 +503,7 @@ static inline Rboolean qtest_list(SEXP x, const checker_t *checker, const R_len_
     const R_len_t nx = xlength(x);
     if (depth > 1) {
         for (R_xlen_t i = 0; i < nx; i++) {
-            if (isRList(VECTOR_ELT(x, i))) {
+            if (is_class_list(VECTOR_ELT(x, i))) {
                 if (!qtest_list(VECTOR_ELT(x, i), checker, nrules, depth - 1))
                     return FALSE;
             } else {
@@ -537,7 +544,7 @@ SEXP attribute_hidden c_qtest(SEXP x, SEXP rules, SEXP recursive, SEXP depth) {
         parse_rule(&checker[i], CHAR(STRING_ELT(rules, i)));
     }
 
-    if (LOGICAL(recursive)[0])
+    if (LOGICAL_RO(recursive)[0])
         return ScalarLogical(qtest_list(x, checker, nrules, asCount(depth, "depth")));
     return ScalarLogical(qtest1(x, checker, nrules));
 }

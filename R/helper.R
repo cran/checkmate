@@ -1,9 +1,9 @@
-mstop = function(msg, ...) {
-  stop(simpleError(sprintf(msg, ...), sys.call(1L)))
+mstop = function(msg, ..., call. = NULL) {
+  stop(simpleError(sprintf(msg, ...), call.))
 }
 
 "%and%" = function(lhs, rhs) {
-  if (identical(lhs, TRUE)) rhs else lhs
+  if (isTRUE(lhs)) rhs else lhs
 }
 
 "%nin%" = function(x, y) {
@@ -21,4 +21,16 @@ guessType = function(x) {
 
 isSameType = function(x, y) {
   identical(typeof(x), typeof(y)) || (is.numeric(x) && is.numeric(y))
+}
+
+array_collapse = function(x) {
+  if (length(x) == 0L)
+    return("[]")
+  sprintf("['%s']", paste0(x, collapse = "','"))
+}
+
+set_collapse = function(x) {
+  if (length(x) == 0L)
+    return("{}")
+  sprintf("{'%s'}", paste0(unique(x), collapse = "','"))
 }

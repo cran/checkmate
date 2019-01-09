@@ -11,49 +11,49 @@
 \title{Check that an argument is a vector of type numeric}
 \usage{
 checkNumeric(x, lower = -Inf, upper = Inf, finite = FALSE,
-  any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL,
-  max.len = NULL, unique = FALSE, sorted = FALSE, names = NULL,
-  null.ok = FALSE)
+  any.missing = TRUE, all.missing = TRUE, len = NULL,
+  min.len = NULL, max.len = NULL, unique = FALSE, sorted = FALSE,
+  names = NULL, null.ok = FALSE)
 
 check_numeric(x, lower = -Inf, upper = Inf, finite = FALSE,
-  any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL,
-  max.len = NULL, unique = FALSE, sorted = FALSE, names = NULL,
-  null.ok = FALSE)
+  any.missing = TRUE, all.missing = TRUE, len = NULL,
+  min.len = NULL, max.len = NULL, unique = FALSE, sorted = FALSE,
+  names = NULL, null.ok = FALSE)
 
 assertNumeric(x, lower = -Inf, upper = Inf, finite = FALSE,
-  any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL,
-  max.len = NULL, unique = FALSE, sorted = FALSE, names = NULL,
-  null.ok = FALSE, .var.name = vname(x), add = NULL)
+  any.missing = TRUE, all.missing = TRUE, len = NULL,
+  min.len = NULL, max.len = NULL, unique = FALSE, sorted = FALSE,
+  names = NULL, null.ok = FALSE, .var.name = vname(x), add = NULL)
 
 assert_numeric(x, lower = -Inf, upper = Inf, finite = FALSE,
-  any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL,
-  max.len = NULL, unique = FALSE, sorted = FALSE, names = NULL,
-  null.ok = FALSE, .var.name = vname(x), add = NULL)
+  any.missing = TRUE, all.missing = TRUE, len = NULL,
+  min.len = NULL, max.len = NULL, unique = FALSE, sorted = FALSE,
+  names = NULL, null.ok = FALSE, .var.name = vname(x), add = NULL)
 
 testNumeric(x, lower = -Inf, upper = Inf, finite = FALSE,
-  any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL,
-  max.len = NULL, unique = FALSE, sorted = FALSE, names = NULL,
-  null.ok = FALSE)
+  any.missing = TRUE, all.missing = TRUE, len = NULL,
+  min.len = NULL, max.len = NULL, unique = FALSE, sorted = FALSE,
+  names = NULL, null.ok = FALSE)
 
 test_numeric(x, lower = -Inf, upper = Inf, finite = FALSE,
-  any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL,
-  max.len = NULL, unique = FALSE, sorted = FALSE, names = NULL,
-  null.ok = FALSE)
+  any.missing = TRUE, all.missing = TRUE, len = NULL,
+  min.len = NULL, max.len = NULL, unique = FALSE, sorted = FALSE,
+  names = NULL, null.ok = FALSE)
 
 expect_numeric(x, lower = -Inf, upper = Inf, finite = FALSE,
-  any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL,
-  max.len = NULL, unique = FALSE, sorted = FALSE, names = NULL,
-  null.ok = FALSE, info = NULL, label = vname(x))
+  any.missing = TRUE, all.missing = TRUE, len = NULL,
+  min.len = NULL, max.len = NULL, unique = FALSE, sorted = FALSE,
+  names = NULL, null.ok = FALSE, info = NULL, label = vname(x))
 }
 \arguments{
 \item{x}{[any]\cr
 Object to check.}
 
 \item{lower}{[\code{numeric(1)}]\cr
-Lower value all elements of \code{x} must be greater than.}
+Lower value all elements of \code{x} must be greater than or equal to.}
 
 \item{upper}{[\code{numeric(1)}]\cr
-Upper value all elements of \code{x} must be lower than.}
+Upper value all elements of \code{x} must be lower than or equal to.}
 
 \item{finite}{[\code{logical(1)}]\cr
 Check for only finite values? Default is \code{FALSE}.}
@@ -121,7 +121,9 @@ Depending on the function prefix:
  \code{\link[testthat]{expectation}}.
 }
 \description{
-Check that an argument is a vector of type numeric
+Vectors of storage type \dQuote{integer} and \dQuote{double} count as \dQuote{numeric}, c.f. \code{\link[base]{is.numeric}}.
+To explicitly check for real integer or double vectors, see \code{\link{checkInteger}}, \code{\link{checkIntegerish}} or
+\code{\link{checkDouble}}.
 }
 \details{
 This function does not distinguish between
@@ -137,11 +139,14 @@ Other basetypes: \code{\link{checkArray}},
   \code{\link{checkAtomicVector}},
   \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
   \code{\link{checkComplex}}, \code{\link{checkDataFrame}},
-  \code{\link{checkDate}}, \code{\link{checkEnvironment}},
-  \code{\link{checkFactor}}, \code{\link{checkFunction}},
+  \code{\link{checkDate}}, \code{\link{checkDouble}},
+  \code{\link{checkEnvironment}},
+  \code{\link{checkFactor}}, \code{\link{checkFormula}},
+  \code{\link{checkFunction}},
   \code{\link{checkIntegerish}},
   \code{\link{checkInteger}}, \code{\link{checkList}},
   \code{\link{checkLogical}}, \code{\link{checkMatrix}},
   \code{\link{checkNull}}, \code{\link{checkPOSIXct}},
-  \code{\link{checkVector}}
+  \code{\link{checkRaw}}, \code{\link{checkVector}}
 }
+\concept{basetypes}

@@ -45,6 +45,9 @@ test_that("checkIntegerish", {
   expect_false(testIntegerish(NA, any.missing = FALSE))
   expect_false(testIntegerish(NA, all.missing = FALSE))
   expect_error(assertIntegerish(x, tol=0), "integerish")
+
+  expect_false(is.integer(assertIntegerish(5)))
+  expect_true(is.integer(assertIntegerish(5, coerce = TRUE)))
 })
 
 test_that("bounds of vectors with only missings are not checked", {
@@ -63,4 +66,20 @@ test_that("isIntegerish internal function", {
 test_that("sorted works", {
   expect_true(checkIntegerish(1:3, sorted = TRUE))
   expect_true(grepl("sorted", checkIntegerish(3:1, sorted = TRUE), fixed = TRUE))
+})
+
+test_that("informative error messages", {
+  x = checkIntegerish((.Machine$integer.max + as.double(-3:3)))
+  expect_string(x, fixed = "element 5")
+  expect_string(x, fixed = "integer range")
+
+  x = checkIntegerish((-.Machine$integer.max - 1))
+  expect_string(x, fixed = "element 1")
+  expect_string(x, fixed = "integer range")
+
+  x = checkIntegerish(0.5)
+  expect_string(x, fixed = "close to an integer")
+
+  x = checkIntegerish(3 + 1i)
+  expect_string(x, fixed = "imaginary part")
 })

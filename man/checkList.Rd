@@ -20,17 +20,17 @@ check_list(x, types = character(0L), any.missing = TRUE,
 
 assertList(x, types = character(0L), any.missing = TRUE,
   all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
-  unique = FALSE, names = NULL, null.ok = FALSE, .var.name = vname(x),
-  add = NULL)
+  unique = FALSE, names = NULL, null.ok = FALSE,
+  .var.name = vname(x), add = NULL)
 
 assert_list(x, types = character(0L), any.missing = TRUE,
   all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
-  unique = FALSE, names = NULL, null.ok = FALSE, .var.name = vname(x),
-  add = NULL)
+  unique = FALSE, names = NULL, null.ok = FALSE,
+  .var.name = vname(x), add = NULL)
 
-testList(x, types = character(0L), any.missing = TRUE, all.missing = TRUE,
-  len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
-  names = NULL, null.ok = FALSE)
+testList(x, types = character(0L), any.missing = TRUE,
+  all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
+  unique = FALSE, names = NULL, null.ok = FALSE)
 
 test_list(x, types = character(0L), any.missing = TRUE,
   all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
@@ -121,13 +121,22 @@ Depending on the function prefix:
 Check if an argument is a list
 }
 \note{
-The test for uniqueness does differentiate between the different NA types in R.
-This is require to be consistent with \code{\link[base]{unique}} while checking
+Contrary to R's \code{\link[base]{is.list}}, objects of type \code{\link[base]{pairlist}} are not
+recognized as list.
+
+Missingness is defined here as elements of the list being \code{NULL}, analogously to \code{\link{anyMissing}}.
+
+The test for uniqueness does differentiate between the different NA types which are built-in in R.
+This is required to be consistent with \code{\link[base]{unique}} while checking
 scalar missing values. Also see the example.
 }
 \examples{
 testList(list())
 testList(as.list(iris), types = c("numeric", "factor"))
+
+# Missingness
+testList(list(1, NA), any.missing = FALSE)
+testList(list(1, NULL), any.missing = FALSE)
 
 # Uniqueness differentiates between different NA types:
 testList(list(NA, NA), unique = TRUE)
@@ -138,11 +147,14 @@ Other basetypes: \code{\link{checkArray}},
   \code{\link{checkAtomicVector}},
   \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
   \code{\link{checkComplex}}, \code{\link{checkDataFrame}},
-  \code{\link{checkDate}}, \code{\link{checkEnvironment}},
-  \code{\link{checkFactor}}, \code{\link{checkFunction}},
+  \code{\link{checkDate}}, \code{\link{checkDouble}},
+  \code{\link{checkEnvironment}},
+  \code{\link{checkFactor}}, \code{\link{checkFormula}},
+  \code{\link{checkFunction}},
   \code{\link{checkIntegerish}},
   \code{\link{checkInteger}}, \code{\link{checkLogical}},
   \code{\link{checkMatrix}}, \code{\link{checkNull}},
   \code{\link{checkNumeric}}, \code{\link{checkPOSIXct}},
-  \code{\link{checkVector}}
+  \code{\link{checkRaw}}, \code{\link{checkVector}}
 }
+\concept{basetypes}

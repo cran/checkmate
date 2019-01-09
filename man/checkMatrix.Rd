@@ -11,35 +11,41 @@
 \title{Check if an argument is a matrix}
 \usage{
 checkMatrix(x, mode = NULL, any.missing = TRUE, all.missing = TRUE,
-  min.rows = NULL, min.cols = NULL, nrows = NULL, ncols = NULL,
-  row.names = NULL, col.names = NULL, null.ok = FALSE)
+  min.rows = NULL, max.rows = NULL, min.cols = NULL,
+  max.cols = NULL, nrows = NULL, ncols = NULL, row.names = NULL,
+  col.names = NULL, null.ok = FALSE)
 
 check_matrix(x, mode = NULL, any.missing = TRUE, all.missing = TRUE,
-  min.rows = NULL, min.cols = NULL, nrows = NULL, ncols = NULL,
-  row.names = NULL, col.names = NULL, null.ok = FALSE)
+  min.rows = NULL, max.rows = NULL, min.cols = NULL,
+  max.cols = NULL, nrows = NULL, ncols = NULL, row.names = NULL,
+  col.names = NULL, null.ok = FALSE)
 
 assertMatrix(x, mode = NULL, any.missing = TRUE, all.missing = TRUE,
-  min.rows = NULL, min.cols = NULL, nrows = NULL, ncols = NULL,
-  row.names = NULL, col.names = NULL, null.ok = FALSE,
-  .var.name = vname(x), add = NULL)
+  min.rows = NULL, max.rows = NULL, min.cols = NULL,
+  max.cols = NULL, nrows = NULL, ncols = NULL, row.names = NULL,
+  col.names = NULL, null.ok = FALSE, .var.name = vname(x),
+  add = NULL)
 
 assert_matrix(x, mode = NULL, any.missing = TRUE, all.missing = TRUE,
-  min.rows = NULL, min.cols = NULL, nrows = NULL, ncols = NULL,
-  row.names = NULL, col.names = NULL, null.ok = FALSE,
-  .var.name = vname(x), add = NULL)
+  min.rows = NULL, max.rows = NULL, min.cols = NULL,
+  max.cols = NULL, nrows = NULL, ncols = NULL, row.names = NULL,
+  col.names = NULL, null.ok = FALSE, .var.name = vname(x),
+  add = NULL)
 
 testMatrix(x, mode = NULL, any.missing = TRUE, all.missing = TRUE,
-  min.rows = NULL, min.cols = NULL, nrows = NULL, ncols = NULL,
-  row.names = NULL, col.names = NULL, null.ok = FALSE)
+  min.rows = NULL, max.rows = NULL, min.cols = NULL,
+  max.cols = NULL, nrows = NULL, ncols = NULL, row.names = NULL,
+  col.names = NULL, null.ok = FALSE)
 
 test_matrix(x, mode = NULL, any.missing = TRUE, all.missing = TRUE,
-  min.rows = NULL, min.cols = NULL, nrows = NULL, ncols = NULL,
-  row.names = NULL, col.names = NULL, null.ok = FALSE)
+  min.rows = NULL, max.rows = NULL, min.cols = NULL,
+  max.cols = NULL, nrows = NULL, ncols = NULL, row.names = NULL,
+  col.names = NULL, null.ok = FALSE)
 
 expect_matrix(x, mode = NULL, any.missing = TRUE, all.missing = TRUE,
-  min.rows = NULL, min.cols = NULL, nrows = NULL, ncols = NULL,
-  row.names = NULL, col.names = NULL, null.ok = FALSE, info = NULL,
-  label = vname(x))
+  min.rows = NULL, max.rows = NULL, min.cols = NULL,
+  max.cols = NULL, nrows = NULL, ncols = NULL, row.names = NULL,
+  col.names = NULL, null.ok = FALSE, info = NULL, label = vname(x))
 }
 \arguments{
 \item{x}{[any]\cr
@@ -60,8 +66,14 @@ Are matrices with only missing values allowed? Default is \code{TRUE}.}
 \item{min.rows}{[\code{integer(1)}]\cr
 Minimum number of rows.}
 
+\item{max.rows}{[\code{integer(1)}]\cr
+Maximum number of rows.}
+
 \item{min.cols}{[\code{integer(1)}]\cr
 Minimum number of columns.}
+
+\item{max.cols}{[\code{integer(1)}]\cr
+Maximum number of columns.}
 
 \item{nrows}{[\code{integer(1)}]\cr
 Exact number of rows.}
@@ -128,15 +140,19 @@ Other basetypes: \code{\link{checkArray}},
   \code{\link{checkAtomicVector}},
   \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
   \code{\link{checkComplex}}, \code{\link{checkDataFrame}},
-  \code{\link{checkDate}}, \code{\link{checkEnvironment}},
-  \code{\link{checkFactor}}, \code{\link{checkFunction}},
+  \code{\link{checkDate}}, \code{\link{checkDouble}},
+  \code{\link{checkEnvironment}},
+  \code{\link{checkFactor}}, \code{\link{checkFormula}},
+  \code{\link{checkFunction}},
   \code{\link{checkIntegerish}},
   \code{\link{checkInteger}}, \code{\link{checkList}},
   \code{\link{checkLogical}}, \code{\link{checkNull}},
   \code{\link{checkNumeric}}, \code{\link{checkPOSIXct}},
-  \code{\link{checkVector}}
+  \code{\link{checkRaw}}, \code{\link{checkVector}}
 
 Other compound: \code{\link{checkArray}},
   \code{\link{checkDataFrame}},
   \code{\link{checkDataTable}}, \code{\link{checkTibble}}
 }
+\concept{basetypes}
+\concept{compound}

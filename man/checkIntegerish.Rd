@@ -23,12 +23,14 @@ check_integerish(x, tol = sqrt(.Machine$double.eps), lower = -Inf,
 assertIntegerish(x, tol = sqrt(.Machine$double.eps), lower = -Inf,
   upper = Inf, any.missing = TRUE, all.missing = TRUE, len = NULL,
   min.len = NULL, max.len = NULL, unique = FALSE, sorted = FALSE,
-  names = NULL, null.ok = FALSE, .var.name = vname(x), add = NULL)
+  names = NULL, null.ok = FALSE, coerce = FALSE,
+  .var.name = vname(x), add = NULL)
 
 assert_integerish(x, tol = sqrt(.Machine$double.eps), lower = -Inf,
   upper = Inf, any.missing = TRUE, all.missing = TRUE, len = NULL,
   min.len = NULL, max.len = NULL, unique = FALSE, sorted = FALSE,
-  names = NULL, null.ok = FALSE, .var.name = vname(x), add = NULL)
+  names = NULL, null.ok = FALSE, coerce = FALSE,
+  .var.name = vname(x), add = NULL)
 
 testIntegerish(x, tol = sqrt(.Machine$double.eps), lower = -Inf,
   upper = Inf, any.missing = TRUE, all.missing = TRUE, len = NULL,
@@ -54,10 +56,10 @@ Numerical tolerance used to check whether a double or complex can be converted.
 Default is \code{sqrt(.Machine$double.eps)}.}
 
 \item{lower}{[\code{numeric(1)}]\cr
-Lower value all elements of \code{x} must be greater than.}
+Lower value all elements of \code{x} must be greater than or equal to.}
 
 \item{upper}{[\code{numeric(1)}]\cr
-Upper value all elements of \code{x} must be lower than.}
+Upper value all elements of \code{x} must be lower than or equal to.}
 
 \item{any.missing}{[\code{logical(1)}]\cr
 Are vectors with missing values allowed? Default is \code{TRUE}.}
@@ -88,6 +90,9 @@ Note that you can use \code{\link{checkSubset}} to check for a specific set of n
 \item{null.ok}{[\code{logical(1)}]\cr
 If set to \code{TRUE}, \code{x} may also be \code{NULL}.
 In this case only a type check of \code{x} is performed, all additional checks are disabled.}
+
+\item{coerce}{[\code{logical(1)}]\cr
+If \code{TRUE}, the input \code{x} is returned as integer after an successful assertion.}
 
 \item{.var.name}{[\code{character(1)}]\cr
 Name of the checked object to print in assertions. Defaults to
@@ -144,10 +149,13 @@ Other basetypes: \code{\link{checkArray}},
   \code{\link{checkAtomicVector}},
   \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
   \code{\link{checkComplex}}, \code{\link{checkDataFrame}},
-  \code{\link{checkDate}}, \code{\link{checkEnvironment}},
-  \code{\link{checkFactor}}, \code{\link{checkFunction}},
-  \code{\link{checkInteger}}, \code{\link{checkList}},
-  \code{\link{checkLogical}}, \code{\link{checkMatrix}},
-  \code{\link{checkNull}}, \code{\link{checkNumeric}},
-  \code{\link{checkPOSIXct}}, \code{\link{checkVector}}
+  \code{\link{checkDate}}, \code{\link{checkDouble}},
+  \code{\link{checkEnvironment}},
+  \code{\link{checkFactor}}, \code{\link{checkFormula}},
+  \code{\link{checkFunction}}, \code{\link{checkInteger}},
+  \code{\link{checkList}}, \code{\link{checkLogical}},
+  \code{\link{checkMatrix}}, \code{\link{checkNull}},
+  \code{\link{checkNumeric}}, \code{\link{checkPOSIXct}},
+  \code{\link{checkRaw}}, \code{\link{checkVector}}
 }
+\concept{basetypes}

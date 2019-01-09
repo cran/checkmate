@@ -7,7 +7,8 @@
 \usage{
 makeExpectation(x, res, info, label)
 
-makeExpectationFunction(check.fun, c.fun = NULL, env = parent.frame())
+makeExpectationFunction(check.fun, c.fun = NULL, use.namespace = FALSE,
+  env = parent.frame())
 }
 \arguments{
 \item{x}{[any]\cr
@@ -30,6 +31,11 @@ Function which checks the input. Must return \code{TRUE} on success and a string
 If not \code{NULL}, instead of calling the function \code{check.fun}, use \code{.Call} to call a C function \dQuote{c.fun} with the identical
 set of parameters. The C function must be registered as a native symbol, see \code{\link[base]{.Call}}.
 Useful if \code{check.fun} is just a simple wrapper.}
+
+\item{use.namespace}{[\code{logical(1)}]\cr
+Call functions of \pkg{checkmate} using its namespace explicitly.
+Can be set to \code{FALSE} so save some microseconds, but the checkmate package needs to be imported.
+Default is \code{TRUE}.}
 
 \item{env}{[\code{environment}]\cr
 The environment of the created function. Default is the \code{\link[base]{parent.frame}}.}
@@ -62,3 +68,4 @@ print(expect_false)
 Other CustomConstructors: \code{\link{makeAssertion}},
   \code{\link{makeTest}}
 }
+\concept{CustomConstructors}

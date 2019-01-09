@@ -7,7 +7,8 @@
 \usage{
 makeAssertion(x, res, var.name, collection)
 
-makeAssertionFunction(check.fun, c.fun = NULL, env = parent.frame())
+makeAssertionFunction(check.fun, c.fun = NULL, use.namespace = TRUE,
+  coerce = FALSE, env = parent.frame())
 }
 \arguments{
 \item{x}{[any]\cr
@@ -33,6 +34,15 @@ Function which checks the input. Must return \code{TRUE} on success and a string
 If not \code{NULL}, instead of calling the function \code{check.fun}, use \code{.Call} to call a C function \dQuote{c.fun} with the identical
 set of parameters. The C function must be registered as a native symbol, see \code{\link[base]{.Call}}.
 Useful if \code{check.fun} is just a simple wrapper.}
+
+\item{use.namespace}{[\code{logical(1)}]\cr
+Call functions of \pkg{checkmate} using its namespace explicitly.
+Can be set to \code{FALSE} so save some microseconds, but the checkmate package needs to be imported.
+Default is \code{TRUE}.}
+
+\item{coerce}{[\code{logical(1)}]\cr
+If \code{TRUE}, injects some lines of code to convert numeric values to integer after an successful assertion.
+Currently used in \code{\link{assertCount}}, \code{\link{assertInt}} and \code{\link{assertIntegerish}}.}
 
 \item{env}{[\code{environment}]\cr
 The environment of the created function. Default is the \code{\link[base]{parent.frame}}.}
@@ -66,3 +76,4 @@ print(assertFalse)
 Other CustomConstructors: \code{\link{makeExpectation}},
   \code{\link{makeTest}}
 }
+\concept{CustomConstructors}

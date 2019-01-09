@@ -15,6 +15,7 @@
 #' @inheritParams checkVector
 #' @template sorted
 #' @template tol
+#' @template coerce
 #' @template null.ok
 #' @template checker
 #' @family basetypes
@@ -36,7 +37,7 @@ check_integerish = checkIntegerish
 #' @include makeAssertion.R
 #' @template assert
 #' @rdname checkIntegerish
-assertIntegerish = makeAssertionFunction(checkIntegerish, c.fun = "c_check_integerish")
+assertIntegerish = makeAssertionFunction(checkIntegerish, c.fun = "c_check_integerish", use.namespace = FALSE, coerce = TRUE)
 
 #' @export
 #' @rdname checkIntegerish
@@ -55,4 +56,4 @@ test_integerish = testIntegerish
 #' @include makeExpectation.R
 #' @template expect
 #' @rdname checkIntegerish
-expect_integerish = makeExpectationFunction(checkIntegerish, c.fun = "c_check_integerish")
+expect_integerish = makeExpectationFunction(checkIntegerish, c.fun = "c_check_integerish", use.namespace = FALSE)

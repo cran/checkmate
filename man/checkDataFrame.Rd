@@ -11,35 +11,42 @@
 \title{Check if an argument is a data frame}
 \usage{
 checkDataFrame(x, types = character(0L), any.missing = TRUE,
-  all.missing = TRUE, min.rows = NULL, min.cols = NULL, nrows = NULL,
-  ncols = NULL, row.names = NULL, col.names = NULL, null.ok = FALSE)
+  all.missing = TRUE, min.rows = NULL, max.rows = NULL,
+  min.cols = NULL, max.cols = NULL, nrows = NULL, ncols = NULL,
+  row.names = NULL, col.names = NULL, null.ok = FALSE)
 
 check_data_frame(x, types = character(0L), any.missing = TRUE,
-  all.missing = TRUE, min.rows = NULL, min.cols = NULL, nrows = NULL,
-  ncols = NULL, row.names = NULL, col.names = NULL, null.ok = FALSE)
+  all.missing = TRUE, min.rows = NULL, max.rows = NULL,
+  min.cols = NULL, max.cols = NULL, nrows = NULL, ncols = NULL,
+  row.names = NULL, col.names = NULL, null.ok = FALSE)
 
 assertDataFrame(x, types = character(0L), any.missing = TRUE,
-  all.missing = TRUE, min.rows = NULL, min.cols = NULL, nrows = NULL,
-  ncols = NULL, row.names = NULL, col.names = NULL, null.ok = FALSE,
+  all.missing = TRUE, min.rows = NULL, max.rows = NULL,
+  min.cols = NULL, max.cols = NULL, nrows = NULL, ncols = NULL,
+  row.names = NULL, col.names = NULL, null.ok = FALSE,
   .var.name = vname(x), add = NULL)
 
 assert_data_frame(x, types = character(0L), any.missing = TRUE,
-  all.missing = TRUE, min.rows = NULL, min.cols = NULL, nrows = NULL,
-  ncols = NULL, row.names = NULL, col.names = NULL, null.ok = FALSE,
+  all.missing = TRUE, min.rows = NULL, max.rows = NULL,
+  min.cols = NULL, max.cols = NULL, nrows = NULL, ncols = NULL,
+  row.names = NULL, col.names = NULL, null.ok = FALSE,
   .var.name = vname(x), add = NULL)
 
 testDataFrame(x, types = character(0L), any.missing = TRUE,
-  all.missing = TRUE, min.rows = NULL, min.cols = NULL, nrows = NULL,
-  ncols = NULL, row.names = NULL, col.names = NULL, null.ok = FALSE)
+  all.missing = TRUE, min.rows = NULL, max.rows = NULL,
+  min.cols = NULL, max.cols = NULL, nrows = NULL, ncols = NULL,
+  row.names = NULL, col.names = NULL, null.ok = FALSE)
 
 test_data_frame(x, types = character(0L), any.missing = TRUE,
-  all.missing = TRUE, min.rows = NULL, min.cols = NULL, nrows = NULL,
-  ncols = NULL, row.names = NULL, col.names = NULL, null.ok = FALSE)
+  all.missing = TRUE, min.rows = NULL, max.rows = NULL,
+  min.cols = NULL, max.cols = NULL, nrows = NULL, ncols = NULL,
+  row.names = NULL, col.names = NULL, null.ok = FALSE)
 
 expect_data_frame(x, types = character(0L), any.missing = TRUE,
-  all.missing = TRUE, min.rows = NULL, min.cols = NULL, nrows = NULL,
-  ncols = NULL, row.names = NULL, col.names = NULL, null.ok = FALSE,
-  info = NULL, label = vname(x))
+  all.missing = TRUE, min.rows = NULL, max.rows = NULL,
+  min.cols = NULL, max.cols = NULL, nrows = NULL, ncols = NULL,
+  row.names = NULL, col.names = NULL, null.ok = FALSE, info = NULL,
+  label = vname(x))
 }
 \arguments{
 \item{x}{[any]\cr
@@ -64,8 +71,14 @@ Are matrices with only missing values allowed? Default is \code{TRUE}.}
 \item{min.rows}{[\code{integer(1)}]\cr
 Minimum number of rows.}
 
+\item{max.rows}{[\code{integer(1)}]\cr
+Maximum number of rows.}
+
 \item{min.cols}{[\code{integer(1)}]\cr
 Minimum number of columns.}
+
+\item{max.cols}{[\code{integer(1)}]\cr
+Maximum number of columns.}
 
 \item{nrows}{[\code{integer(1)}]\cr
 Exact number of rows.}
@@ -135,11 +148,16 @@ Other basetypes: \code{\link{checkArray}},
   \code{\link{checkAtomicVector}},
   \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
   \code{\link{checkComplex}}, \code{\link{checkDate}},
+  \code{\link{checkDouble}},
   \code{\link{checkEnvironment}},
-  \code{\link{checkFactor}}, \code{\link{checkFunction}},
+  \code{\link{checkFactor}}, \code{\link{checkFormula}},
+  \code{\link{checkFunction}},
   \code{\link{checkIntegerish}},
   \code{\link{checkInteger}}, \code{\link{checkList}},
   \code{\link{checkLogical}}, \code{\link{checkMatrix}},
   \code{\link{checkNull}}, \code{\link{checkNumeric}},
-  \code{\link{checkPOSIXct}}, \code{\link{checkVector}}
+  \code{\link{checkPOSIXct}}, \code{\link{checkRaw}},
+  \code{\link{checkVector}}
 }
+\concept{basetypes}
+\concept{compound}

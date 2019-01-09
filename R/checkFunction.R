@@ -33,7 +33,7 @@ checkFunction = function(x, args = NULL, ordered = FALSE, nargs = NULL, null.ok 
 
   if (!is.null(args)) {
     qassert(args, "S")
-    fargs = names(formals(x)) %??% character(0L)
+    fargs = names(formals(args(x))) %??% character(0L)
 
     if (length(args) == 0L) {
       if (length(fargs) > 0L)
@@ -55,7 +55,7 @@ checkFunction = function(x, args = NULL, ordered = FALSE, nargs = NULL, null.ok 
 
   if (!is.null(nargs)) {
     nargs = asCount(nargs)
-    fnargs = length(setdiff(names(formals(x)) %??% character(0L), "..."))
+    fnargs = length(setdiff(names(formals(args(x))) %??% character(0L), "..."))
     if (nargs != fnargs)
       return(sprintf("Must have exactly %i formal arguments, but has %i", nargs, fnargs))
   }
@@ -71,7 +71,7 @@ check_function = checkFunction
 #' @include makeAssertion.R
 #' @template assert
 #' @rdname checkFunction
-assertFunction = makeAssertionFunction(checkFunction)
+assertFunction = makeAssertionFunction(checkFunction, use.namespace = FALSE)
 
 #' @export
 #' @rdname checkFunction
@@ -90,4 +90,4 @@ test_function = testFunction
 #' @include makeExpectation.R
 #' @template expect
 #' @rdname checkFunction
-expect_function = makeExpectationFunction(checkFunction)
+expect_function = makeExpectationFunction(checkFunction, use.namespace = FALSE)

@@ -6,10 +6,10 @@
 \alias{asInt}
 \title{Convert an argument to an integer}
 \usage{
-asInteger(x, tol = sqrt(.Machine$double.eps), lower = -Inf, upper = Inf,
-  any.missing = TRUE, all.missing = TRUE, len = NULL, min.len = NULL,
-  max.len = NULL, unique = FALSE, sorted = FALSE, names = NULL,
-  .var.name = vname(x))
+asInteger(x, tol = sqrt(.Machine$double.eps), lower = -Inf,
+  upper = Inf, any.missing = TRUE, all.missing = TRUE, len = NULL,
+  min.len = NULL, max.len = NULL, unique = FALSE, sorted = FALSE,
+  names = NULL, .var.name = vname(x))
 
 asCount(x, na.ok = FALSE, positive = FALSE,
   tol = sqrt(.Machine$double.eps), .var.name = vname(x))
@@ -26,10 +26,10 @@ Numerical tolerance used to check whether a double or complex can be converted.
 Default is \code{sqrt(.Machine$double.eps)}.}
 
 \item{lower}{[\code{numeric(1)}]\cr
-Lower value all elements of \code{x} must be greater than.}
+Lower value all elements of \code{x} must be greater than or equal to.}
 
 \item{upper}{[\code{numeric(1)}]\cr
-Upper value all elements of \code{x} must be lower than.}
+Upper value all elements of \code{x} must be lower than or equal to.}
 
 \item{any.missing}{[\code{logical(1)}]\cr
 Are vectors with missing values allowed? Default is \code{TRUE}.}
@@ -78,6 +78,11 @@ non-negative integers.
 Convertible are (a) atomic vectors with all elements \code{NA}
 and (b) double vectors with all elements being within \code{tol}
 range of an integer.
+
+Note that these functions may be deprecated in the future.
+Instead, it is advised to use \code{\link{assertCount}},
+\code{\link{assertInt}} or \code{\link{assertIntegerish}} with
+argument \code{coerce} set to \code{TRUE} instead.
 }
 \details{
 This function does not distinguish between

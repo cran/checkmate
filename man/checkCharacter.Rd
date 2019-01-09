@@ -13,37 +13,40 @@
 checkCharacter(x, min.chars = NULL, pattern = NULL, fixed = NULL,
   ignore.case = FALSE, any.missing = TRUE, all.missing = TRUE,
   len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
-  names = NULL, null.ok = FALSE)
+  sorted = FALSE, names = NULL, null.ok = FALSE)
 
 check_character(x, min.chars = NULL, pattern = NULL, fixed = NULL,
   ignore.case = FALSE, any.missing = TRUE, all.missing = TRUE,
   len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
-  names = NULL, null.ok = FALSE)
+  sorted = FALSE, names = NULL, null.ok = FALSE)
 
 assertCharacter(x, min.chars = NULL, pattern = NULL, fixed = NULL,
   ignore.case = FALSE, any.missing = TRUE, all.missing = TRUE,
   len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
-  names = NULL, null.ok = FALSE, .var.name = vname(x), add = NULL)
+  sorted = FALSE, names = NULL, null.ok = FALSE,
+  .var.name = vname(x), add = NULL)
 
 assert_character(x, min.chars = NULL, pattern = NULL, fixed = NULL,
   ignore.case = FALSE, any.missing = TRUE, all.missing = TRUE,
   len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
-  names = NULL, null.ok = FALSE, .var.name = vname(x), add = NULL)
+  sorted = FALSE, names = NULL, null.ok = FALSE,
+  .var.name = vname(x), add = NULL)
 
 testCharacter(x, min.chars = NULL, pattern = NULL, fixed = NULL,
   ignore.case = FALSE, any.missing = TRUE, all.missing = TRUE,
   len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
-  names = NULL, null.ok = FALSE)
+  sorted = FALSE, names = NULL, null.ok = FALSE)
 
 test_character(x, min.chars = NULL, pattern = NULL, fixed = NULL,
   ignore.case = FALSE, any.missing = TRUE, all.missing = TRUE,
   len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
-  names = NULL, null.ok = FALSE)
+  sorted = FALSE, names = NULL, null.ok = FALSE)
 
 expect_character(x, min.chars = NULL, pattern = NULL, fixed = NULL,
   ignore.case = FALSE, any.missing = TRUE, all.missing = TRUE,
   len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
-  names = NULL, null.ok = FALSE, info = NULL, label = vname(x))
+  sorted = FALSE, names = NULL, null.ok = FALSE, info = NULL,
+  label = vname(x))
 }
 \arguments{
 \item{x}{[any]\cr
@@ -81,6 +84,9 @@ Maximal length of \code{x}.}
 
 \item{unique}{[\code{logical(1)}]\cr
 Must all values be unique? Default is \code{FALSE}.}
+
+\item{sorted}{[\code{logical(1)}]\cr
+Elements must be sorted in ascending order. Missing values are ignored.}
 
 \item{names}{[\code{character(1)}]\cr
 Check for names. See \code{\link{checkNamed}} for possible values.
@@ -141,11 +147,15 @@ Other basetypes: \code{\link{checkArray}},
   \code{\link{checkAtomicVector}},
   \code{\link{checkAtomic}}, \code{\link{checkComplex}},
   \code{\link{checkDataFrame}}, \code{\link{checkDate}},
+  \code{\link{checkDouble}},
   \code{\link{checkEnvironment}},
-  \code{\link{checkFactor}}, \code{\link{checkFunction}},
+  \code{\link{checkFactor}}, \code{\link{checkFormula}},
+  \code{\link{checkFunction}},
   \code{\link{checkIntegerish}},
   \code{\link{checkInteger}}, \code{\link{checkList}},
   \code{\link{checkLogical}}, \code{\link{checkMatrix}},
   \code{\link{checkNull}}, \code{\link{checkNumeric}},
-  \code{\link{checkPOSIXct}}, \code{\link{checkVector}}
+  \code{\link{checkPOSIXct}}, \code{\link{checkRaw}},
+  \code{\link{checkVector}}
 }
+\concept{basetypes}

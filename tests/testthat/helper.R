@@ -1,3 +1,5 @@
+library(testthat)
+
 expect_expectation_successful = function(expr, info = NULL, label = NULL) {
   res = tryCatch(expr, expectation = function(e) e)
   expect_is(res, "expectation_success", info = info, label = label)
@@ -20,7 +22,7 @@ expect_succ_all = function(part, x, ..., cc = as.character(substitute(part)), lc
   # check null.ok if it is in formals
   s = paste0("check", cc)
   fun = match.fun(s)
-  if ("null.ok" %in% names(formals(fun))) {
+  if ("null.ok" %in% names(formals(args(fun)))) {
     dots = list(...)
     dots["x"] = list(NULL)
     dots$null.ok = TRUE
@@ -64,7 +66,7 @@ expect_fail_all = function(part, x, ..., cc = as.character(substitute(part)), lc
   # check null.ok if it is in formals
   s = paste0("check", cc)
   fun = match.fun(s)
-  if ("null.ok" %in% names(formals(fun))) {
+  if ("null.ok" %in% names(formals(args(fun)))) {
     dots = list(...)
     dots["x"] = list(NULL)
     dots$null.ok = FALSE

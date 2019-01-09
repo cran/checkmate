@@ -40,7 +40,7 @@ check_directory_exists = checkDirectoryExists
 #' @include makeAssertion.R
 #' @template assert
 #' @rdname checkDirectoryExists
-assertDirectoryExists = makeAssertionFunction(checkDirectoryExists)
+assertDirectoryExists = makeAssertionFunction(checkDirectoryExists, use.namespace = FALSE)
 
 #' @export
 #' @rdname checkDirectoryExists
@@ -57,7 +57,7 @@ test_directory_exists = testDirectoryExists
 
 #' @export
 #' @rdname checkDirectoryExists
-expect_directory_exists = makeExpectationFunction(checkDirectoryExists)
+expect_directory_exists = makeExpectationFunction(checkDirectoryExists, use.namespace = FALSE)
 
 #' @export
 #' @rdname checkDirectoryExists

@@ -18,6 +18,9 @@ test_that("checkInt", {
   expect_false(testInt(1:2))
   expect_false(testInt(""))
 
+  expect_false(is.integer(assertInt(5)))
+  expect_true(is.integer(assertInt(5, coerce = TRUE)))
+
   expect_error(assertInt(2+3i), "integerish")
 })
 
@@ -27,4 +30,10 @@ test_that("bounds of vectors with only missings are not checked", {
   expect_true(checkInt(NA_character_, na.ok = TRUE, upper = 10))
   expect_fail_all(Int, 0L, lower = 1L)
   expect_fail_all(Int, 100L, upper = 10L)
+})
+
+test_that("Coercion works", {
+  expect_identical(assertInt(2, coerce = TRUE), 2L)
+  expect_error(assertInt("lkajsd"), "single integerish")
+  expect_error(assertInt("lkajsd"), "not 'character'")
 })

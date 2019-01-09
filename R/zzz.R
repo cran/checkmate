@@ -1,13 +1,4 @@
-#' @description
-#'
-#' \describe{
-#'   \item{Homepage:}{\url{https://github.com/mllg/checkmate}}
-#'   \item{Bug Reports:}{\url{https://github.com/mllg/checkmate/issues}}
-#' }
-#'
-#' @section Overview of implemented functions:
-#'
-#' Check scalars:
+#' @section Check scalars:
 #' \itemize{
 #'   \item{\code{\link{checkFlag}}}
 #'   \item{\code{\link{checkCount}}}
@@ -18,51 +9,57 @@
 #'   \item{\code{\link{checkScalarNA}}}
 #' }
 #'
-#' Check vectors:
+#' @section Check vectors:
 #' \itemize{
 #'   \item{\code{\link{checkLogical}}}
 #'   \item{\code{\link{checkNumeric}}}
+#'   \item{\code{\link{checkDouble}}}
 #'   \item{\code{\link{checkInteger}}}
 #'   \item{\code{\link{checkIntegerish}}}
 #'   \item{\code{\link{checkCharacter}}}
 #'   \item{\code{\link{checkComplex}}}
 #'   \item{\code{\link{checkFactor}}}
 #'   \item{\code{\link{checkList}}}
+#'   \item{\code{\link{checkPOSIXct}}}
 #'   \item{\code{\link{checkVector}}}
 #'   \item{\code{\link{checkAtomic}}}
 #'   \item{\code{\link{checkAtomicVector}}}
+#'   \item{\code{\link{checkRaw}}}
 #' }
 #'
-#' Check attributes:
+#' @section Check attributes:
 #' \itemize{
 #'   \item{\code{\link{checkClass}}}
+#'   \item{\code{\link{checkMultiClass}}}
 #'   \item{\code{\link{checkNames}}}
 #'   \item{\code{\link{checkNamed}}} (deprecated)
 #' }
 #'
-#' Check compound types:
+#' @section Check compound types:
 #' \itemize{
 #'   \item{\code{\link{checkArray}}}
 #'   \item{\code{\link{checkDataFrame}}}
 #'   \item{\code{\link{checkMatrix}}}
 #' }
 #'
-#' Check other built-in R types:
+#' @section Check other built-in R types:
 #' \itemize{
 #'   \item{\code{\link{checkDate}}}
 #'   \item{\code{\link{checkEnvironment}}}
 #'   \item{\code{\link{checkFunction}}}
+#'   \item{\code{\link{checkFormula}}}
 #'   \item{\code{\link{checkNull}}}
 #' }
 #'
-#' Check sets:
+#' @section Check sets:
 #' \itemize{
 #'   \item{\code{\link{checkChoice}}}
 #'   \item{\code{\link{checkSubset}}}
 #'   \item{\code{\link{checkSetEqual}}}
+#'   \item{\code{\link{checkDisjunct}}}
 #' }
 #'
-#' File IO:
+#' @section File IO:
 #' \itemize{
 #'   \item{\code{\link{checkFileExists}}}
 #'   \item{\code{\link{checkDirectoryExists}}}
@@ -70,7 +67,7 @@
 #'   \item{\code{\link{checkAccess}}}
 #' }
 #'
-#' Popular data types in external packages:
+#' @section Popular data types of third party packages:
 #' \itemize{
 #'   \item{\code{\link{checkBit}}}
 #'   \item{\code{\link{checkDataTable}}}
@@ -78,20 +75,20 @@
 #'   \item{\code{\link{checkTibble}}}
 #' }
 #'
-#' Safe coercion to integer:
+#' @section Safe coercion to integer:
 #' \itemize{
 #'   \item{\code{\link{asCount}}}
 #'   \item{\code{\link{asInt}}}
 #'   \item{\code{\link{asInteger}}}
 #' }
 #'
-#' Quick argument checks using a DSL:
+#' @section Quick argument checks using a DSL:
 #' \itemize{
 #'   \item{\code{\link{qassert}}}
 #'   \item{\code{\link{qassertr}}}
 #' }
 #'
-#' Misc:
+#' @section Misc:
 #' \itemize{
 #'   \item{\code{\link{checkOS}} (check operating system)}
 #'   \item{\code{\link{assert}} (combine multiple checks into an assertion)}
@@ -127,7 +124,7 @@ checkmate$listtypefuns = list2env(list(
 ))
 
 .onLoad = function(libpath, pkgname) {
-  backports::import(pkgname, "dir.exists")
+  backports::import(pkgname, c("dir.exists", "isFALSE"))
 }
 
 .onUnload = function (libpath) {

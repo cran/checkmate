@@ -28,12 +28,12 @@ checkSetEqual = function(x, y, ordered = FALSE, fmatch = FALSE) {
 
   if (ordered) {
     if (!isSameType(x, y) || length(x) != length(y) || any(xor(is.na(x), is.na(y)) | x != y, na.rm = TRUE))
-      return(sprintf("Must be equal to {'%s'}", paste0(y, collapse = "','")))
+      return(sprintf("Must be equal to %s, but is %s", array_collapse(y), array_collapse(x)))
   } else {
     if (isTRUE(fmatch) && requireNamespace("fastmatch", quietly = TRUE))
       match = fastmatch::fmatch
-    if (!isSameType(x, y) || any(match(x, y, 0L) == 0L) || any(match(y, x, 0L) == 0L))
-      return(sprintf("Must be equal to set {'%s'}", paste0(y, collapse = "','")))
+    if (!isSameType(x, y) || anyMissing(match(x, y)) || anyMissing(match(y, x)))
+      return(sprintf("Must be equal to set %s, but is %s", set_collapse(y), set_collapse(x)))
   }
   return(TRUE)
 }
@@ -46,7 +46,7 @@ check_set_equal = checkSetEqual
 #' @include makeAssertion.R
 #' @template assert
 #' @rdname checkSetEqual
-assertSetEqual = makeAssertionFunction(checkSetEqual)
+assertSetEqual = makeAssertionFunction(checkSetEqual, use.namespace = FALSE)
 
 #' @export
 #' @rdname checkSetEqual
@@ -65,4 +65,4 @@ test_set_equal = testSetEqual
 #' @include makeExpectation.R
 #' @template expect
 #' @rdname checkSetEqual
-expect_set_equal = makeExpectationFunction(checkSetEqual)
+expect_set_equal = makeExpectationFunction(checkSetEqual, use.namespace = FALSE)

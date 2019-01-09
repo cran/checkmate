@@ -10,41 +10,44 @@
 \alias{expect_vector}
 \title{Check if an argument is a vector}
 \usage{
-checkVector(x, strict = FALSE, any.missing = TRUE, all.missing = TRUE,
-  len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
-  names = NULL, null.ok = FALSE)
+checkVector(x, strict = FALSE, any.missing = TRUE,
+  all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
+  unique = FALSE, names = NULL, null.ok = FALSE)
 
-check_vector(x, strict = FALSE, any.missing = TRUE, all.missing = TRUE,
-  len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
-  names = NULL, null.ok = FALSE)
+check_vector(x, strict = FALSE, any.missing = TRUE,
+  all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
+  unique = FALSE, names = NULL, null.ok = FALSE)
 
-assertVector(x, strict = FALSE, any.missing = TRUE, all.missing = TRUE,
-  len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
-  names = NULL, null.ok = FALSE, .var.name = vname(x), add = NULL)
+assertVector(x, strict = FALSE, any.missing = TRUE,
+  all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
+  unique = FALSE, names = NULL, null.ok = FALSE,
+  .var.name = vname(x), add = NULL)
 
-assert_vector(x, strict = FALSE, any.missing = TRUE, all.missing = TRUE,
-  len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
-  names = NULL, null.ok = FALSE, .var.name = vname(x), add = NULL)
+assert_vector(x, strict = FALSE, any.missing = TRUE,
+  all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
+  unique = FALSE, names = NULL, null.ok = FALSE,
+  .var.name = vname(x), add = NULL)
 
 testVector(x, strict = FALSE, any.missing = TRUE, all.missing = TRUE,
   len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
   names = NULL, null.ok = FALSE)
 
-test_vector(x, strict = FALSE, any.missing = TRUE, all.missing = TRUE,
-  len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
-  names = NULL, null.ok = FALSE)
+test_vector(x, strict = FALSE, any.missing = TRUE,
+  all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
+  unique = FALSE, names = NULL, null.ok = FALSE)
 
-expect_vector(x, strict = FALSE, any.missing = TRUE, all.missing = TRUE,
-  len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
-  names = NULL, null.ok = FALSE, info = NULL, label = vname(x))
+expect_vector(x, strict = FALSE, any.missing = TRUE,
+  all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
+  unique = FALSE, names = NULL, null.ok = FALSE, info = NULL,
+  label = vname(x))
 }
 \arguments{
 \item{x}{[any]\cr
 Object to check.}
 
 \item{strict}{[\code{logical(1)}]\cr
-May the vector have additional attributes or perform a
-check for additional attributes like \code{\link[base]{is.vector}}?
+May the vector have additional attributes? If \code{TRUE}, mimics the behavior of
+\code{\link[base]{is.vector}}.
 Default is \code{FALSE} which allows e.g. \code{factor}s or \code{data.frame}s
 to be recognized as vectors.}
 
@@ -118,14 +121,18 @@ Other basetypes: \code{\link{checkArray}},
   \code{\link{checkAtomicVector}},
   \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
   \code{\link{checkComplex}}, \code{\link{checkDataFrame}},
-  \code{\link{checkDate}}, \code{\link{checkEnvironment}},
-  \code{\link{checkFactor}}, \code{\link{checkFunction}},
+  \code{\link{checkDate}}, \code{\link{checkDouble}},
+  \code{\link{checkEnvironment}},
+  \code{\link{checkFactor}}, \code{\link{checkFormula}},
+  \code{\link{checkFunction}},
   \code{\link{checkIntegerish}},
   \code{\link{checkInteger}}, \code{\link{checkList}},
   \code{\link{checkLogical}}, \code{\link{checkMatrix}},
   \code{\link{checkNull}}, \code{\link{checkNumeric}},
-  \code{\link{checkPOSIXct}}
+  \code{\link{checkPOSIXct}}, \code{\link{checkRaw}}
 
 Other atomicvector: \code{\link{checkAtomicVector}},
   \code{\link{checkAtomic}}
 }
+\concept{atomicvector}
+\concept{basetypes}

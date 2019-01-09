@@ -35,4 +35,35 @@ test_that("checkDataTable", {
   expect_error(testDataTable(dt, index = 1), "string")
   expect_error(assertDataTable(dt, key = "Species"), "primary keys")
   expect_error(assertDataTable(dt, index = "Species"), "secondary keys")
+
+  x = data.table::as.data.table(iris)
+  expect_true(testDataTable(x, max.rows = 200, max.cols = 5))
+  expect_false(testDataTable(x, max.rows = 100))
+  expect_false(testDataTable(x, max.cols = 3))
+})
+
+test_that("list columns", {
+  skip_if_not_physically_installed("data.table")
+
+  x = data.table::data.table(a = 1:2, b = list(3, 4))
+  expect_true(testDataTable(x, any.missing = FALSE))
+
+  x$b = list(3, NULL)
+  expect_true(testDataTable(x, any.missing = FALSE))
+  expect_true(testDataTable(x, all.missing = FALSE))
+
+  x$b = list(NULL, NULL)
+  expect_true(testDataTable(x, any.missing = FALSE))
+  expect_true(testDataTable(x, all.missing = FALSE))
+})
+
+test_that("nrow for null data tables", {
+  # c.f. https://github.com/Rdatatable/data.table/issues/3149
+  M = matrix(1:3, nrow = 3)
+  M = M[, integer(0)]
+  DT = data.table::as.data.table(M) # null data table
+
+  expect_equal(rownames(DT), as.character(1:3))
+  expect_equal(nrow(DT), 0)
+  expect_true(testDataTable(DT, nrow = 0))
 })

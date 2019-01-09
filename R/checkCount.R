@@ -11,6 +11,7 @@
 #'  Must \code{x} be positive (>= 1)?
 #'  Default is \code{FALSE}, allowing 0.
 #' @template tol
+#' @template coerce
 #' @template null.ok
 #' @template checker
 #' @template note-convert
@@ -32,7 +33,7 @@ check_count = checkCount
 #' @include makeAssertion.R
 #' @template assert
 #' @rdname checkCount
-assertCount = makeAssertionFunction(checkCount, c.fun = "c_check_count")
+assertCount = makeAssertionFunction(checkCount, c.fun = "c_check_count", coerce = TRUE, use.namespace = FALSE)
 
 #' @export
 #' @rdname checkCount
@@ -51,4 +52,4 @@ test_count = testCount
 #' @include makeExpectation.R
 #' @template expect
 #' @rdname checkCount
-expect_count = makeExpectationFunction(checkCount, c.fun = "c_check_count")
+expect_count = makeExpectationFunction(checkCount, c.fun = "c_check_count", use.namespace = FALSE)

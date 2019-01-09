@@ -1,7 +1,7 @@
 #' @title Check if a path is suited for creating an output file
 #'
 #' @description
-#' Check if a file path can be safely be used to create a file and write to it.
+#' Check if a file path can be used safely to create a file and write to it.
 #'
 #' This is checked:
 #' \itemize{
@@ -52,7 +52,7 @@ check_path_for_output = checkPathForOutput
 #' @include makeAssertion.R
 #' @template assert
 #' @rdname checkPathForOutput
-assertPathForOutput = makeAssertionFunction(checkPathForOutput)
+assertPathForOutput = makeAssertionFunction(checkPathForOutput, use.namespace = FALSE)
 
 #' @export
 #' @rdname checkPathForOutput
@@ -71,4 +71,4 @@ test_path_for_output = testPathForOutput
 #' @include makeExpectation.R
 #' @template expect
 #' @rdname checkPathForOutput
-expect_path_for_output = makeExpectationFunction(checkPathForOutput)
+expect_path_for_output = makeExpectationFunction(checkPathForOutput, use.namespace = FALSE)

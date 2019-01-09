@@ -72,5 +72,6 @@ testNamed(x, "unique")
 }
 \seealso{
 Other attributes: \code{\link{checkClass}},
-  \code{\link{checkNames}}
+  \code{\link{checkMultiClass}}, \code{\link{checkNames}}
 }
+\concept{attributes}

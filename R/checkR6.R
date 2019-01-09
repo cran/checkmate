@@ -12,6 +12,7 @@
 #'  Names of expected private slots.
 #' @template null.ok
 #' @template checker
+#' @family classes
 #' @export
 #' @examples
 #' library(R6)
@@ -72,7 +73,7 @@ check_r6 = checkR6
 #' @include makeAssertion.R
 #' @template assert
 #' @rdname checkR6
-assertR6 = makeAssertionFunction(checkR6)
+assertR6 = makeAssertionFunction(checkR6, use.namespace = FALSE)
 
 #' @export
 #' @rdname checkR6
@@ -91,4 +92,4 @@ test_r6 = testR6
 #' @include makeExpectation.R
 #' @template expect
 #' @rdname checkR6
-expect_r6 = makeExpectationFunction(checkR6)
+expect_r6 = makeExpectationFunction(checkR6, use.namespace = FALSE)

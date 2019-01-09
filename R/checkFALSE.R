@@ -13,7 +13,7 @@
 #' testFALSE(TRUE)
 checkFALSE = function(x, na.ok = FALSE) {
   qassert(na.ok, "B1")
-  if (identical(x, FALSE) || (na.ok && length(x) == 1L && is.na(x)))
+  if (isFALSE(x) || (na.ok && length(x) == 1L && is.na(x)))
     return(TRUE)
   return("Must be FALSE")
 }
@@ -26,7 +26,7 @@ check_false = checkFALSE
 #' @include makeAssertion.R
 #' @template assert
 #' @rdname checkFALSE
-assertFALSE = makeAssertionFunction(checkFALSE)
+assertFALSE = makeAssertionFunction(checkFALSE, use.namespace = FALSE)
 
 #' @export
 #' @rdname checkFALSE

@@ -25,7 +25,7 @@ checkSubset = function(x, choices, empty.ok = TRUE, fmatch = FALSE) {
   qassert(empty.ok, "B1")
   if (length(x) == 0L) {
     if (!empty.ok)
-      return(sprintf("Must be a subset of {'%s'}, not empty", paste0(choices, collapse = "','")))
+      return(sprintf("Must be a subset of %s, not empty", set_collapse(choices)))
     return(TRUE)
   }
 
@@ -39,8 +39,8 @@ checkSubset = function(x, choices, empty.ok = TRUE, fmatch = FALSE) {
   if (isTRUE(fmatch) && requireNamespace("fastmatch", quietly = TRUE))
     match = fastmatch::fmatch
 
-  if (!is.null(x) && (!isSameType(x, choices) || any(match(x, choices, 0L) == 0L)))
-    return(sprintf("Must be a subset of {'%s'}", paste0(choices, collapse = "','")))
+  if (!is.null(x) && (!isSameType(x, choices) || anyMissing(match(x, choices))))
+    return(sprintf("Must be a subset of %s, but is %s", set_collapse(choices), set_collapse(x)))
   return(TRUE)
 }
 
@@ -52,7 +52,7 @@ check_subset = checkSubset
 #' @include makeAssertion.R
 #' @template assert
 #' @rdname checkSubset
-assertSubset = makeAssertionFunction(checkSubset)
+assertSubset = makeAssertionFunction(checkSubset, use.namespace = FALSE)
 
 #' @export
 #' @rdname checkSubset
@@ -71,4 +71,4 @@ test_subset = testSubset
 #' @include makeExpectation.R
 #' @template expect
 #' @rdname checkSubset
-expect_subset = makeExpectationFunction(checkSubset)
+expect_subset = makeExpectationFunction(checkSubset, use.namespace = FALSE)

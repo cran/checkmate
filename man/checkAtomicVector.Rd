@@ -10,25 +10,29 @@
 \alias{expect_atomic_vector}
 \title{Check that an argument is an atomic vector}
 \usage{
-checkAtomicVector(x, any.missing = TRUE, all.missing = TRUE, len = NULL,
-  min.len = NULL, max.len = NULL, unique = FALSE, names = NULL)
+checkAtomicVector(x, any.missing = TRUE, all.missing = TRUE,
+  len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
+  names = NULL)
 
-check_atomic_vector(x, any.missing = TRUE, all.missing = TRUE, len = NULL,
-  min.len = NULL, max.len = NULL, unique = FALSE, names = NULL)
+check_atomic_vector(x, any.missing = TRUE, all.missing = TRUE,
+  len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
+  names = NULL)
 
-assertAtomicVector(x, any.missing = TRUE, all.missing = TRUE, len = NULL,
-  min.len = NULL, max.len = NULL, unique = FALSE, names = NULL,
-  .var.name = vname(x), add = NULL)
+assertAtomicVector(x, any.missing = TRUE, all.missing = TRUE,
+  len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
+  names = NULL, .var.name = vname(x), add = NULL)
 
 assert_atomic_vector(x, any.missing = TRUE, all.missing = TRUE,
   len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
   names = NULL, .var.name = vname(x), add = NULL)
 
-testAtomicVector(x, any.missing = TRUE, all.missing = TRUE, len = NULL,
-  min.len = NULL, max.len = NULL, unique = FALSE, names = NULL)
+testAtomicVector(x, any.missing = TRUE, all.missing = TRUE,
+  len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
+  names = NULL)
 
-test_atomic_vector(x, any.missing = TRUE, all.missing = TRUE, len = NULL,
-  min.len = NULL, max.len = NULL, unique = FALSE, names = NULL)
+test_atomic_vector(x, any.missing = TRUE, all.missing = TRUE,
+  len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
+  names = NULL)
 
 expect_atomic_vector(x, any.missing = TRUE, all.missing = TRUE,
   len = NULL, min.len = NULL, max.len = NULL, unique = FALSE,
@@ -99,7 +103,7 @@ An atomic vector is either \code{logical}, \code{integer}, \code{numeric},
 \code{complex}, \code{character} or \code{raw} and can have any attributes except a
 dimension attribute (like matrices).
 I.e., a \code{factor} is an atomic vector, but a matrix or \code{NULL} are not.
-In short, this is mostly equivalent to \code{is.atomic(x) && !is.null(x) && is.null(dim(x))}.
+In short, this is basically equivalent to \code{is.atomic(x) && !is.null(x) && is.null(dim(x))}.
 }
 \examples{
 testAtomicVector(letters, min.len = 1L, any.missing = FALSE)
@@ -108,14 +112,19 @@ testAtomicVector(letters, min.len = 1L, any.missing = FALSE)
 Other basetypes: \code{\link{checkArray}},
   \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
   \code{\link{checkComplex}}, \code{\link{checkDataFrame}},
-  \code{\link{checkDate}}, \code{\link{checkEnvironment}},
-  \code{\link{checkFactor}}, \code{\link{checkFunction}},
+  \code{\link{checkDate}}, \code{\link{checkDouble}},
+  \code{\link{checkEnvironment}},
+  \code{\link{checkFactor}}, \code{\link{checkFormula}},
+  \code{\link{checkFunction}},
   \code{\link{checkIntegerish}},
   \code{\link{checkInteger}}, \code{\link{checkList}},
   \code{\link{checkLogical}}, \code{\link{checkMatrix}},
   \code{\link{checkNull}}, \code{\link{checkNumeric}},
-  \code{\link{checkPOSIXct}}, \code{\link{checkVector}}
+  \code{\link{checkPOSIXct}}, \code{\link{checkRaw}},
+  \code{\link{checkVector}}
 
 Other atomicvector: \code{\link{checkAtomic}},
   \code{\link{checkVector}}
 }
+\concept{atomicvector}
+\concept{basetypes}

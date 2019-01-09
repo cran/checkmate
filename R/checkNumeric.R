@@ -1,5 +1,10 @@
 #' Check that an argument is a vector of type numeric
 #'
+#' @description
+#' Vectors of storage type \dQuote{integer} and \dQuote{double} count as \dQuote{numeric}, c.f. \code{\link[base]{is.numeric}}.
+#' To explicitly check for real integer or double vectors, see \code{\link{checkInteger}}, \code{\link{checkIntegerish}} or
+#' \code{\link{checkDouble}}.
+#'
 #' @templateVar fn Numeric
 #' @template x
 #' @template na-handling
@@ -28,7 +33,7 @@ check_numeric = checkNumeric
 #' @include makeAssertion.R
 #' @template assert
 #' @rdname checkNumeric
-assertNumeric = makeAssertionFunction(checkNumeric, c.fun = "c_check_numeric")
+assertNumeric = makeAssertionFunction(checkNumeric, c.fun = "c_check_numeric", use.namespace = FALSE)
 
 #' @export
 #' @rdname checkNumeric
@@ -47,4 +52,4 @@ test_numeric = testNumeric
 #' @include makeExpectation.R
 #' @template expect
 #' @rdname checkNumeric
-expect_numeric = makeExpectationFunction(checkNumeric, c.fun = "c_check_numeric")
+expect_numeric = makeExpectationFunction(checkNumeric, c.fun = "c_check_numeric", use.namespace = FALSE)

@@ -6,6 +6,7 @@
 #' @template na.ok
 #' @template bounds
 #' @template tol
+#' @template coerce
 #' @template null.ok
 #' @template checker
 #' @template note-convert
@@ -27,7 +28,7 @@ check_int = checkInt
 #' @include makeAssertion.R
 #' @template assert
 #' @rdname checkInt
-assertInt = makeAssertionFunction(checkInt, c.fun = "c_check_int")
+assertInt = makeAssertionFunction(checkInt, c.fun = "c_check_int", use.namespace = FALSE, coerce = TRUE)
 
 #' @export
 #' @rdname checkInt
@@ -46,4 +47,4 @@ test_int = testInt
 #' @include makeExpectation.R
 #' @template expect
 #' @rdname checkInt
-expect_int = makeExpectationFunction(checkInt, c.fun = "c_check_int")
+expect_int = makeExpectationFunction(checkInt, c.fun = "c_check_int", use.namespace = FALSE)

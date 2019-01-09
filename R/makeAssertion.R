@@ -37,9 +37,9 @@
 #' assertFalse = makeAssertionFunction(checkFalse)
 #' print(assertFalse)
 makeAssertion = function(x, res, var.name, collection) {
-  if (!identical(res, TRUE)) {
+  if (!isTRUE(res)) {
     if (is.null(collection))
-      mstop("Assertion on '%s' failed: %s.", var.name, res)
+      mstop("Assertion on '%s' failed: %s.", var.name, res, call. = sys.call(-2L))
     assertClass(collection, "AssertCollection", .var.name = "add")
     collection$push(sprintf("Variable '%s': %s.", var.name, res))
   }
@@ -48,20 +48,45 @@ makeAssertion = function(x, res, var.name, collection) {
 
 #' @rdname makeAssertion
 #' @template makeFunction
+#' @template use.namespace
+#' @param coerce [\code{logical(1)}]\cr
+#'  If \code{TRUE}, injects some lines of code to convert numeric values to integer after an successful assertion.
+#'  Currently used in \code{\link{assertCount}}, \code{\link{assertInt}} and \code{\link{assertIntegerish}}.
 #' @export
-makeAssertionFunction = function(check.fun, c.fun = NULL, env = parent.frame()) {
-  fn.name = if (!is.character(check.fun)) deparse(substitute(check.fun)) else check.fun
+makeAssertionFunction = function(check.fun, c.fun = NULL, use.namespace = TRUE, coerce = FALSE, env = parent.frame()) {
+  fun.name = if (is.character(check.fun)) check.fun else deparse(substitute(check.fun))
   check.fun = match.fun(check.fun)
-  x = NULL
-
+  check.args = fun.args = formals(args(check.fun))
+  x.name = names(fun.args[1L])
   new.fun = function() TRUE
-  formals(new.fun) = c(formals(check.fun), alist(.var.name = vname(x), add = NULL))
-  tmpl = "{ res = %s(%s); makeAssertion(x, res, .var.name, add) }"
+
+  body = sprintf("if (missing(%s)) stop(sprintf(\"argument \\\"%%s\\\" is missing, with no default\", .var.name))", x.name)
+
   if (is.null(c.fun)) {
-    body(new.fun) = parse(text = sprintf(tmpl, fn.name, paste0(names(formals(check.fun)), collapse = ", ")))
+    body = paste0(body, sprintf("; res = %s(%s)", fun.name, paste0(names(check.args), collapse = ", ")))
   } else {
-    body(new.fun) = parse(text = sprintf(tmpl, ".Call", paste0(c(c.fun, names(formals(check.fun))), collapse = ", ")))
+    body = paste0(body, sprintf("; res = .Call(%s)", paste0(c(c.fun, names(check.args)), collapse = ", ")))
   }
+
+  if (coerce) {
+    fun.args = c(fun.args, alist(coerce = FALSE))
+  }
+
+  if (use.namespace) {
+    fun.args = c(fun.args,  list(.var.name = bquote(checkmate::vname(.(as.name(x.name)))), add = NULL))
+    body = paste0(body, "; checkmate::makeAssertion")
+  } else {
+    fun.args = c(fun.args, list(.var.name = bquote(vname(.(as.name(x.name)))), add = NULL))
+    body = paste0(body, "; makeAssertion")
+  }
+  body = paste0(body, sprintf("(%s, res, .var.name, add)", x.name))
+
+  if (coerce) {
+    body = paste0(body, "; if (isTRUE(coerce)) as.integer(x) else x")
+  }
+
+  formals(new.fun) = fun.args
+  body(new.fun) = parse(text = paste("{", body, "}"))
   environment(new.fun) = env
   return(new.fun)
 }
