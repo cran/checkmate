@@ -65,6 +65,7 @@ f <- function(x) {
 #  })
 
 ## ----dev="svg",fig.width=6,fig.height=4,dependson="init",eval=requireNamespace("microbenchmark", quietly = TRUE)----
+library(checkmate)
 library(ggplot2)
 library(microbenchmark)
 
