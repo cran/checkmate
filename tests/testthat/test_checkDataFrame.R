@@ -39,16 +39,16 @@ test_that("checkDataFrame name checking works", {
   df = data.frame(x = 1:2, y = 1:2)
   names(df) = c("x", "x")
   expect_identical(assertDataFrame(df), df)
-  expect_error(assertDataFrame(df, col.names = "unnamed"), "unnamed")
+  expect_error(assertDataFrame(df, col.names = "unnamed"), "colnames")
 
   names(df) = c("x", "")
-  expect_error(assertDataFrame(df, col.names = "named"), "named")
+  expect_error(assertDataFrame(df, col.names = "named"), "empty")
 
   names(df) = c("x", "x")
   expect_identical(assertDataFrame(df, col.names = "named"), df)
-  expect_error(assertDataFrame(df, col.names = "unique"), "uniquely")
-  expect_error(assertDataFrame(df, col.names = "strict"), "uniquely")
-  expect_error(assertDataFrame(df, col.names = "foo"), "unnamed")
+  expect_error(assertDataFrame(df, col.names = "unique"), "duplicated")
+  expect_error(assertDataFrame(df, col.names = "strict"), "duplicated")
+  expect_error(assertDataFrame(df, col.names = "foo"), "type")
 
   names(df) = c("x", "1")
   expect_identical(assertDataFrame(df, col.names = "named"), df)
@@ -91,6 +91,9 @@ test_that("missing values are detected", {
   expect_true(testDataFrame(x, any.missing = FALSE))
   expect_true(testDataFrame(x, all.missing = FALSE))
   x$b[1] = NA
+  expect_false(testDataFrame(x, any.missing = FALSE))
+  expect_true(testDataFrame(x, all.missing = FALSE))
+  x$a[1] = NA
   expect_false(testDataFrame(x, any.missing = FALSE))
   expect_true(testDataFrame(x, all.missing = FALSE))
   x$b[2] = NA

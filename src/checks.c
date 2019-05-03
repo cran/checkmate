@@ -209,11 +209,11 @@ static R_xlen_t check_strict_names(SEXP x) {
 }
 
 static Rboolean check_names(SEXP nn, const char * type, const char * what) {
-    typedef enum { T_UNNAMED, T_NAMED, T_UNIQUE, T_STRICT } name_t;
+    typedef enum { T_UNNAMED, T_NAMED, T_UNIQUE, T_STRICT, T_IDS } name_t;
     name_t checks = T_UNNAMED;
 
     if (strcmp(type, "unnamed") == 0)
-        return isNull(nn) ? TRUE : message("%s must be unnamed, but has names", what);
+        return isNull(nn) ? TRUE : message("May not have %s", what);
 
     if (strcmp(type, "named") == 0) {
         checks = T_NAMED;
@@ -221,33 +221,36 @@ static Rboolean check_names(SEXP nn, const char * type, const char * what) {
         checks = T_UNIQUE;
     } else if (strcmp(type, "strict") == 0) {
         checks = T_STRICT;
+    } else if (strcmp(type, "ids") == 0) {
+        checks = T_IDS;
     } else {
         error("Unknown type '%s' to specify check for names. Supported are 'unnamed', 'named', 'unique' and 'strict'.", type);
     }
 
     if (isNull(nn)) {
-        return message("%s must be named, but is NULL", what);
+        return message("Must have %s", what);
     }
 
     R_xlen_t pos = find_missing_string(nn);
     if (pos > 0) {
-        return message("%s must be named, but name %i is NA", what, pos);
+        return message("Must have %s, but is NA at position %i", what, pos);
     }
 
     pos = find_min_nchar(nn, 1, FALSE);
     if (pos > 0) {
-        return message("%s must be named, but name %i is empty", what, pos);
+        return message("Must have %s, but element %i is empty", what, pos);
     }
 
-    if (checks >= T_UNIQUE) {
+    if (checks == T_UNIQUE || checks == T_STRICT) {
         pos = any_duplicated(nn, FALSE);
         if (pos > 0)
-            return message("%s must be uniquely named, but name %i is duplicated", what, pos);
-        if (checks >= T_STRICT) {
-            pos = check_strict_names(nn);
-            if (pos > 0)
-                return message("%s must be named according to R's variable naming conventions and may not contain special characters", what);
-        }
+            return message("Must have unique %s, but element %i is duplicated", what, pos);
+    }
+
+    if (checks == T_STRICT || checks == T_IDS) {
+        pos = check_strict_names(nn);
+        if (pos > 0)
+            return message("Must have %s according to R's variable naming conventions, but element %i does not comply", what, pos);
     }
     return TRUE;
 }
@@ -446,11 +449,11 @@ SEXP attribute_hidden c_check_dataframe(SEXP x, SEXP any_missing, SEXP all_missi
             nn = PROTECT(coerceVector(nn, STRSXP));
             nprotect++;
         }
-        ASSERT_TRUE_UNPROTECT(check_names(nn, asString(row_names, "row.names"), "Rows"), nprotect);
+        ASSERT_TRUE_UNPROTECT(check_names(nn, asString(row_names, "row.names"), "rownames"), nprotect);
     }
 
     if (!isNull(col_names)) {
-        ASSERT_TRUE(check_named(x, asString(col_names, "col.names"), "Columns"));
+        ASSERT_TRUE(check_named(x, asString(col_names, "col.names"), "colnames"));
     }
     if (!asFlag(any_missing, "any.missing")) {
         R_xlen_t pos = find_missing_frame(x);
@@ -527,14 +530,14 @@ SEXP attribute_hidden c_check_matrix(SEXP x, SEXP mode, SEXP any_missing, SEXP a
         SEXP nn = PROTECT(getAttrib(x, R_DimNamesSymbol));
         if (!isNull(nn))
             nn = VECTOR_ELT(nn, 0);
-        ASSERT_TRUE_UNPROTECT(check_names(nn, asString(row_names, "row.names"), "Rows"), 1);
+        ASSERT_TRUE_UNPROTECT(check_names(nn, asString(row_names, "row.names"), "rownames"), 1);
     }
 
     if (!isNull(col_names) && xlength(x) > 0) {
         SEXP nn = PROTECT(getAttrib(x, R_DimNamesSymbol));
         if (!isNull(nn))
             nn = VECTOR_ELT(nn, 1);
-        ASSERT_TRUE_UNPROTECT(check_names(nn, asString(col_names, "col.names"), "Columns"), 1);
+        ASSERT_TRUE_UNPROTECT(check_names(nn, asString(col_names, "col.names"), "colnames"), 1);
     }
 
     if (!asFlag(any_missing, "any.missing")) {
@@ -587,13 +590,12 @@ SEXP attribute_hidden c_check_named(SEXP x, SEXP type) {
     return ScalarLogical(TRUE);
 }
 
-SEXP attribute_hidden c_check_names(SEXP x, SEXP type) {
+SEXP attribute_hidden c_check_names(SEXP x, SEXP type, SEXP what) {
     if (!(isString(x) || isNull(x)))
-        return result("Must be a character vector of names");
-    ASSERT_TRUE(check_names(x, asString(type, "type"), "Names"));
+        return result("Must be a character vector");
+    ASSERT_TRUE(check_names(x, asString(type, "type"), asString(what, "what")));
     return ScalarLogical(TRUE);
 }
-
 
 SEXP attribute_hidden c_check_numeric(SEXP x, SEXP lower, SEXP upper, SEXP finite, SEXP any_missing, SEXP all_missing, SEXP len, SEXP min_len, SEXP max_len, SEXP unique, SEXP sorted, SEXP names, SEXP null_ok) {
     HANDLE_TYPE_NULL(is_class_numeric(x) || all_missing_atomic(x), "numeric", null_ok);
