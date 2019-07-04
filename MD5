@@ -1,7 +1,7 @@
-60ef8ae3c49df9d4e486ef5042150962 *DESCRIPTION
+4864d54635660305ab55fb198ccccd39 *DESCRIPTION
 12150ebd522453dd3d7ba23b88973fe4 *LICENSE
 bc2d899d047bd20804c40541c8e2f9e3 *NAMESPACE
-f1a1d9a6dcb02349f60fe29e1c8d50ab *NEWS.md
+3f55dbb320a3ad29dd4cdea116b86d1b *NEWS.md
 f0fc2aeb92b3d2014f6357308fd80954 *R/AssertCollection.R
 a7fc65b769f9477797c56c8c2af12339 *R/allMissing.R
 d4b005e269d2845ff89bed357a4e3d5f *R/anyInfinite.R
@@ -35,7 +35,7 @@ d12ec20b440da7dbc5001d4a53b3478f *R/checkFunction.R
 010d3b94c18be3104ce67320710dadd1 *R/checkInt.R
 d8ed036b51855aee4818196ce2b8dde2 *R/checkInteger.R
 f42c1237ac7f777ea1adadeaf0726536 *R/checkIntegerish.R
-ca43dfc00524de55d06d20ff83510748 *R/checkList.R
+2ab152e9e693d737204a7b239a2600d1 *R/checkList.R
 8d0baaae6518d3b614423d6f80de7e12 *R/checkLogical.R
 63d09cf4637e1bf8e8d81e37966c10e1 *R/checkMatrix.R
 1b11b632a897f9353f3045c17f53e225 *R/checkMultiClass.R
@@ -70,11 +70,11 @@ e5a4b149d401ff39b945b3b350101acf *R/qassert.R
 e461317d090f6344d1e56dc1cbfd4c20 *R/wfwl.R
 d05cbdd988a0ced4fde0598e7a2d0291 *R/zzz.R
 39bf7482a077081f074b720c719186ca *README.md
-51c8a28989a7b106c7811068126d73d3 *build/vignette.rds
+3513c70a947232ced6f3a859ea5991fc *build/vignette.rds
 1fc7d9ccd9c68a9f21d76744c19fd6ed *inst/CITATION
 1eca3fbf585ee5a94f225af02605a7c4 *inst/doc/checkmate.R
 44b22fee63734f3225dca86e2aad1d5e *inst/doc/checkmate.Rmd
-e248b4e42bf2309b3c96df265a93cb61 *inst/doc/checkmate.html
+da57624e43b0ca94556a0433e412bddb *inst/doc/checkmate.html
 022139fefe30297f3f1ef95ae27f3901 *inst/include/checkmate.h
 7455ff6681ad01c81b9fe547128ec5d3 *inst/include/checkmate_stub.c
 570556c5f559df4b9cbc2388e9138da9 *man/AssertCollection.Rd
@@ -131,7 +131,7 @@ f2968e1ebcf664ecc4a109cf63d61037 *man/checkSubset.Rd
 44531cf5d2a63326c9e5f21e7a181c56 *man/checkTRUE.Rd
 e70a93280399d76f9b4d104853a21b03 *man/checkTibble.Rd
 30f3ecae1e9ffabf124bc9714353571e *man/checkVector.Rd
-e2d00fc748288497e3d937c68d5167cb *man/checkmate-package.Rd
+684c5f1938292dfb8046c3d667d49647 *man/checkmate-package.Rd
 df830e7a73a97a9dcce66037219a92ab *man/coalesce.Rd
 14f7aaa35e168b3ec3e6c22289a5cc55 *man/makeAssertion.Rd
 b3838f9b3386e5f3262a44a345443ac0 *man/makeExpectation.Rd
@@ -150,7 +150,7 @@ d0e3faef15112efd1b1c4bb5cc328c6a *src/any_missing.h
 a295c7c831cc537938adc8a461ccf81b *src/any_nan.c
 29b28c13be569fc54e133373e259f37b *src/any_nan.h
 5283fb10f1406f2f8d79816173b9ef3a *src/backports.h
-babf272d969cbf4f075bdedfdcb46d40 *src/checks.c
+ea69d2f89538486ec4296e1a869831e9 *src/checks.c
 d928ab64d7709ec73d0cbdb4ed549227 *src/checks.h
 7835d63c8aaa237e87625c672042d321 *src/find_min_nchar.c
 0636d9620a849431cba8d1d8651a6fb0 *src/find_min_nchar.h
@@ -158,8 +158,8 @@ e84db1dc86df9cc8641179dd1e2ff3a0 *src/guess_type.c
 626cdf5752ff0c365859428212510bfb *src/guess_type.h
 55cbac6b20cf11577111b79d858defab *src/helper.c
 3c25aa3d8755803c7f526d8a20e39662 *src/helper.h
-69d381d2d97ab7744c2465603768c7ad *src/init.c
-18c4e24fd76abe193bcb13c92d237e8a *src/integerish.c
+2ed589157cb56709adb47fde8e77143b *src/init.c
+e13d22b6d12ae799a93b459587376454 *src/integerish.c
 8efb31a0360216fdee5a63aa41c3ce93 *src/integerish.h
 f9625f42d59b7788902c0b0ca6eb7539 *src/is_sorted.c
 eccffa05125008d99e94d7ad36207cdf *src/is_sorted.h
@@ -198,8 +198,8 @@ f96af114d15103662437e59c71f229a1 *tests/testthat/test_checkFilesystem.R
 05785cb9cb39155726790723627b81f9 *tests/testthat/test_checkFormula.R
 8f827cf646493433f5ea34dbb5a2607b *tests/testthat/test_checkFunction.R
 e08ef1e58036d81332bfc7df997154c5 *tests/testthat/test_checkInt.R
-7ba3825215a39e8925d1256deb3d5b87 *tests/testthat/test_checkInteger.R
-c1a03b9df11e7c4e6cba8a5817f6c72b *tests/testthat/test_checkIntegerish.R
+ac02e0959d9c6a13c2796e396d93359d *tests/testthat/test_checkInteger.R
+b0d516944eb07ee5843bb78f4684cf75 *tests/testthat/test_checkIntegerish.R
 47aa28611662d173477ac48eea36ddfb *tests/testthat/test_checkList.R
 edd75ed2d26e8ab74c186bff3511a403 *tests/testthat/test_checkLogical.R
 b05f4e7d4de6bf79cb2fe2adf8368534 *tests/testthat/test_checkMatrix.R
@@ -207,7 +207,7 @@ b05f4e7d4de6bf79cb2fe2adf8368534 *tests/testthat/test_checkMatrix.R
 66f9ae42e0364d41599d2f7d15d3f85c *tests/testthat/test_checkNames.R
 5ca56038ba855cffb5996db49724663b *tests/testthat/test_checkNull.R
 522c310bf5964325aff7e7f94b89c8c8 *tests/testthat/test_checkNumber.R
-ce553e6e9807bcb3d3183cda5e77dc6e *tests/testthat/test_checkNumeric.R
+4d044204956f074b7a843a7c59239417 *tests/testthat/test_checkNumeric.R
 af4d804926a342f32ea132c81eb0e9f3 *tests/testthat/test_checkOS.R
 5deadc9354cc2d67cb28dd486eb67b26 *tests/testthat/test_checkPOSIXct.R
 0569420355d062441f913ecdd9c2a374 *tests/testthat/test_checkR6.R
