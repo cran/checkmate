@@ -10,36 +10,102 @@
 \alias{expect_list}
 \title{Check if an argument is a list}
 \usage{
-checkList(x, types = character(0L), any.missing = TRUE,
-  all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
-  unique = FALSE, names = NULL, null.ok = FALSE)
+checkList(
+  x,
+  types = character(0L),
+  any.missing = TRUE,
+  all.missing = TRUE,
+  len = NULL,
+  min.len = NULL,
+  max.len = NULL,
+  unique = FALSE,
+  names = NULL,
+  null.ok = FALSE
+)
 
-check_list(x, types = character(0L), any.missing = TRUE,
-  all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
-  unique = FALSE, names = NULL, null.ok = FALSE)
+check_list(
+  x,
+  types = character(0L),
+  any.missing = TRUE,
+  all.missing = TRUE,
+  len = NULL,
+  min.len = NULL,
+  max.len = NULL,
+  unique = FALSE,
+  names = NULL,
+  null.ok = FALSE
+)
 
-assertList(x, types = character(0L), any.missing = TRUE,
-  all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
-  unique = FALSE, names = NULL, null.ok = FALSE,
-  .var.name = vname(x), add = NULL)
+assertList(
+  x,
+  types = character(0L),
+  any.missing = TRUE,
+  all.missing = TRUE,
+  len = NULL,
+  min.len = NULL,
+  max.len = NULL,
+  unique = FALSE,
+  names = NULL,
+  null.ok = FALSE,
+  .var.name = vname(x),
+  add = NULL
+)
 
-assert_list(x, types = character(0L), any.missing = TRUE,
-  all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
-  unique = FALSE, names = NULL, null.ok = FALSE,
-  .var.name = vname(x), add = NULL)
+assert_list(
+  x,
+  types = character(0L),
+  any.missing = TRUE,
+  all.missing = TRUE,
+  len = NULL,
+  min.len = NULL,
+  max.len = NULL,
+  unique = FALSE,
+  names = NULL,
+  null.ok = FALSE,
+  .var.name = vname(x),
+  add = NULL
+)
 
-testList(x, types = character(0L), any.missing = TRUE,
-  all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
-  unique = FALSE, names = NULL, null.ok = FALSE)
+testList(
+  x,
+  types = character(0L),
+  any.missing = TRUE,
+  all.missing = TRUE,
+  len = NULL,
+  min.len = NULL,
+  max.len = NULL,
+  unique = FALSE,
+  names = NULL,
+  null.ok = FALSE
+)
 
-test_list(x, types = character(0L), any.missing = TRUE,
-  all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
-  unique = FALSE, names = NULL, null.ok = FALSE)
+test_list(
+  x,
+  types = character(0L),
+  any.missing = TRUE,
+  all.missing = TRUE,
+  len = NULL,
+  min.len = NULL,
+  max.len = NULL,
+  unique = FALSE,
+  names = NULL,
+  null.ok = FALSE
+)
 
-expect_list(x, types = character(0L), any.missing = TRUE,
-  all.missing = TRUE, len = NULL, min.len = NULL, max.len = NULL,
-  unique = FALSE, names = NULL, null.ok = FALSE, info = NULL,
-  label = vname(x))
+expect_list(
+  x,
+  types = character(0L),
+  any.missing = TRUE,
+  all.missing = TRUE,
+  len = NULL,
+  min.len = NULL,
+  max.len = NULL,
+  unique = FALSE,
+  names = NULL,
+  null.ok = FALSE,
+  info = NULL,
+  label = vname(x)
+)
 }
 \arguments{
 \item{x}{[any]\cr
@@ -96,9 +162,6 @@ See \code{\link[testthat]{expect_that}}.}
 \item{label}{[\code{character(1)}]\cr
 Name of the checked object to print in messages. Defaults to
 the heuristic implemented in \code{\link{vname}}.}
-
-\item{...}{[any]\cr
-Additional parameters used in a call of \code{\link{checkVector}}.}
 }
 \value{
 Depending on the function prefix:
@@ -143,18 +206,27 @@ testList(list(NA, NA), unique = TRUE)
 testList(list(NA, NA_real_), unique = TRUE)
 }
 \seealso{
-Other basetypes: \code{\link{checkArray}},
-  \code{\link{checkAtomicVector}},
-  \code{\link{checkAtomic}}, \code{\link{checkCharacter}},
-  \code{\link{checkComplex}}, \code{\link{checkDataFrame}},
-  \code{\link{checkDate}}, \code{\link{checkDouble}},
-  \code{\link{checkEnvironment}},
-  \code{\link{checkFactor}}, \code{\link{checkFormula}},
-  \code{\link{checkFunction}},
-  \code{\link{checkIntegerish}},
-  \code{\link{checkInteger}}, \code{\link{checkLogical}},
-  \code{\link{checkMatrix}}, \code{\link{checkNull}},
-  \code{\link{checkNumeric}}, \code{\link{checkPOSIXct}},
-  \code{\link{checkRaw}}, \code{\link{checkVector}}
+Other basetypes: 
+\code{\link{checkArray}()},
+\code{\link{checkAtomicVector}()},
+\code{\link{checkAtomic}()},
+\code{\link{checkCharacter}()},
+\code{\link{checkComplex}()},
+\code{\link{checkDataFrame}()},
+\code{\link{checkDate}()},
+\code{\link{checkDouble}()},
+\code{\link{checkEnvironment}()},
+\code{\link{checkFactor}()},
+\code{\link{checkFormula}()},
+\code{\link{checkFunction}()},
+\code{\link{checkIntegerish}()},
+\code{\link{checkInteger}()},
+\code{\link{checkLogical}()},
+\code{\link{checkMatrix}()},
+\code{\link{checkNull}()},
+\code{\link{checkNumeric}()},
+\code{\link{checkPOSIXct}()},
+\code{\link{checkRaw}()},
+\code{\link{checkVector}()}
 }
 \concept{basetypes}

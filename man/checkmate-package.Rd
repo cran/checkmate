@@ -96,7 +96,6 @@ Tests and assertions to perform frequent argument checks. A
 \section{Popular data types of third party packages}{
 
 \itemize{
-  \item{\code{\link{checkBit}}}
   \item{\code{\link{checkDataTable}}}
   \item{\code{\link{checkR6}}}
   \item{\code{\link{checkTibble}}}
@@ -141,7 +140,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Michel Lang \email{michellang@gmail.com} (0000-0001-9754-0393)
+\strong{Maintainer}: Michel Lang \email{michellang@gmail.com} (\href{https://orcid.org/0000-0001-9754-0393}{ORCID})
 
 Other contributors:
 \itemize{

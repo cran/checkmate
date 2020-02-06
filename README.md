@@ -1,10 +1,9 @@
 # checkmate
 
-[![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/checkmate)](https://cran.r-project.org/package=checkmate)
-[![Build Status](https://travis-ci.org/mllg/checkmate.svg?branch=master)](https://travis-ci.org/mllg/checkmate)
-[![Build status](https://ci.appveyor.com/api/projects/status/y4ayps61hjd3375o/branch/master?svg=true)](https://ci.appveyor.com/project/mllg/checkmate/branch/master)
+[![CRAN_Status_Badge](https://www.r-pkg.org/badges/version/checkmate)](https://cran.r-project.org/package=checkmate)
+[![R build status](https://github.com/mllg/checkmate/workflows/R-CMD-check/badge.svg)](https://github.com/mllg/checkmate)
 [![Coverage Status](https://img.shields.io/coveralls/mllg/checkmate.svg)](https://coveralls.io/r/mllg/checkmate?branch=master)
-[![Download Stats](http://cranlogs.r-pkg.org/badges/checkmate)](https://cran.r-project.org/package=checkmate)
+[![Download Stats](https://cranlogs.r-pkg.org/badges/checkmate)](https://cran.r-project.org/package=checkmate)
 
 Fast and versatile argument checks for R.
 

@@ -69,7 +69,6 @@
 #'
 #' @section Popular data types of third party packages:
 #' \itemize{
-#'   \item{\code{\link{checkBit}}}
 #'   \item{\code{\link{checkDataTable}}}
 #'   \item{\code{\link{checkR6}}}
 #'   \item{\code{\link{checkTibble}}}
@@ -123,8 +122,18 @@ checkmate$listtypefuns = list2env(list(
   "null"         = is.null
 ))
 
+
+register_tinytest = function() {
+  ns = getNamespace("checkmate")
+  expectations = names(ns)[grepl("^expect_", names(ns))]
+  tinytest::register_tinytest_extension("checkmate", expectations)
+}
+
 .onLoad = function(libpath, pkgname) {
-  backports::import(pkgname, c("dir.exists", "isFALSE"))
+  backports::import(pkgname)
+  if ("tinytest" %in% loadedNamespaces())
+    register_tinytest()
+  setHook(packageEvent("tinytest", "onLoad"), function(...) register_tinytest(), action = "append")
 }
 
 .onUnload = function (libpath) {
