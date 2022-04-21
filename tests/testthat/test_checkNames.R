@@ -31,8 +31,8 @@ test_that("checkNames", {
   expect_false(testNames(".1", type = "strict"))
   expect_false(testNames("..1", type = "strict"))
   expect_false(testNames("x ", type = "strict"))
-  expect_false(testNames("ä", type = "strict"))
-  expect_false(testNames("ä", type = "ids"))
+  expect_false(testNames("\u00e4", type = "strict"))
+  expect_false(testNames("\u00e4", type = "ids"))
   expect_error(assertNames(c("a", "a"), "unique"), "unique")
 
   expect_error(assertNames(c("a", "a"), "strict"), "unique")
@@ -60,6 +60,11 @@ test_that("checkNames / subset.of", {
   expect_false(testNames(NULL, subset.of = character(0)))
   expect_true(testNames(character(0), subset.of = character(0)))
   expect_true(testNames(character(0), subset.of = NULL))
+
+  expect_error(
+    assert_names(names(x), subset.of = c("a", "b")),
+    "{'c'}", fixed = TRUE
+  )
 })
 
 test_that("checkNames / identical.to", {
@@ -75,6 +80,11 @@ test_that("checkNames / identical.to", {
   expect_true(testNames(character(0), identical.to = character(0)))
   expect_true(testNames(character(0), identical.to = NULL))
   expect_false(testNames(NULL, identical.to = NULL))
+
+  expect_error(
+    assert_names(names(x), identical.to = c("a", "b")),
+    "{'a','b','c'}", fixed = TRUE
+  )
 })
 
 test_that("checkNames / permutation.of", {
@@ -90,6 +100,16 @@ test_that("checkNames / permutation.of", {
   expect_true(testNames(character(0), permutation.of = character(0)))
   expect_true(testNames(character(0), permutation.of = NULL))
   expect_false(testNames(NULL, permutation.of = NULL))
+
+  expect_error(
+    assert_names(names(x), permutation.of = c("a", "b")),
+    "{'c'}", fixed = TRUE
+  )
+
+  expect_error(
+    assert_names(names(x), permutation.of = c("a", "b", "c", "d")),
+    "{'d'}", fixed = TRUE
+  )
 })
 
 test_that("checkNames / must.include", {
@@ -103,6 +123,11 @@ test_that("checkNames / must.include", {
   expect_false(testNames(NULL, must.include = character(0)))
   expect_true(testNames(character(0), must.include = character(0)))
   expect_true(testNames(character(0), must.include = NULL))
+
+  expect_error(
+    assert_names(names(x), must.include = c("a", "b", "c", "d")),
+    "{'d'}", fixed = TRUE
+  )
 })
 
 test_that("checkNames / disjunct.from", {
@@ -112,6 +137,11 @@ test_that("checkNames / disjunct.from", {
   expect_true(testNames(names(x)))
   expect_true(testNames(names(x), disjunct.from = "d"))
   expect_false(testNames(names(x), disjunct.from = "b"))
+
+  expect_error(
+    assert_names(names(x), disjunct.from = c("c")),
+    "{'c'}", fixed = TRUE
+  )
 })
 
 test_that("checkNames / errors are useful", {

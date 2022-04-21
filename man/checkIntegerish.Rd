@@ -23,6 +23,7 @@ checkIntegerish(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE
 )
 
@@ -39,6 +40,7 @@ check_integerish(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE
 )
 
@@ -55,6 +57,7 @@ assertIntegerish(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE,
   coerce = FALSE,
   .var.name = vname(x),
@@ -74,6 +77,7 @@ assert_integerish(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE,
   coerce = FALSE,
   .var.name = vname(x),
@@ -93,6 +97,7 @@ testIntegerish(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE
 )
 
@@ -109,6 +114,7 @@ test_integerish(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE
 )
 
@@ -125,6 +131,7 @@ expect_integerish(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE,
   info = NULL,
   label = vname(x)
@@ -148,7 +155,8 @@ Upper value all elements of \code{x} must be lower than or equal to.}
 Are vectors with missing values allowed? Default is \code{TRUE}.}
 
 \item{all.missing}{[\code{logical(1)}]\cr
-Are vectors with only missing values allowed? Default is \code{TRUE}.}
+Are vectors with no non-missing values allowed? Default is \code{TRUE}.
+Note that empty vectors do not have non-missing values.}
 
 \item{len}{[\code{integer(1)}]\cr
 Exact expected length of \code{x}.}
@@ -170,6 +178,12 @@ Check for names. See \code{\link{checkNamed}} for possible values.
 Default is \dQuote{any} which performs no check at all.
 Note that you can use \code{\link{checkSubset}} to check for a specific set of names.}
 
+\item{typed.missing}{[\code{logical(1)}]\cr
+If set to \code{FALSE} (default), all types of missing values (\code{NA}, \code{NA_integer_},
+\code{NA_real_}, \code{NA_character_} or \code{NA_character_}) as well as empty vectors are allowed
+while type-checking atomic input.
+Set to \code{FALSE} to enable strict type checking.}
+
 \item{null.ok}{[\code{logical(1)}]\cr
 If set to \code{TRUE}, \code{x} may also be \code{NULL}.
 In this case only a type check of \code{x} is performed, all additional checks are disabled.}
@@ -184,7 +198,7 @@ the heuristic implemented in \code{\link{vname}}.}
 \item{add}{[\code{AssertCollection}]\cr
 Collection to store assertion messages. See \code{\link{AssertCollection}}.}
 
-\item{info}{[character(1)]\cr
+\item{info}{[\code{character(1)}]\cr
 Extra information to be included in the message for the testthat reporter.
 See \code{\link[testthat]{expect_that}}.}
 
@@ -205,14 +219,15 @@ Depending on the function prefix:
  throws an error message, 
  \code{testIntegerish}/\code{test_integerish}
  returns \code{FALSE},
- and \code{checkIntegerish} returns a string with the error message.
+ and \code{checkIntegerish}/\code{check_integerish} 
+ return a string with the error message.
  The function \code{expect_integerish} always returns an
  \code{\link[testthat]{expectation}}.
 }
 \description{
 An integerish value is defined as value safely convertible to integer.
-This includes integers and numeric values which are close to an integer
-w.r.t. a numeric tolerance.
+This includes integers and numeric values which sufficiently close to an
+integer w.r.t. a numeric tolerance `tol`.
 }
 \details{
 This function does not distinguish between

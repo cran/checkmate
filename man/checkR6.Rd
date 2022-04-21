@@ -8,7 +8,7 @@
 \alias{testR6}
 \alias{test_r6}
 \alias{expect_r6}
-\title{Check if an argument is a R6 class}
+\title{Check if an argument is an R6 class}
 \usage{
 checkR6(
   x,
@@ -119,7 +119,7 @@ the heuristic implemented in \code{\link{vname}}.}
 \item{add}{[\code{AssertCollection}]\cr
 Collection to store assertion messages. See \code{\link{AssertCollection}}.}
 
-\item{info}{[character(1)]\cr
+\item{info}{[\code{character(1)}]\cr
 Extra information to be included in the message for the testthat reporter.
 See \code{\link[testthat]{expect_that}}.}
 
@@ -140,12 +140,13 @@ Depending on the function prefix:
  throws an error message, 
  \code{testClass}/\code{test_class}
  returns \code{FALSE},
- and \code{checkClass} returns a string with the error message.
+ and \code{checkClass}/\code{check_class} 
+ return a string with the error message.
  The function \code{expect_class} always returns an
  \code{\link[testthat]{expectation}}.
 }
 \description{
-Check if an argument is a R6 class
+Check if an argument is an R6 class
 }
 \examples{
 library(R6)

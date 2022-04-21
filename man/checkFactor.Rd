@@ -162,7 +162,8 @@ Default is \code{TRUE}.}
 Are vectors with missing values allowed? Default is \code{TRUE}.}
 
 \item{all.missing}{[\code{logical(1)}]\cr
-Are vectors with only missing values allowed? Default is \code{TRUE}.}
+Are vectors with no non-missing values allowed? Default is \code{TRUE}.
+Note that empty vectors do not have non-missing values.}
 
 \item{len}{[\code{integer(1)}]\cr
 Exact expected length of \code{x}.}
@@ -204,7 +205,7 @@ the heuristic implemented in \code{\link{vname}}.}
 \item{add}{[\code{AssertCollection}]\cr
 Collection to store assertion messages. See \code{\link{AssertCollection}}.}
 
-\item{info}{[character(1)]\cr
+\item{info}{[\code{character(1)}]\cr
 Extra information to be included in the message for the testthat reporter.
 See \code{\link[testthat]{expect_that}}.}
 
@@ -225,7 +226,8 @@ Depending on the function prefix:
  throws an error message, 
  \code{testFactor}/\code{test_factor}
  returns \code{FALSE},
- and \code{checkFactor} returns a string with the error message.
+ and \code{checkFactor}/\code{check_factor} 
+ return a string with the error message.
  The function \code{expect_factor} always returns an
  \code{\link[testthat]{expectation}}.
 }

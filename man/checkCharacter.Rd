@@ -12,7 +12,9 @@
 \usage{
 checkCharacter(
   x,
+  n.chars = NULL,
   min.chars = NULL,
+  max.chars = NULL,
   pattern = NULL,
   fixed = NULL,
   ignore.case = FALSE,
@@ -24,12 +26,15 @@ checkCharacter(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE
 )
 
 check_character(
   x,
+  n.chars = NULL,
   min.chars = NULL,
+  max.chars = NULL,
   pattern = NULL,
   fixed = NULL,
   ignore.case = FALSE,
@@ -41,12 +46,15 @@ check_character(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE
 )
 
 assertCharacter(
   x,
+  n.chars = NULL,
   min.chars = NULL,
+  max.chars = NULL,
   pattern = NULL,
   fixed = NULL,
   ignore.case = FALSE,
@@ -58,6 +66,7 @@ assertCharacter(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE,
   .var.name = vname(x),
   add = NULL
@@ -65,7 +74,9 @@ assertCharacter(
 
 assert_character(
   x,
+  n.chars = NULL,
   min.chars = NULL,
+  max.chars = NULL,
   pattern = NULL,
   fixed = NULL,
   ignore.case = FALSE,
@@ -77,6 +88,7 @@ assert_character(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE,
   .var.name = vname(x),
   add = NULL
@@ -84,7 +96,9 @@ assert_character(
 
 testCharacter(
   x,
+  n.chars = NULL,
   min.chars = NULL,
+  max.chars = NULL,
   pattern = NULL,
   fixed = NULL,
   ignore.case = FALSE,
@@ -96,12 +110,15 @@ testCharacter(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE
 )
 
 test_character(
   x,
+  n.chars = NULL,
   min.chars = NULL,
+  max.chars = NULL,
   pattern = NULL,
   fixed = NULL,
   ignore.case = FALSE,
@@ -113,12 +130,15 @@ test_character(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE
 )
 
 expect_character(
   x,
+  n.chars = NULL,
   min.chars = NULL,
+  max.chars = NULL,
   pattern = NULL,
   fixed = NULL,
   ignore.case = FALSE,
@@ -130,6 +150,7 @@ expect_character(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE,
   info = NULL,
   label = vname(x)
@@ -139,8 +160,14 @@ expect_character(
 \item{x}{[any]\cr
 Object to check.}
 
+\item{n.chars}{[\code{integer(1)}]\cr
+Exact number of characters for each element of \code{x}.}
+
 \item{min.chars}{[\code{integer(1)}]\cr
 Minimum number of characters for each element of \code{x}.}
+
+\item{max.chars}{[\code{integer(1)}]\cr
+Maximum number of characters for each element of \code{x}.}
 
 \item{pattern}{[\code{character(1L)}]\cr
 Regular expression as used in \code{\link[base]{grepl}}.
@@ -158,7 +185,8 @@ See \code{\link[base]{grepl}}. Default is \code{FALSE}.}
 Are vectors with missing values allowed? Default is \code{TRUE}.}
 
 \item{all.missing}{[\code{logical(1)}]\cr
-Are vectors with only missing values allowed? Default is \code{TRUE}.}
+Are vectors with no non-missing values allowed? Default is \code{TRUE}.
+Note that empty vectors do not have non-missing values.}
 
 \item{len}{[\code{integer(1)}]\cr
 Exact expected length of \code{x}.}
@@ -180,6 +208,12 @@ Check for names. See \code{\link{checkNamed}} for possible values.
 Default is \dQuote{any} which performs no check at all.
 Note that you can use \code{\link{checkSubset}} to check for a specific set of names.}
 
+\item{typed.missing}{[\code{logical(1)}]\cr
+If set to \code{FALSE} (default), all types of missing values (\code{NA}, \code{NA_integer_},
+\code{NA_real_}, \code{NA_character_} or \code{NA_character_}) as well as empty vectors are allowed
+while type-checking atomic input.
+Set to \code{FALSE} to enable strict type checking.}
+
 \item{null.ok}{[\code{logical(1)}]\cr
 If set to \code{TRUE}, \code{x} may also be \code{NULL}.
 In this case only a type check of \code{x} is performed, all additional checks are disabled.}
@@ -191,7 +225,7 @@ the heuristic implemented in \code{\link{vname}}.}
 \item{add}{[\code{AssertCollection}]\cr
 Collection to store assertion messages. See \code{\link{AssertCollection}}.}
 
-\item{info}{[character(1)]\cr
+\item{info}{[\code{character(1)}]\cr
 Extra information to be included in the message for the testthat reporter.
 See \code{\link[testthat]{expect_that}}.}
 
@@ -212,7 +246,8 @@ Depending on the function prefix:
  throws an error message, 
  \code{testCharacter}/\code{test_character}
  returns \code{FALSE},
- and \code{checkCharacter} returns a string with the error message.
+ and \code{checkCharacter}/\code{check_character} 
+ return a string with the error message.
  The function \code{expect_character} always returns an
  \code{\link[testthat]{expectation}}.
 }

@@ -13,7 +13,9 @@
 checkString(
   x,
   na.ok = FALSE,
+  n.chars = NULL,
   min.chars = NULL,
+  max.chars = NULL,
   pattern = NULL,
   fixed = NULL,
   ignore.case = FALSE,
@@ -23,7 +25,9 @@ checkString(
 check_string(
   x,
   na.ok = FALSE,
+  n.chars = NULL,
   min.chars = NULL,
+  max.chars = NULL,
   pattern = NULL,
   fixed = NULL,
   ignore.case = FALSE,
@@ -33,7 +37,9 @@ check_string(
 assertString(
   x,
   na.ok = FALSE,
+  n.chars = NULL,
   min.chars = NULL,
+  max.chars = NULL,
   pattern = NULL,
   fixed = NULL,
   ignore.case = FALSE,
@@ -45,7 +51,9 @@ assertString(
 assert_string(
   x,
   na.ok = FALSE,
+  n.chars = NULL,
   min.chars = NULL,
+  max.chars = NULL,
   pattern = NULL,
   fixed = NULL,
   ignore.case = FALSE,
@@ -57,7 +65,9 @@ assert_string(
 testString(
   x,
   na.ok = FALSE,
+  n.chars = NULL,
   min.chars = NULL,
+  max.chars = NULL,
   pattern = NULL,
   fixed = NULL,
   ignore.case = FALSE,
@@ -67,7 +77,9 @@ testString(
 test_string(
   x,
   na.ok = FALSE,
+  n.chars = NULL,
   min.chars = NULL,
+  max.chars = NULL,
   pattern = NULL,
   fixed = NULL,
   ignore.case = FALSE,
@@ -77,7 +89,9 @@ test_string(
 expect_string(
   x,
   na.ok = FALSE,
+  n.chars = NULL,
   min.chars = NULL,
+  max.chars = NULL,
   pattern = NULL,
   fixed = NULL,
   ignore.case = FALSE,
@@ -93,8 +107,14 @@ Object to check.}
 \item{na.ok}{[\code{logical(1)}]\cr
 Are missing values allowed? Default is \code{FALSE}.}
 
+\item{n.chars}{[\code{integer(1)}]\cr
+Exact number of characters for each element of \code{x}.}
+
 \item{min.chars}{[\code{integer(1)}]\cr
 Minimum number of characters for each element of \code{x}.}
+
+\item{max.chars}{[\code{integer(1)}]\cr
+Maximum number of characters for each element of \code{x}.}
 
 \item{pattern}{[\code{character(1L)}]\cr
 Regular expression as used in \code{\link[base]{grepl}}.
@@ -119,7 +139,7 @@ the heuristic implemented in \code{\link{vname}}.}
 \item{add}{[\code{AssertCollection}]\cr
 Collection to store assertion messages. See \code{\link{AssertCollection}}.}
 
-\item{info}{[character(1)]\cr
+\item{info}{[\code{character(1)}]\cr
 Extra information to be included in the message for the testthat reporter.
 See \code{\link[testthat]{expect_that}}.}
 
@@ -140,7 +160,8 @@ Depending on the function prefix:
  throws an error message, 
  \code{testString}/\code{test_string}
  returns \code{FALSE},
- and \code{checkString} returns a string with the error message.
+ and \code{checkString}/\code{check_string} 
+ return a string with the error message.
  The function \code{expect_string} always returns an
  \code{\link[testthat]{expectation}}.
 }

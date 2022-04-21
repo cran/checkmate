@@ -22,6 +22,7 @@ checkInteger(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE
 )
 
@@ -37,6 +38,7 @@ check_integer(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE
 )
 
@@ -52,6 +54,7 @@ assertInteger(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE,
   .var.name = vname(x),
   add = NULL
@@ -69,6 +72,7 @@ assert_integer(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE,
   .var.name = vname(x),
   add = NULL
@@ -86,6 +90,7 @@ testInteger(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE
 )
 
@@ -101,6 +106,7 @@ test_integer(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE
 )
 
@@ -116,6 +122,7 @@ expect_integer(
   unique = FALSE,
   sorted = FALSE,
   names = NULL,
+  typed.missing = FALSE,
   null.ok = FALSE,
   info = NULL,
   label = vname(x)
@@ -135,7 +142,8 @@ Upper value all elements of \code{x} must be lower than or equal to.}
 Are vectors with missing values allowed? Default is \code{TRUE}.}
 
 \item{all.missing}{[\code{logical(1)}]\cr
-Are vectors with only missing values allowed? Default is \code{TRUE}.}
+Are vectors with no non-missing values allowed? Default is \code{TRUE}.
+Note that empty vectors do not have non-missing values.}
 
 \item{len}{[\code{integer(1)}]\cr
 Exact expected length of \code{x}.}
@@ -157,6 +165,12 @@ Check for names. See \code{\link{checkNamed}} for possible values.
 Default is \dQuote{any} which performs no check at all.
 Note that you can use \code{\link{checkSubset}} to check for a specific set of names.}
 
+\item{typed.missing}{[\code{logical(1)}]\cr
+If set to \code{FALSE} (default), all types of missing values (\code{NA}, \code{NA_integer_},
+\code{NA_real_}, \code{NA_character_} or \code{NA_character_}) as well as empty vectors are allowed
+while type-checking atomic input.
+Set to \code{FALSE} to enable strict type checking.}
+
 \item{null.ok}{[\code{logical(1)}]\cr
 If set to \code{TRUE}, \code{x} may also be \code{NULL}.
 In this case only a type check of \code{x} is performed, all additional checks are disabled.}
@@ -168,7 +182,7 @@ the heuristic implemented in \code{\link{vname}}.}
 \item{add}{[\code{AssertCollection}]\cr
 Collection to store assertion messages. See \code{\link{AssertCollection}}.}
 
-\item{info}{[character(1)]\cr
+\item{info}{[\code{character(1)}]\cr
 Extra information to be included in the message for the testthat reporter.
 See \code{\link[testthat]{expect_that}}.}
 
@@ -189,7 +203,8 @@ Depending on the function prefix:
  throws an error message, 
  \code{testInteger}/\code{test_integer}
  returns \code{FALSE},
- and \code{checkInteger} returns a string with the error message.
+ and \code{checkInteger}/\code{check_integer} 
+ return a string with the error message.
  The function \code{expect_integer} always returns an
  \code{\link[testthat]{expectation}}.
 }

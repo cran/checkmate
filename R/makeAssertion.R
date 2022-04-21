@@ -38,8 +38,11 @@
 #' print(assertFalse)
 makeAssertion = function(x, res, var.name, collection) {
   if (!isTRUE(res)) {
-    if (is.null(collection))
+    assertString(var.name, .var.name = ".var.name")
+
+    if (is.null(collection)) {
       mstop("Assertion on '%s' failed: %s.", var.name, res, call. = sys.call(-2L))
+    }
     assertClass(collection, "AssertCollection", .var.name = "add")
     collection$push(sprintf("Variable '%s': %s.", var.name, res))
   }
@@ -82,7 +85,7 @@ makeAssertionFunction = function(check.fun, c.fun = NULL, use.namespace = TRUE, 
   body = paste0(body, sprintf("(%s, res, .var.name, add)", x.name))
 
   if (coerce) {
-    body = paste0(body, "; if (isTRUE(coerce) && is.double(x)) storage.mode(x) = \"integer\"; invisible(x)")
+    body = paste0(body, "; if (isTRUE(coerce) && is.double(x)) x = setNames(as.integer(round(x, 0L)), names(x)); invisible(x)")
   }
 
   formals(new.fun) = fun.args

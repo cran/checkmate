@@ -61,7 +61,7 @@ the heuristic implemented in \code{\link{vname}}.}
 \item{add}{[\code{AssertCollection}]\cr
 Collection to store assertion messages. See \code{\link{AssertCollection}}.}
 
-\item{info}{[character(1)]\cr
+\item{info}{[\code{character(1)}]\cr
 Extra information to be included in the message for the testthat reporter.
 See \code{\link[testthat]{expect_that}}.}
 
@@ -82,7 +82,8 @@ Depending on the function prefix:
  throws an error message, 
  \code{testPathForOutput}/\code{test_path_for_output}
  returns \code{FALSE},
- and \code{checkPathForOutput} returns a string with the error message.
+ and \code{checkPathForOutput}/\code{check_path_for_output} 
+ return a string with the error message.
  The function \code{expect_path_for_output} always returns an
  \code{\link[testthat]{expectation}}.
 }

@@ -3,7 +3,7 @@
 #' @description
 #' Performs various checks on character vectors, usually names.
 #'
-#' @templateVar fn Named
+#' @templateVar fn Names
 #' @param x [\code{character} || \code{NULL}]\cr
 #'  Names to check using rules defined via \code{type}.
 #' @param type [character(1)]\cr
@@ -29,7 +29,7 @@
 #'  Names provided in \code{x} must be identical to the vector \code{identical.to}.
 #'  Use this argument instead of \code{permutation.of} if the order of the names is relevant.
 #' @param disjunct.from [\code{character}]\cr
-#'  Names provided in \code{x} must may not be present in the vector \code{identical.to}.
+#'  Names provided in \code{x} must may not be present in the vector \code{disjunct.from}.
 #' @param what [\code{character(1)}]\cr
 #'  Type of name vector to check, e.g. \dQuote{names} (default), \dQuote{colnames} or \dQuote{rownames}.
 #' @template checker
@@ -38,42 +38,62 @@
 #' @export
 #' @examples
 #' x = 1:3
-#' testNames(x, "unnamed")
+#' testNames(names(x), "unnamed")
 #' names(x) = letters[1:3]
-#' testNames(x, "unique")
+#' testNames(names(x), "unique")
 #'
 #' cn = c("Species", "Sepal.Length", "Sepal.Width", "Petal.Length", "Petal.Width")
 #' assertNames(names(iris), permutation.of = cn)
 checkNames = function(x, type = "named", subset.of = NULL, must.include = NULL, permutation.of = NULL, identical.to = NULL, disjunct.from = NULL, what = "names") {
   .Call(c_check_names, x, type, what) %and%
-    checkNamesCmp(x, subset.of, must.include, permutation.of, identical.to, disjunct.from)
+    checkNamesCmp(x, subset.of, must.include, permutation.of, identical.to, disjunct.from, what)
 }
 
-checkNamesCmp = function(x, subset.of, must.include, permutation.of, identical.to, disjunct.from) {
+checkNamesCmp = function(x, subset.of, must.include, permutation.of, identical.to, disjunct.from, what) {
   if (!is.null(subset.of)) {
     qassert(subset.of, "S")
-    if (anyMissing(match(x, subset.of)))
-      return(sprintf("Must be a subset of set {%s}", paste0(subset.of, collapse = ",")))
+    msg = check_subset_internal(x, subset.of, match, what)
+    if (!isTRUE(msg))
+      return(msg)
   }
+
   if (!is.null(must.include)) {
     qassert(must.include, "S")
-    if (anyMissing(match(must.include, x)))
-      return(sprintf("Must include the elements {%s}", paste0(must.include, collapse = ",")))
+    ii = match(must.include, x)
+    if (anyMissing(ii)) {
+      return(set_msg("must include the elements %s, but is missing elements %s",
+        what,
+        set_collapse(must.include),
+        set_collapse(must.include[is.na(ii)])
+      ))
+    }
   }
+
   if (!is.null(permutation.of)) {
     permutation.of = unique(qassert(permutation.of, "S"))
-    if (length(x) != length(permutation.of) || !setequal(x, permutation.of))
-      return(sprintf("Must be a permutation of set {%s}", paste0(permutation.of, collapse = ",")))
+    msg = check_set_equal_internal(x, permutation.of, match, what)
+    if (!isTRUE(msg))
+      return(msg)
   }
+
   if (!is.null(identical.to)) {
     qassert(identical.to, "S")
-    if (!identical(x, identical.to))
-      return(sprintf("Must be a identical to (%s)", paste0(identical.to, collapse = ",")))
+    if (!identical(x, identical.to)) {
+      return(set_msg("must be a identical to set %s, but is %s",
+        what,
+        set_collapse(identical.to),
+        set_collapse(x)
+      ))
+    }
   }
+
   if (!is.null(disjunct.from)) {
-    if (any(x %in% disjunct.from))
-      return(sprintf("Must be disjunct from (%s)", paste0(disjunct.from, collapse = ",")))
+    qassert(disjunct.from, "S")
+    msg = check_disjunct_internal(x, disjunct.from, match, what)
+    if (!isTRUE(msg))
+      return(msg)
   }
+
   return(TRUE)
 }
 

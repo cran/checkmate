@@ -76,7 +76,7 @@ the heuristic implemented in \code{\link{vname}}.}
 \item{add}{[\code{AssertCollection}]\cr
 Collection to store assertion messages. See \code{\link{AssertCollection}}.}
 
-\item{info}{[character(1)]\cr
+\item{info}{[\code{character(1)}]\cr
 Extra information to be included in the message for the testthat reporter.
 See \code{\link[testthat]{expect_that}}.}
 
@@ -97,7 +97,8 @@ Depending on the function prefix:
  throws an error message, 
  \code{testFileExists}/\code{test_file_exists}
  returns \code{FALSE},
- and \code{checkFileExists} returns a string with the error message.
+ and \code{checkFileExists}/\code{check_file_exists} 
+ return a string with the error message.
  The function \code{expect_file_exists} always returns an
  \code{\link[testthat]{expectation}}.
 }

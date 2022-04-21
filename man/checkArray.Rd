@@ -94,7 +94,8 @@ Object to check.}
 Storage mode of the array. Arrays can hold vectors, i.e. \dQuote{logical},
 \dQuote{integer}, \dQuote{integerish}, \dQuote{double}, \dQuote{numeric}, \dQuote{complex},
 \dQuote{character} and \dQuote{list}. You can also specify \dQuote{atomic}
-here to explicitly prohibit lists. Default is \code{NULL} (no check).}
+here to explicitly prohibit lists. Default is \code{NULL} (no check).
+If all values of \code{x} are missing, this check is skipped.}
 
 \item{any.missing}{[\code{logical(1)}]\cr
 Are missing values allowed? Default is \code{TRUE}.}
@@ -122,7 +123,7 @@ the heuristic implemented in \code{\link{vname}}.}
 \item{add}{[\code{AssertCollection}]\cr
 Collection to store assertion messages. See \code{\link{AssertCollection}}.}
 
-\item{info}{[character(1)]\cr
+\item{info}{[\code{character(1)}]\cr
 Extra information to be included in the message for the testthat reporter.
 See \code{\link[testthat]{expect_that}}.}
 
@@ -143,7 +144,8 @@ Depending on the function prefix:
  throws an error message, 
  \code{testArray}/\code{test_array}
  returns \code{FALSE},
- and \code{checkArray} returns a string with the error message.
+ and \code{checkArray}/\code{check_array} 
+ return a string with the error message.
  The function \code{expect_array} always returns an
  \code{\link[testthat]{expectation}}.
 }

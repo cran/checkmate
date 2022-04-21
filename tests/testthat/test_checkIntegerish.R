@@ -88,3 +88,33 @@ test_that("factors are detected (#164)", {
   x = factor(letters)
   expect_error(assertIntegerish(x), "factor")
 })
+
+test_that("Dates are detected (#223)", {
+  x = Sys.Date()
+  expect_error(assertIntegerish(x), "Date")
+})
+
+test_that("POSIXt is detected (#223)", {
+  x = Sys.time()
+  expect_error(assertIntegerish(x), "POSIX")
+})
+
+test_that("0 tolerance works (#177)", {
+  expect_true(isIntegerish(1, tol = 0))
+})
+
+test_that("coerce rounds to next integer", {
+  x = 1 - sqrt(.Machine$double.eps) / 10
+  y = assert_integerish(x, coerce = TRUE)
+  expect_identical(y, 1L)
+})
+
+test_that("typed.missing", {
+  expect_true(testIntegerish(NA_character_))
+  expect_true(testIntegerish(NA_character_, typed.missing = FALSE))
+  expect_false(testIntegerish(NA_character_, typed.missing = TRUE))
+
+  expect_true(testIntegerish(character()))
+  expect_true(testIntegerish(character(), typed.missing = FALSE))
+  expect_false(testIntegerish(character(), typed.missing = TRUE))
+})

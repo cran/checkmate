@@ -103,7 +103,7 @@ the heuristic implemented in \code{\link{vname}}.}
 \item{add}{[\code{AssertCollection}]\cr
 Collection to store assertion messages. See \code{\link{AssertCollection}}.}
 
-\item{info}{[character(1)]\cr
+\item{info}{[\code{character(1)}]\cr
 Extra information to be included in the message for the testthat reporter.
 See \code{\link[testthat]{expect_that}}.}
 
@@ -124,7 +124,8 @@ Depending on the function prefix:
  throws an error message, 
  \code{testCount}/\code{test_count}
  returns \code{FALSE},
- and \code{checkCount} returns a string with the error message.
+ and \code{checkCount}/\code{check_count} 
+ return a string with the error message.
  The function \code{expect_count} always returns an
  \code{\link[testthat]{expectation}}.
 }
