@@ -1,7 +1,7 @@
-64b86af56cdca2ce2ea9aa38910af757 *DESCRIPTION
+5355e5a766aa1c1d1fa7eeff7902c0ad *DESCRIPTION
 3fa047ece8f2443abd01534b78f373c5 *LICENSE
 50f08001a14942d8005630fd94358e89 *NAMESPACE
-3764418acf84a463e0f23978cf95569f *NEWS.md
+b5e60f2794be0cb26feb0acec0b277fc *NEWS.md
 f0fc2aeb92b3d2014f6357308fd80954 *R/AssertCollection.R
 a7fc65b769f9477797c56c8c2af12339 *R/allMissing.R
 d4b005e269d2845ff89bed357a4e3d5f *R/anyInfinite.R
@@ -70,14 +70,14 @@ e5a4b149d401ff39b945b3b350101acf *R/qassert.R
 e461317d090f6344d1e56dc1cbfd4c20 *R/wfwl.R
 7ef6c7539dd8b143d12ebac12d03d427 *R/zzz.R
 98ad5835faefecf58714931a9f2fe11c *README.md
-d7f28dd3e4e68c654f8865b8f3355f42 *build/vignette.rds
+dfa1b70434930e53c817dbde15e8c160 *build/vignette.rds
 8503302b8e95f52f7a083f7a53749d78 *inst/CITATION
 ff96d64f966d5318f56505355acd48bd *inst/doc/checkmate.R
 496d009a2d4fe0411d011a9dea9780d5 *inst/doc/checkmate.Rmd
-b6dc4f8d8ad0475e6b771e9c843d3ffe *inst/doc/checkmate.html
+d3500b5be6ea2a1b5f023df27c5b9652 *inst/doc/checkmate.html
 967a7f2ba57a8cc0ba002e315009c937 *inst/doc/tinytest.R
 d56c423e340039ac255b90458252ec5b *inst/doc/tinytest.Rmd
-d61fb7488965a00a7b056b09121aac8c *inst/doc/tinytest.html
+7942a92327fa6f154f6a7853cb5f2d71 *inst/doc/tinytest.html
 2b802843486b8eedf6fc7b2c73215844 *inst/include/checkmate.h
 9410eaa688f6922154f59ed428acb131 *inst/include/checkmate_stub.c
 570556c5f559df4b9cbc2388e9138da9 *man/AssertCollection.Rd
@@ -160,7 +160,7 @@ edb2213bce6e3f84592a2ce6580cb237 *src/checks.h
 b9af0c7caddc2a8f185da8e970301774 *src/find_nchar.h
 379e20d399b3eca2ee0d5147454c566a *src/guess_type.c
 626cdf5752ff0c365859428212510bfb *src/guess_type.h
-cac7ad79199f228a4cd98aee431dcf21 *src/helper.c
+b92df4b8f25ddee50e8246e93ff258fe *src/helper.c
 5950653d7af20771e4a1db394ca95a1d *src/helper.h
 8206e1eec10932a6f4f709229ffc46b0 *src/init.c
 e50eeea00f9f9e4db738c834549b4d9f *src/integerish.c
