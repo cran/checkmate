@@ -419,7 +419,7 @@ static Rboolean check_string_nchar(SEXP x, SEXP n_chars, SEXP min_chars, SEXP ma
         R_xlen_t pos = find_nchar(x, n);
         if (pos > 0) {
             return message("All elements must have exactly %i characters, but element %i has %i chararacters",
-            n, pos, get_nchars(x, pos - 1));
+            n, pos, length(STRING_ELT(x, pos - 1)));
         }
     }
 
@@ -428,7 +428,7 @@ static Rboolean check_string_nchar(SEXP x, SEXP n_chars, SEXP min_chars, SEXP ma
         R_xlen_t pos = find_min_nchar(x, n);
         if (pos > 0) {
             return message("All elements must have at least %i characters, but element %i has %i characters",
-            n, pos, get_nchars(x, pos - 1));
+            n, pos, length(STRING_ELT(x, pos - 1)));
         }
     }
 
@@ -437,7 +437,7 @@ static Rboolean check_string_nchar(SEXP x, SEXP n_chars, SEXP min_chars, SEXP ma
         R_xlen_t pos = find_max_nchar(x, n);
         if (pos > 0) {
             return message("All elements must have at most %i characters, but element %i has %i characters",
-            n, pos, get_nchars(x, pos - 1));
+            n, pos, length(STRING_ELT(x, pos - 1)));
         }
     }
 
@@ -486,15 +486,15 @@ SEXP attribute_hidden c_check_integerish(SEXP x, SEXP tol, SEXP lower, SEXP uppe
                 }
                 break;
             case INT_RANGE:
-                snprintf(msg, 255, "Must be of type 'integerish', but element %jd is not in integer range", ok.pos);
+                snprintf(msg, 255, "Must be of type 'integerish', but element %g is not in integer range", (double)ok.pos);
                 return ScalarString(mkChar(msg));
                 break;
             case INT_TOL:
-                snprintf(msg, 255, "Must be of type 'integerish', but element %jd is not close to an integer", ok.pos);
+                snprintf(msg, 255, "Must be of type 'integerish', but element %g is not close to an integer", (double)ok.pos);
                 return ScalarString(mkChar(msg));
                 break;
             case INT_COMPLEX:
-                snprintf(msg, 255, "Must be of type 'integerish', but element %jd has an imaginary part", ok.pos);
+                snprintf(msg, 255, "Must be of type 'integerish', but element %g has an imaginary part", (double)ok.pos);
                 return ScalarString(mkChar(msg));
                 break;
         }
