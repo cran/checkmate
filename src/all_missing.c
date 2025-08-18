@@ -47,7 +47,7 @@ Rboolean attribute_hidden all_missing_complex(SEXP x) {
     const Rcomplex * xp = COMPLEX_RO(x);
     const Rcomplex * const xe = xp + xlength(x);
     for (; xp != xe; xp++) {
-        if (!ISNAN((*xp).r) || !ISNAN((*xp).i))
+        if (!ISNAN((*xp).r) && !ISNAN((*xp).i))
             return FALSE;
     }
     return TRUE;
@@ -105,7 +105,7 @@ Rboolean attribute_hidden all_missing(SEXP x) {
         case CPLXSXP: return all_missing_complex(x);
         case STRSXP: return all_missing_string(x);
         case NILSXP: return FALSE;
-        case VECSXP: return isFrame(x) ? all_missing_frame(x) : all_missing_list(x);
+        case VECSXP: return isDataFrame(x) ? all_missing_frame(x) : all_missing_list(x);
         case RAWSXP: return FALSE;
         default: error("Object of type '%s' not supported", type2char(TYPEOF(x)));
     }
